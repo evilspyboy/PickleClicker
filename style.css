@@ -172,8 +172,8 @@ body, html {
 }
 
 #sticker-pillow {
-  left: 66.8333%;
-  top: 77.4827%;
+  left: 65.8316%;
+  top: 76.822%;
   transform: translate(-50%, -50%) scale(0.26);
   z-index: 1;
 }
@@ -228,14 +228,14 @@ body, html {
     cursor: pointer;
     pointer-events: auto;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(0.84);
+    left: 62.8333%;
+    top: 64.31%;
+    transform: translate(-50%, -50%) scale(0.71);
     z-index: 50;
 }
 
 #cat-image:active {
-    transform: translate(-50%, -50%) scale(0.8232);
+    transform: translate(-50%, -50%) scale(0.6958);
 }
 
 /* Upgrade List */
