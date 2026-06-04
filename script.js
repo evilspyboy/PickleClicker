@@ -97,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const devBgToggleBtn = document.getElementById('dev-bg-toggle');
     const devSelectedStickerText = document.getElementById('dev-selected-sticker');
     const devScaleInput = document.getElementById('dev-scale');
+    const devZIndexInput = document.getElementById('dev-zindex');
+    const devFlipInput = document.getElementById('dev-flip');
     const devOutput = document.getElementById('dev-output');
     const devCloseBtn = document.getElementById('dev-close-btn');
     const stickersContainer = document.getElementById('stickers-container');
@@ -286,13 +288,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!catImage.dataset.devSetup) {
             catImage.dataset.devSetup = true;
             if (!catImage.dataset.scale) catImage.dataset.scale = "1"; // Default scale for cat
+            if (!catImage.dataset.flip) catImage.dataset.flip = "false";
 
             // Apply absolute positioning if not set
-            if (!catImage.style.position) {
+            if (window.getComputedStyle(catImage).position !== 'absolute' && !catImage.style.position) {
                 catImage.style.position = 'absolute';
                 catImage.style.left = '50%';
                 catImage.style.top = '50%';
-                catImage.style.transform = `translate(-50%, -50%) scale(1)`;
+                updateStickerTransform(catImage);
             }
 
             catImage.addEventListener('mousedown', startDrag);
@@ -353,7 +356,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         selectedSticker = e.target;
         devSelectedStickerText.textContent = selectedSticker.id;
-        devScaleInput.value = selectedSticker.dataset.scale || 0.5;
+
+        // Update UI controls to match selection
+        devScaleInput.value = selectedSticker.dataset.scale || 1;
+        devZIndexInput.value = window.getComputedStyle(selectedSticker).zIndex === 'auto' ? '1' : window.getComputedStyle(selectedSticker).zIndex;
+        devFlipInput.checked = selectedSticker.dataset.flip === 'true';
 
         // Visual selection
         document.querySelectorAll('.sticker').forEach(s => s.style.border = '2px dashed red');
@@ -387,8 +394,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const containerRect = document.getElementById('background-container').getBoundingClientRect();
 
         // Calculate new center position in percentages relative to container
-        let newLeft = clientX - containerRect.left - dragOffsetX + (selectedSticker.offsetWidth * selectedSticker.dataset.scale / 2);
-        let newTop = clientY - containerRect.top - dragOffsetY + (selectedSticker.offsetHeight * selectedSticker.dataset.scale / 2);
+        // We use the scaled bounds (getBoundingClientRect) for the width/height to properly counteract the dragOffsetX/Y
+        const stickerRect = selectedSticker.getBoundingClientRect();
+        let newLeft = clientX - containerRect.left - dragOffsetX + (stickerRect.width / 2);
+        let newTop = clientY - containerRect.top - dragOffsetY + (stickerRect.height / 2);
 
         let leftPercent = (newLeft / containerRect.width) * 100;
         let topPercent = (newTop / containerRect.height) * 100;
@@ -409,12 +418,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     devScaleInput.addEventListener('input', (e) => {
         if (selectedSticker) {
-            const newScale = e.target.value;
-            selectedSticker.dataset.scale = newScale;
-            selectedSticker.style.transform = `translate(-50%, -50%) scale(${newScale})`;
+            selectedSticker.dataset.scale = e.target.value;
+            updateStickerTransform(selectedSticker);
+        }
+    });
+
+    devZIndexInput.addEventListener('input', (e) => {
+        if (selectedSticker) {
+            selectedSticker.style.zIndex = e.target.value;
             updateDevOutput();
         }
     });
+
+    devFlipInput.addEventListener('change', (e) => {
+        if (selectedSticker) {
+            selectedSticker.dataset.flip = e.target.checked ? 'true' : 'false';
+            updateStickerTransform(selectedSticker);
+        }
+    });
+
+    function updateStickerTransform(el) {
+        const scale = el.dataset.scale || '1';
+        const isFlipped = el.dataset.flip === 'true';
+        const flipTransform = isFlipped ? 'scaleX(-1)' : '';
+
+        el.style.transform = `translate(-50%, -50%) scale(${scale}) ${flipTransform}`.trim();
+        updateDevOutput();
+    }
 
     function updateDevOutput() {
         if (!devModeActive) return;
@@ -425,7 +455,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const catLeft = catImage.style.left || '50%';
         const catTop = catImage.style.top || '50%';
         const catScale = catImage.dataset.scale || '1';
-        outputHTML += `#cat-image {\n  position: absolute;\n  left: ${catLeft};\n  top: ${catTop};\n  transform: translate(-50%, -50%) scale(${catScale});\n}\n\n`;
+        const catFlip = catImage.dataset.flip === 'true' ? ' scaleX(-1)' : '';
+        const catZIndex = catImage.style.zIndex || window.getComputedStyle(catImage).zIndex;
+        outputHTML += `#cat-image {\n  position: absolute;\n  left: ${catLeft};\n  top: ${catTop};\n  transform: translate(-50%, -50%) scale(${catScale})${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
 
         // Output for Stickers
         document.querySelectorAll('.sticker').forEach(sticker => {
@@ -441,8 +473,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const left = sticker.style.left;
                 const top = sticker.style.top;
                 const scale = sticker.dataset.scale || '0.5';
+                const flip = sticker.dataset.flip === 'true' ? ' scaleX(-1)' : '';
+                const zIndex = sticker.style.zIndex || window.getComputedStyle(sticker).zIndex;
 
-                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  transform: translate(-50%, -50%) scale(${scale});\n}\n\n`;
+                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  transform: translate(-50%, -50%) scale(${scale})${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
             }
         });
         outputHTML += '</textarea>';
