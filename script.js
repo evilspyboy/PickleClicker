@@ -18,32 +18,22 @@ document.addEventListener('DOMContentLoaded', () => {
     catContainerEl.classList.add('ui-offscreen-bottom');
     stickersContainerEl.classList.add('ui-offscreen-bottom');
 
-    // Hide upgrades initially by collapsing height so background can be larger
-    upgradeListContEl.style.flexBasis = '0%';
-    upgradeListContEl.style.height = '0px';
-    upgradeListContEl.style.padding = '0px';
-    upgradeListContEl.style.borderTopWidth = '0px';
-    upgradeListContEl.style.overflow = 'hidden';
-
+    // Hide upgrades entirely via display property initially
+    upgradeListContEl.style.display = 'none';
     settingsAreaEl.style.display = 'none';
 
     startBtn.addEventListener('click', () => {
         // Slide out start screen components
         startScreen.classList.add('slide-up');
 
-        // Slide in game UI elements and expand upgrade list
+        // Prepare to show game UI
         setTimeout(() => {
             headerEl.classList.remove('ui-offscreen-top');
             catContainerEl.classList.remove('ui-offscreen-bottom');
             stickersContainerEl.classList.remove('ui-offscreen-bottom');
 
-            // Restore upgrade list height
-            upgradeListContEl.style.flexBasis = '40%';
-            upgradeListContEl.style.height = 'auto';
-            upgradeListContEl.style.padding = '10px';
-            upgradeListContEl.style.borderTopWidth = '4px';
-            upgradeListContEl.style.overflowY = 'auto';
-
+            // Restore upgrade list display
+            upgradeListContEl.style.display = 'grid'; // Originally defined as grid in CSS
             settingsAreaEl.style.display = 'flex';
         }, 100); // Slight delay for smoother transition start
 
