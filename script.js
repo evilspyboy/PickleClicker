@@ -306,8 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
         catImage.style.border = '2px dashed red';
         if (!catImage.dataset.devSetup) {
             catImage.dataset.devSetup = true;
-            if (!catImage.dataset.scale) catImage.dataset.scale = "1"; // Default scale for cat
-            if (!catImage.dataset.flip) catImage.dataset.flip = "false";
 
             // Apply absolute positioning if not set
             if (window.getComputedStyle(catImage).position !== 'absolute' && !catImage.style.position) {
@@ -329,10 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add interaction listeners if not already present
             if (!sticker.dataset.devSetup) {
                 sticker.dataset.devSetup = true;
-
-                // Initialize custom transform values if not set
-                if (!sticker.dataset.scale) sticker.dataset.scale = "0.5";
-
                 sticker.addEventListener('mousedown', startDrag);
                 sticker.addEventListener('touchstart', startDrag, {passive: false});
             }

@@ -165,44 +165,44 @@ body, html {
 }
 
 #sticker-blanket {
-  left: 65.3333%;
-  top: 79.6916%;
-  transform: translate(-50%, -50%) scale(0.24);
+  left: 64.8333%;
+  top: 79.2516%;
+  transform: translate(-50%, -50%) scale(0.5);
   z-index: 1;
 }
 
 #sticker-pillow {
-  left: 66.1667%;
-  top: 77.7095%;
-  transform: translate(-50%, -50%) scale(0.22);
+  left: 65%;
+  top: 78.8094%;
+  transform: translate(-50%, -50%) scale(0.5);
   z-index: 1;
 }
 
 #sticker-spring_toy {
-  left: 33.6649%;
-  top: 91.3478%;
-  transform: translate(-50%, -50%) scale(0.08);
+  left: 34.3316%;
+  top: 92.0123%;
+  transform: translate(-50%, -50%) scale(0.09);
   z-index: 1;
 }
 
 #sticker-carboard_box {
-  left: 52.8333%;
-  top: 38.9923%;
-  transform: translate(-50%, -50%) scale(0.18);
+  left: 53.3333%;
+  top: 38.9991%;
+  transform: translate(-50%, -50%) scale(0.2);
   z-index: 1;
 }
 
 #sticker-mouse_toy {
-  left: 18.8316%;
-  top: 77.0496%;
+  left: 19.9983%;
+  top: 77.2696%;
   transform: translate(-50%, -50%) scale(0.11) scaleX(-1);
   z-index: 1;
 }
 
 #sticker-cat_tree {
-  left: 23.9983%;
-  top: 46.6958%;
-  transform: translate(-50%, -50%) scale(0.3) scaleX(-1);
+  left: 22.8316%;
+  top: 47.3603%;
+  transform: translate(-50%, -50%) scale(0.28) scaleX(-1);
   z-index: 1;
 }
 
@@ -228,14 +228,14 @@ body, html {
     cursor: pointer;
     pointer-events: auto;
     position: absolute;
-    left: 64.6649%;
-    top: 65.1735%;
-    transform: translate(-50%, -50%) scale(0.75);
+    left: 64.5%;
+    top: 64.0736%;
+    transform: translate(-50%, -50%) scale(0.84);
     z-index: 50;
 }
 
 #cat-image:active {
-    transform: translate(-50%, -50%) scale(0.735);
+    transform: translate(-50%, -50%) scale(0.8232);
 }
 
 /* Upgrade List */
