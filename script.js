@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateBiscuitDisplay() {
-        biscuitCountEl.textContent = Math.floor(biscuits);
+        biscuitCountEl.textContent = `${Math.floor(biscuits).toLocaleString()} (x${tapMultiplier})`;
         updateUpgradesUI();
     }
 
@@ -178,9 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             itemEl.innerHTML = `
                 <div class="upgrade-info">
-                    <div class="upgrade-name">${upgrade.name}</div>
-                    <div class="upgrade-cost">Cost: <span class="cost-val" id="cost-${upgrade.id}">${Math.floor(upgrade.currentCost)}</span> biscuits</div>
-                    <div class="upgrade-desc">${upgrade.isSunbeam ? 'Auto-tap for 60s' : '+' + upgrade.multiplier + 'x Multiplier'}</div>
+                    <div class="upgrade-name">${upgrade.name} <span style="font-weight: normal; color: #888; font-size: 12px; margin-left: 4px;">${upgrade.isSunbeam ? 'Auto' : 'x' + upgrade.multiplier}</span></div>
+                    <div class="upgrade-cost" style="display: none;">Cost: <span class="cost-val" id="cost-${upgrade.id}">${Math.floor(upgrade.currentCost)}</span> biscuits</div>
                 </div>
                 <div class="upgrade-stats">
                     <span class="upgrade-count" id="count-${upgrade.id}">${upgrade.count}x</span>
@@ -210,8 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Sunbeam remains flat cost, activate logic here later
                 activateSunbeam();
             } else {
-                // Standard item: increase cost by 1.15x
-                upgrade.currentCost = Math.ceil(upgrade.currentCost * 1.15);
+                // Standard item: double the cost
+                upgrade.currentCost = Math.ceil(upgrade.currentCost * 2);
                 document.getElementById(`cost-${upgrade.id}`).textContent = Math.floor(upgrade.currentCost);
 
                 // Increase tap multiplier
@@ -259,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 60000);
     }
 
-    const resetBtn = document.getElementById('reset-btn');
+    const resetBtn = document.getElementById('reset-icon');
     if (resetBtn) {
         resetBtn.addEventListener('click', () => {
             if (confirm("Are you sure you want to reset your progress? This cannot be undone.")) {
