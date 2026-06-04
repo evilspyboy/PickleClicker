@@ -20,10 +20,11 @@ body, html {
     position: relative;
     max-width: 600px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #e0f7fa;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 /* Start Screen */
@@ -37,7 +38,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
+    background-color: transparent;
     z-index: 100;
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
@@ -50,6 +51,17 @@ body, html {
 
 #start-screen.hidden {
     display: none;
+}
+
+/* UI Transitions */
+.ui-offscreen-top {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.ui-offscreen-bottom {
+    transform: translateY(100%);
+    opacity: 0;
 }
 
 #start-title {
@@ -83,15 +95,6 @@ body, html {
     position: absolute;
     top: 0;
     left: 0;
-    transition: transform 1s ease-in-out;
-}
-
-#game-screen.hidden {
-    display: none;
-}
-
-#game-screen.slide-down {
-    transform: translateY(100%);
 }
 
 /* Header */
@@ -107,6 +110,7 @@ body, html {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     z-index: 10;
     position: relative;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
 #reset-icon {
@@ -167,6 +171,7 @@ body, html {
     width: 100%;
     height: 100%;
     pointer-events: none;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
 .sticker {
@@ -237,6 +242,7 @@ body, html {
     width: 100%;
     height: 100%;
     pointer-events: none; /* Let clicks pass through if not on the cat */
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
 #cat-image {
@@ -266,6 +272,7 @@ body, html {
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: min-content;
     gap: 10px;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
 .upgrade-item {
@@ -350,6 +357,7 @@ body, html {
     justify-content: center;
     background-color: #fff;
     border-top: 1px solid #eee;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
 #settings-area button {

@@ -5,20 +5,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameScreen = document.getElementById('game-screen');
     const startBtn = document.getElementById('start-btn');
 
-    // Initialize Game Screen state
-    gameScreen.classList.add('slide-down');
-    gameScreen.classList.remove('hidden'); // Remove hidden so it can slide up
+    // UI Elements for Transition
+    const headerEl = document.getElementById('header');
+    const catContainerEl = document.getElementById('cat-container');
+    const stickersContainerEl = document.getElementById('stickers-container');
+    const upgradeListContEl = document.getElementById('upgrade-list');
+    const settingsAreaEl = document.getElementById('settings-area');
+
+    // Initialize Game Screen state - move UI elements out of frame, but keep background
+    gameScreen.classList.remove('hidden');
+    headerEl.classList.add('ui-offscreen-top');
+    catContainerEl.classList.add('ui-offscreen-bottom');
+    stickersContainerEl.classList.add('ui-offscreen-bottom');
+    upgradeListContEl.classList.add('ui-offscreen-bottom');
+    settingsAreaEl.classList.add('ui-offscreen-bottom');
 
     startBtn.addEventListener('click', () => {
-        // Slide out start screen
+        // Slide out start screen components
         startScreen.classList.add('slide-up');
 
-        // Slide in game screen
+        // Slide in game UI elements
         setTimeout(() => {
-            gameScreen.classList.remove('slide-down');
+            headerEl.classList.remove('ui-offscreen-top');
+            catContainerEl.classList.remove('ui-offscreen-bottom');
+            stickersContainerEl.classList.remove('ui-offscreen-bottom');
+            upgradeListContEl.classList.remove('ui-offscreen-bottom');
+            settingsAreaEl.classList.remove('ui-offscreen-bottom');
         }, 100); // Slight delay for smoother transition start
 
-        // Fully hide start screen after transition
+        // Fully hide start screen container after transition
         setTimeout(() => {
             startScreen.classList.add('hidden');
         }, 1000);
