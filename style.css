@@ -182,51 +182,51 @@ body, html {
 }
 
 #sticker-blanket {
-  left: 65.8316%;
-  top: 80.787%;
-  transform: translate(-50%, -50%) scale(0.29);
+  left: 64.3316%;
+  top: 77.8085%;
+  transform: translate(-50%, -50%) scale(0.21);
   z-index: 1;
 }
 
 #sticker-pillow {
-  left: 65.1649%;
-  top: 79.0166%;
-  transform: translate(-50%, -50%) scale(0.26);
+  left: 64.4948%;
+  top: 77.2298%;
+  transform: translate(-50%, -50%) scale(0.23);
   z-index: 1;
 }
 
 #sticker-spring_toy {
-  left: 34.3316%;
-  top: 92.0123%;
-  transform: translate(-50%, -50%) scale(0.09);
+  left: 34.4983%;
+  top: 83.6768%;
+  transform: translate(-50%, -50%) scale(0.08);
   z-index: 1;
 }
 
 #sticker-carboard_box {
-  left: 53.3333%;
-  top: 38.9991%;
-  transform: translate(-50%, -50%) scale(0.2);
+  left: 56.3316%;
+  top: 43.7607%;
+  transform: translate(-50%, -50%) scale(0.19);
   z-index: 1;
 }
 
 #sticker-mouse_toy {
-  left: 19.9983%;
-  top: 77.2696%;
-  transform: translate(-50%, -50%) scale(0.11) scaleX(-1);
+  left: 24.4983%;
+  top: 71.5145%;
+  transform: translate(-50%, -50%) scale(0.1) scaleX(-1);
   z-index: 1;
 }
 
 #sticker-cat_tree {
-  left: 22.8316%;
-  top: 47.3603%;
-  transform: translate(-50%, -50%) scale(0.28) scaleX(-1);
+  left: 27.6649%;
+  top: 46.3631%;
+  transform: translate(-50%, -50%) scale(0.24) scaleX(-1);
   z-index: 1;
 }
 
 #sticker-motivational_poster {
-  left: 75.5%;
-  top: 18.7572%;
-  transform: translate(-50%, -50%) scale(0.24);
+  left: 73.1667%;
+  top: 22.3258%;
+  transform: translate(-50%, -50%) scale(0.2);
   z-index: 1;
 }
 
@@ -245,14 +245,14 @@ body, html {
     cursor: pointer;
     pointer-events: auto;
     position: absolute;
-    left: 62.8333%;
-    top: 64.31%;
-    transform: translate(-50%, -50%) scale(0.71);
+    left: 62.4983%;
+    top: 66.0948%;
+    transform: translate(-50%, -50%) scale(0.6);
     z-index: 50;
 }
 
 #cat-image:active {
-    transform: translate(-50%, -50%) scale(0.6958);
+    transform: translate(-50%, -50%) scale(0.588);
 }
 
 /* Upgrade List */
