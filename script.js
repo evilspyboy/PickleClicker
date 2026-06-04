@@ -61,23 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Merge loaded upgrades with defaults to prevent issues if game updates
                 if (gameState.upgradesData) {
                     upgradesData = gameState.upgradesData;
-
-                    // Show stickers for bought items
-                    upgradesData.forEach(upgrade => {
-                        if (upgrade.count > 0 && !upgrade.isSunbeam) {
-                            const sticker = document.getElementById(`sticker-${upgrade.id}`);
-                            if (sticker) sticker.classList.remove('hidden');
-                        }
-                    });
+                    // Trigger global visibility update
+                    updateStickerVisibility();
                 }
             } catch (e) {
                 console.error("Error loading save file", e);
             }
         }
     }
-
-    // Call loadGame immediately
-    loadGame();
 
     // DOM Elements
     const biscuitCountEl = document.getElementById('biscuit-count');
@@ -141,10 +132,41 @@ document.addEventListener('DOMContentLoaded', () => {
         saveGame();
     });
 
+    function updateStickerVisibility() {
+        if (devModeActive) return; // In dev mode we show everything or manage it manually
+
+        upgradesData.forEach(upgrade => {
+            if (upgrade.isSunbeam) return;
+
+            const sticker = document.getElementById(`sticker-${upgrade.id}`);
+            if (!sticker) return;
+
+            // Logic for "Pillow hides Blanket"
+            if (upgrade.id === 'blanket') {
+                const pillowUpgrade = upgradesData.find(u => u.id === 'pillow');
+                if (pillowUpgrade && pillowUpgrade.count > 0) {
+                    sticker.classList.add('hidden');
+                    return; // exit early for blanket
+                }
+            }
+
+            // Default visibility based on count
+            if (upgrade.count > 0) {
+                sticker.classList.remove('hidden');
+            } else {
+                sticker.classList.add('hidden');
+            }
+        });
+    }
+
     function updateBiscuitDisplay() {
         biscuitCountEl.textContent = Math.floor(biscuits);
         updateUpgradesUI();
     }
+
+    // Call loadGame after UI is set up
+    loadGame();
+    updateBiscuitDisplay();
 
     function renderUpgrades() {
         upgradeListEl.innerHTML = '';
@@ -195,11 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Increase tap multiplier
                 tapMultiplier += upgrade.multiplier;
 
-                // Show sticker on first purchase
-                if (upgrade.count === 1) {
-                    const sticker = document.getElementById(`sticker-${upgrade.id}`);
-                    if (sticker) sticker.classList.remove('hidden');
-                }
+                // Apply visual updates
+                updateStickerVisibility();
             }
 
             updateBiscuitDisplay();
@@ -329,15 +348,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset cat border
         catImage.style.border = 'none';
 
-        // Hide stickers that aren't purchased yet and remove borders
+        // Clean up sticker borders
         document.querySelectorAll('.sticker').forEach(sticker => {
             sticker.style.border = 'none';
-            const id = sticker.id.replace('sticker-', '');
-            const upgrade = upgradesData.find(u => u.id === id);
-            if (upgrade && upgrade.count === 0) {
-                sticker.classList.add('hidden');
-            }
         });
+
+        // Enforce actual game visibility rules
+        updateStickerVisibility();
+
         selectedSticker = null;
         devSelectedStickerText.textContent = "None";
     });
