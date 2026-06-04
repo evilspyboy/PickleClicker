@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PickleClicker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <img src="assets/title.png" id="start-title" alt="PickleClicker Title">
+            <img src="assets/cat_title.png" id="start-cat" alt="Cat">
+            <img src="assets/go_button.png" id="start-btn" alt="Go Button">
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="hidden">
+            <!-- Header (Biscuits) -->
+            <div id="header">
+                <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
+                <span id="biscuit-count">0</span>
+            </div>
+
+            <!-- Main Game Area -->
+            <div id="game-area">
+                <div id="background-container">
+                    <img src="assets/bg_game.png" id="bg-image" alt="Background">
+
+                    <!-- Stickers Container -->
+                    <div id="stickers-container">
+                        <img src="assets/blanket.png" class="sticker hidden" id="sticker-blanket" alt="Blanket">
+                        <img src="assets/pillow.png" class="sticker hidden" id="sticker-pillow" alt="Pillow">
+                        <img src="assets/spring_toy.png" class="sticker hidden" id="sticker-spring_toy" alt="Spring Toy">
+                        <img src="assets/carboard_box.png" class="sticker hidden" id="sticker-carboard_box" alt="Cardboard Box">
+                        <img src="assets/mouse_toy.png" class="sticker hidden" id="sticker-mouse_toy" alt="Mouse Toy">
+                        <img src="assets/cat_tree.png" class="sticker hidden" id="sticker-cat_tree" alt="Cat Tree">
+                        <img src="assets/motivational_poster.png" class="sticker hidden" id="sticker-motivational_poster" alt="Motivational Poster">
+                    </div>
+
+                    <!-- Cat Container -->
+                    <div id="cat-container">
+                        <img src="assets/cat_rest.png" id="cat-image" alt="Cat">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upgrade List -->
+            <div id="upgrade-list">
+                <!-- Upgrade items will be injected here via JS -->
+            </div>
+
+            <div id="settings-area">
+                <button id="reset-btn">Reset Progress</button>
+                <button id="dev-mode-btn">Developer Mode</button>
+            </div>
+        </div>
+
+        <!-- Dev Mode Panel -->
+        <div id="dev-mode-panel" class="hidden">
+            <h3>Developer Mode</h3>
+            <button id="dev-bg-toggle">Toggle Background</button>
+            <div id="dev-controls">
+                <p>Selected Sticker: <span id="dev-selected-sticker">None</span></p>
+                <label>Scale: <input type="range" id="dev-scale" min="0.1" max="3" step="0.01" value="1"></label>
+                <div id="dev-output"></div>
+            </div>
+            <button id="dev-close-btn">Close Dev Mode</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
