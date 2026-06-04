@@ -1,0 +1,9 @@
+Ok we are going to make a cozy cookie clicker style game but I have all the visual assets and I will need to upload them for you to be able to work.
+There will be a main screen with some assets on it (background game image), a title image, a cat image and a go button image to start the game.
+Once in the game there will be that default background game image and a default cat image (rest state). If the user taps on the cat they will start 'making biscuits' which involves changing between 3 images for every click (a leftcat, middlecat, rightcat, then back to middlecat and repeating with the middle separating the left and right). If the user does not tap for 5 seconds it will go back to the rest image.
+For every tap the user gets a biscuit (cookie). They can then use the biscuits to upgrade in an order which will give them more biscuits per click.
+The order of items that are available for an upgrade are:
+blanket, pillow, spring toy, cardboard box, mouse toy, cat tree, motivational poster and sunbeam. Each of these upgrades comes with a sticker that can be positioned over the top of the bg image and under the cat images. Those upgrade stickers will need to be positioned and sized appropriately for scale. The sunbeam image is a change of the background image (so instead of a sticker on the background we change the background and keep the stickers that have been applied.
+This is a cozy game intended to be played on a web page through a mobile phone layout. So we really need the background image to be the main visible area with the biscuit counter and items above and below kept to a minimum/not a lot of text etc.
+As the user gets upgrades the amount of biscuits they get per tap increases by a multiplier. The user can get multiples of each upgrade but it will only be visible on screen as a single sticker.
+I have the assets for this that I need to upload into an asset directory when you are ready. They are png images.
