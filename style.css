@@ -164,6 +164,48 @@ body, html {
     display: none;
 }
 
+#sticker-blanket {
+  left: 65.5%;
+  top: 74.6345%;
+  transform: translate(-50%, -50%) scale(0.24);
+}
+
+#sticker-pillow {
+  left: 65.1667%;
+  top: 73.7501%;
+  transform: translate(-50%, -50%) scale(0.22);
+}
+
+#sticker-spring_toy {
+  left: 55.8333%;
+  top: 61.2185%;
+  transform: translate(-50%, -50%) scale(0.19);
+}
+
+#sticker-carboard_box {
+  left: 66.6667%;
+  top: 48.6779%;
+  transform: translate(-50%, -50%) scale(0.27);
+}
+
+#sticker-mouse_toy {
+  left: 21.3333%;
+  top: 89.808%;
+  transform: translate(-50%, -50%) scale(0.1);
+}
+
+#sticker-cat_tree {
+  left: 22.3333%;
+  top: 48.4602%;
+  transform: translate(-50%, -50%) scale(0.29);
+}
+
+#sticker-motivational_poster {
+  left: 75%;
+  top: 16.7797%;
+  transform: translate(-50%, -50%) scale(0.24);
+}
+
 #cat-container {
     position: absolute;
     top: 0;
