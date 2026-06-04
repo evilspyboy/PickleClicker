@@ -30,22 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Upgrades Data
     const defaultUpgradesData = [
-        { id: 'blanket', name: 'Blanket', baseCost: 50, currentCost: 50, count: 0, multiplier: 2, isSunbeam: false },
-        { id: 'pillow', name: 'Pillow', baseCost: 100, currentCost: 100, count: 0, multiplier: 4, isSunbeam: false },
-        { id: 'spring_toy', name: 'Spring Toy', baseCost: 200, currentCost: 200, count: 0, multiplier: 8, isSunbeam: false },
-        { id: 'carboard_box', name: 'Cardboard Box', baseCost: 500, currentCost: 500, count: 0, multiplier: 16, isSunbeam: false },
-        { id: 'mouse_toy', name: 'Mouse Toy', baseCost: 1000, currentCost: 1000, count: 0, multiplier: 32, isSunbeam: false },
-        { id: 'sunbeam', name: 'Sunbeam', baseCost: 2000, currentCost: 2000, count: 0, multiplier: 0, isSunbeam: true }, // Special item
-        { id: 'cat_tree', name: 'Cat Tree', baseCost: 4000, currentCost: 4000, count: 0, multiplier: 64, isSunbeam: false },
-        { id: 'motivational_poster', name: 'Motivational Poster', baseCost: 8000, currentCost: 8000, count: 0, multiplier: 128, isSunbeam: false }
+        { id: 'blanket', name: 'Blanket', baseCost: 50, currentCost: 50, count: 0, totalPurchased: 0, multiplier: 2, isSunbeam: false },
+        { id: 'pillow', name: 'Pillow', baseCost: 100, currentCost: 100, count: 0, totalPurchased: 0, multiplier: 4, isSunbeam: false },
+        { id: 'spring_toy', name: 'Spring Toy', baseCost: 200, currentCost: 200, count: 0, totalPurchased: 0, multiplier: 8, isSunbeam: false },
+        { id: 'carboard_box', name: 'Cardboard Box', baseCost: 500, currentCost: 500, count: 0, totalPurchased: 0, multiplier: 16, isSunbeam: false },
+        { id: 'mouse_toy', name: 'Mouse Toy', baseCost: 1000, currentCost: 1000, count: 0, totalPurchased: 0, multiplier: 32, isSunbeam: false },
+        { id: 'sunbeam', name: 'Sunbeam', baseCost: 2000, currentCost: 2000, count: 0, totalPurchased: 0, multiplier: 0, isSunbeam: true }, // Special item
+        { id: 'cat_tree', name: 'Cat Tree', baseCost: 4000, currentCost: 4000, count: 0, totalPurchased: 0, multiplier: 64, isSunbeam: false },
+        { id: 'motivational_poster', name: 'Motivational Poster', baseCost: 8000, currentCost: 8000, count: 0, totalPurchased: 0, multiplier: 128, isSunbeam: false }
     ];
     let upgradesData = JSON.parse(JSON.stringify(defaultUpgradesData));
+
+    // Sunbeam State
+    let sunbeamActive = false;
+    let sunbeamInterval = null;
+    let sunbeamTimeRemaining = 0; // in milliseconds
 
     function saveGame() {
         const gameState = {
             biscuits,
             tapMultiplier,
-            upgradesData
+            upgradesData,
+            sunbeamTimeRemaining
         };
         localStorage.setItem('pickleClickerSave', JSON.stringify(gameState));
     }
@@ -57,12 +63,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gameState = JSON.parse(savedData);
                 biscuits = gameState.biscuits || 0;
                 tapMultiplier = gameState.tapMultiplier || 1;
+                sunbeamTimeRemaining = gameState.sunbeamTimeRemaining || 0;
 
                 // Merge loaded upgrades with defaults to prevent issues if game updates
                 if (gameState.upgradesData) {
                     upgradesData = gameState.upgradesData;
+
+                    // Add totalPurchased backwards compatibility for older saves
+                    upgradesData.forEach(u => {
+                        if (u.totalPurchased === undefined) {
+                            u.totalPurchased = u.isSunbeam ? 0 : u.count; // Old sunbeam counts weren't tracked for price
+                        }
+                    });
+
                     // Trigger global visibility update
                     updateStickerVisibility();
+                }
+
+                if (sunbeamTimeRemaining > 0) {
+                    resumeSunbeam();
                 }
             } catch (e) {
                 console.error("Error loading save file", e);
@@ -94,11 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const devCloseBtn = document.getElementById('dev-close-btn');
     const stickersContainer = document.getElementById('stickers-container');
     const bgImage = document.getElementById('bg-image');
-
-    // Sunbeam State
-    let sunbeamActive = false;
-    let sunbeamInterval = null;
-    let sunbeamTimeout = null;
 
     // Cat Animation State
     const catImages = [
@@ -201,18 +215,25 @@ document.addEventListener('DOMContentLoaded', () => {
             // Deduct cost
             biscuits -= upgrade.currentCost;
 
-            // Increment count
+            // Increment count and total
             upgrade.count += 1;
+            upgrade.totalPurchased += 1;
+
+            // Update cost based on totalPurchased
+            if (upgrade.totalPurchased === 1) {
+                upgrade.currentCost = Math.ceil(upgrade.baseCost * 1.5);
+            } else {
+                upgrade.currentCost = upgrade.baseCost * upgrade.totalPurchased;
+            }
+            document.getElementById(`cost-${upgrade.id}`).textContent = Math.floor(upgrade.currentCost);
+
+            // Update UI count
             document.getElementById(`count-${upgrade.id}`).textContent = `${upgrade.count}x`;
 
             if (upgrade.isSunbeam) {
-                // Sunbeam remains flat cost, activate logic here later
+                // Activate sunbeam logic
                 activateSunbeam();
             } else {
-                // Standard item: double the cost
-                upgrade.currentCost = Math.ceil(upgrade.currentCost * 2);
-                document.getElementById(`cost-${upgrade.id}`).textContent = Math.floor(upgrade.currentCost);
-
                 // Increase tap multiplier
                 tapMultiplier += upgrade.multiplier;
 
@@ -226,17 +247,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function activateSunbeam() {
-        if (sunbeamActive) {
-            // Reset timer if already active
-            clearTimeout(sunbeamTimeout);
-            clearInterval(sunbeamInterval);
+        sunbeamTimeRemaining += 20000; // Add 20 seconds
+
+        // Ensure UI is immediately updated with new count
+        const sunbeamUpgrade = upgradesData.find(u => u.id === 'sunbeam');
+        if (sunbeamUpgrade) {
+            sunbeamUpgrade.count = Math.ceil(sunbeamTimeRemaining / 20000);
+            const countEl = document.getElementById(`count-sunbeam`);
+            if (countEl) countEl.textContent = `${sunbeamUpgrade.count}x`;
         }
 
+        resumeSunbeam();
+    }
+
+    function resumeSunbeam() {
+        if (sunbeamActive || sunbeamTimeRemaining <= 0) return;
         sunbeamActive = true;
         bgImage.src = 'assets/bg_sunbeam.png';
 
-        // Auto-tap 2 times per second
+        // Auto-tap 2 times per second and manage time
         sunbeamInterval = setInterval(() => {
+            sunbeamTimeRemaining -= 500;
+
             // Trigger auto tap
             biscuits += 1 * tapMultiplier;
             updateBiscuitDisplay();
@@ -250,12 +282,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 catImage.src = 'assets/cat_rest.png';
                 catAnimIndex = 0;
             }, 5000);
-        }, 500); // 500ms = 2 taps per second
+            // Update UI count
+            const sunbeamUpgrade = upgradesData.find(u => u.id === 'sunbeam');
+            if (sunbeamUpgrade) {
+                sunbeamUpgrade.count = Math.ceil(sunbeamTimeRemaining / 20000);
+                const countEl = document.getElementById(`count-sunbeam`);
+                if (countEl) countEl.textContent = `${sunbeamUpgrade.count}x`;
+            }
 
-        // End after 60 seconds
-        sunbeamTimeout = setTimeout(() => {
-            endSunbeam();
-        }, 60000);
+            if (sunbeamTimeRemaining % 5000 === 0) {
+                saveGame(); // Save every 5 seconds to persist time
+            }
+
+            if (sunbeamTimeRemaining <= 0) {
+                endSunbeam();
+            }
+        }, 500); // 500ms = 2 taps per second
     }
 
     const resetBtn = document.getElementById('reset-icon');
@@ -270,10 +312,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function endSunbeam() {
         sunbeamActive = false;
+        sunbeamTimeRemaining = 0;
         clearInterval(sunbeamInterval);
+
+        const sunbeamUpgrade = upgradesData.find(u => u.id === 'sunbeam');
+        if (sunbeamUpgrade) {
+            sunbeamUpgrade.count = 0;
+            const countEl = document.getElementById(`count-sunbeam`);
+            if (countEl) countEl.textContent = `0x`;
+        }
+
         bgImage.src = 'assets/bg_game.png';
         catImage.src = 'assets/cat_rest.png';
         catAnimIndex = 0;
+        saveGame();
     }
 
     function updateUpgradesUI() {
