@@ -165,16 +165,16 @@ body, html {
 }
 
 #sticker-blanket {
-  left: 64.8333%;
-  top: 79.2516%;
-  transform: translate(-50%, -50%) scale(0.5);
+  left: 65.9983%;
+  top: 83.4311%;
+  transform: translate(-50%, -50%) scale(0.29);
   z-index: 1;
 }
 
 #sticker-pillow {
-  left: 65%;
-  top: 78.8094%;
-  transform: translate(-50%, -50%) scale(0.5);
+  left: 66.8333%;
+  top: 77.4827%;
+  transform: translate(-50%, -50%) scale(0.26);
   z-index: 1;
 }
 
@@ -228,8 +228,8 @@ body, html {
     cursor: pointer;
     pointer-events: auto;
     position: absolute;
-    left: 64.5%;
-    top: 64.0736%;
+    left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%) scale(0.84);
     z-index: 50;
 }
