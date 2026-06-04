@@ -119,6 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Core Tap Mechanic
     catImage.addEventListener('click', () => {
+        if (devModeActive) return; // Prevent tapping in dev mode
+
         // Increment biscuits
         biscuits += 1 * tapMultiplier;
         updateBiscuitDisplay();
@@ -279,6 +281,24 @@ document.addEventListener('DOMContentLoaded', () => {
         devModePanel.classList.remove('hidden');
         stickersContainer.style.pointerEvents = 'auto'; // allow clicking stickers
 
+        // Prepare cat for dragging
+        catImage.style.border = '2px dashed red';
+        if (!catImage.dataset.devSetup) {
+            catImage.dataset.devSetup = true;
+            if (!catImage.dataset.scale) catImage.dataset.scale = "1"; // Default scale for cat
+
+            // Apply absolute positioning if not set
+            if (!catImage.style.position) {
+                catImage.style.position = 'absolute';
+                catImage.style.left = '50%';
+                catImage.style.top = '50%';
+                catImage.style.transform = `translate(-50%, -50%) scale(1)`;
+            }
+
+            catImage.addEventListener('mousedown', startDrag);
+            catImage.addEventListener('touchstart', startDrag, {passive: false});
+        }
+
         // Show all stickers
         document.querySelectorAll('.sticker').forEach(sticker => {
             sticker.classList.remove('hidden');
@@ -302,6 +322,9 @@ document.addEventListener('DOMContentLoaded', () => {
         devModeActive = false;
         devModePanel.classList.add('hidden');
         stickersContainer.style.pointerEvents = 'none';
+
+        // Reset cat border
+        catImage.style.border = 'none';
 
         // Hide stickers that aren't purchased yet and remove borders
         document.querySelectorAll('.sticker').forEach(sticker => {
@@ -334,6 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Visual selection
         document.querySelectorAll('.sticker').forEach(s => s.style.border = '2px dashed red');
+        catImage.style.border = '2px dashed red';
         selectedSticker.style.border = '4px solid blue';
 
         isDragging = true;
@@ -359,7 +383,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
         let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
 
-        const containerRect = stickersContainer.getBoundingClientRect();
+        // Use background-container as the reference for percentage coordinates
+        const containerRect = document.getElementById('background-container').getBoundingClientRect();
 
         // Calculate new center position in percentages relative to container
         let newLeft = clientX - containerRect.left - dragOffsetX + (selectedSticker.offsetWidth * selectedSticker.dataset.scale / 2);
@@ -395,13 +420,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!devModeActive) return;
 
         let outputHTML = '<strong>CSS for standard placements:</strong><br><textarea style="width:100%; height:150px; font-size:10px;">';
+
+        // Output for Cat Image
+        const catLeft = catImage.style.left || '50%';
+        const catTop = catImage.style.top || '50%';
+        const catScale = catImage.dataset.scale || '1';
+        outputHTML += `#cat-image {\n  position: absolute;\n  left: ${catLeft};\n  top: ${catTop};\n  transform: translate(-50%, -50%) scale(${catScale});\n}\n\n`;
+
+        // Output for Stickers
         document.querySelectorAll('.sticker').forEach(sticker => {
             const id = sticker.id;
-            const left = sticker.style.left || '50%';
-            const top = sticker.style.top || '50%';
-            const scale = sticker.dataset.scale || '0.5';
 
-            outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  transform: translate(-50%, -50%) scale(${scale});\n}\n\n`;
+            // Get computed style if inline style is not set
+            const computedStyle = window.getComputedStyle(sticker);
+
+            // Since computed left/top are pixels, and the user provided percentages in CSS,
+            // we will only output elements that have been explicitly moved via dragging
+            // to avoid overwriting their CSS with incorrect pixel/default values.
+            if (sticker.style.left && sticker.style.top) {
+                const left = sticker.style.left;
+                const top = sticker.style.top;
+                const scale = sticker.dataset.scale || '0.5';
+
+                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  transform: translate(-50%, -50%) scale(${scale});\n}\n\n`;
+            }
         });
         outputHTML += '</textarea>';
         devOutput.innerHTML = outputHTML;
