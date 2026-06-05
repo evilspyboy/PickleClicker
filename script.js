@@ -50,13 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Upgrades Data
     const defaultUpgradesData = [
         { id: 'blanket', name: 'Blanket', baseCost: 50, currentCost: 50, count: 0, totalPurchased: 0, multiplier: 2, isSunbeam: false },
-        { id: 'pillow', name: 'Pillow', baseCost: 100, currentCost: 100, count: 0, totalPurchased: 0, multiplier: 4, isSunbeam: false },
-        { id: 'spring_toy', name: 'Spring Toy', baseCost: 200, currentCost: 200, count: 0, totalPurchased: 0, multiplier: 8, isSunbeam: false },
-        { id: 'carboard_box', name: 'Cardboard Box', baseCost: 500, currentCost: 500, count: 0, totalPurchased: 0, multiplier: 16, isSunbeam: false },
-        { id: 'mouse_toy', name: 'Mouse Toy', baseCost: 1000, currentCost: 1000, count: 0, totalPurchased: 0, multiplier: 32, isSunbeam: false },
+        { id: 'pillow', name: 'Pillow', baseCost: 400, currentCost: 400, count: 0, totalPurchased: 0, multiplier: 4, isSunbeam: false },
+        { id: 'spring_toy', name: 'Spring Toy', baseCost: 800, currentCost: 800, count: 0, totalPurchased: 0, multiplier: 8, isSunbeam: false },
+        { id: 'carboard_box', name: 'Cardboard Box', baseCost: 1600, currentCost: 1600, count: 0, totalPurchased: 0, multiplier: 16, isSunbeam: false },
+        { id: 'mouse_toy', name: 'Mouse Toy', baseCost: 3200, currentCost: 3200, count: 0, totalPurchased: 0, multiplier: 32, isSunbeam: false },
         { id: 'sunbeam', name: 'Sunbeam', baseCost: 2000, currentCost: 2000, count: 0, totalPurchased: 0, multiplier: 0, isSunbeam: true }, // Special item
-        { id: 'cat_tree', name: 'Cat Tree', baseCost: 4000, currentCost: 4000, count: 0, totalPurchased: 0, multiplier: 64, isSunbeam: false },
-        { id: 'motivational_poster', name: 'Motivational Poster', baseCost: 8000, currentCost: 8000, count: 0, totalPurchased: 0, multiplier: 128, isSunbeam: false }
+        { id: 'cat_tree', name: 'Cat Tree', baseCost: 6400, currentCost: 6400, count: 0, totalPurchased: 0, multiplier: 64, isSunbeam: false },
+        { id: 'motivational_poster', name: 'Motivational Poster', baseCost: 12800, currentCost: 12800, count: 0, totalPurchased: 0, multiplier: 128, isSunbeam: false }
     ];
     let upgradesData = JSON.parse(JSON.stringify(defaultUpgradesData));
 
