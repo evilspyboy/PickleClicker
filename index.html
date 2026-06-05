@@ -58,13 +58,41 @@
             </div>
         </div>
 
-        <!-- Custom Modal Popup -->
-        <div id="custom-modal" class="hidden">
-            <div id="custom-modal-content">
+        <!-- Custom Modal Popup (Reset) -->
+        <div id="custom-modal" class="modal-overlay hidden">
+            <div class="modal-content">
                 <p id="custom-modal-message"></p>
-                <div id="custom-modal-buttons">
-                    <button id="custom-modal-yes">Yes</button>
-                    <button id="custom-modal-no">No</button>
+                <div class="modal-buttons">
+                    <button id="custom-modal-yes" class="modal-btn green-btn">Yes</button>
+                    <button id="custom-modal-no" class="modal-btn red-btn">No</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Modal -->
+        <div id="instructions-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <img src="assets/biscuit.png" class="modal-icon" alt="Biscuit">
+                <p>Mr Pickles has a large order of biscuits he needs to make, tap on Mr Pickles to start making biscuits.</p>
+                <div class="modal-buttons">
+                    <button id="instructions-ok" class="modal-btn green-btn">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Game Modal -->
+        <div id="endgame-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <img src="assets/chef_hat.png" class="modal-icon" alt="Chef Hat">
+                <p>Mr Pickles has made a MILLION biscuits and needs a rest now, you can reset and aim for a better score.</p>
+                <div id="leaderboard-container">
+                    <h4>Top 5 Scores</h4>
+                    <ul id="leaderboard-list">
+                        <!-- injected via js -->
+                    </ul>
+                </div>
+                <div class="modal-buttons">
+                    <button id="endgame-reset" class="modal-btn red-btn">Reset</button>
                 </div>
             </div>
         </div>
