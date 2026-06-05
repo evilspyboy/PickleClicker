@@ -184,7 +184,9 @@ body, html {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.5);
+    transform: translate(-50%, -50%);
+    width: 20%; /* fallback width */
+    height: auto;
     transform-origin: center center;
 }
 
@@ -195,49 +197,56 @@ body, html {
 #sticker-blanket {
   left: 65.8316%;
   top: 80.6406%;
-  transform: translate(-50%, -50%) scale(0.21);
+  width: 25%;
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-pillow {
   left: 67.3281%;
   top: 78.5625%;
-  transform: translate(-50%, -50%) scale(0.23);
+  width: 27%;
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-spring_toy {
   left: 34.4983%;
   top: 83.6768%;
-  transform: translate(-50%, -50%) scale(0.08);
+  width: 8%;
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-carboard_box {
   left: 56.3316%;
   top: 43.7607%;
-  transform: translate(-50%, -50%) scale(0.19);
+  width: 22%;
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-mouse_toy {
   left: 24.4983%;
   top: 71.5145%;
-  transform: translate(-50%, -50%) scale(0.1) scaleX(-1);
+  width: 12%;
+  transform: translate(-50%, -50%) scaleX(-1);
   z-index: 1;
 }
 
 #sticker-cat_tree {
   left: 27.6649%;
   top: 46.3631%;
-  transform: translate(-50%, -50%) scale(0.24) scaleX(-1);
+  width: 28%;
+  transform: translate(-50%, -50%) scaleX(-1);
   z-index: 1;
 }
 
 #sticker-motivational_poster {
   left: 73.1667%;
   top: 22.3258%;
-  transform: translate(-50%, -50%) scale(0.2);
+  width: 24%;
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
@@ -252,19 +261,20 @@ body, html {
 }
 
 #cat-image {
-    width: 80%;
-    max-width: 400px;
+    width: 50%;
+    height: auto;
     cursor: pointer;
     pointer-events: auto;
     position: absolute;
     left: 63.9983%;
     top: 69.7604%;
-    transform: translate(-50%, -50%) scale(0.6);
+    transform: translate(-50%, -50%);
     z-index: 50;
+    transition: width 0.1s ease-in-out;
 }
 
 #cat-image:active {
-    transform: translate(-50%, -50%) scale(0.588);
+    width: 48%; /* Slightly smaller for the active effect instead of scaling */
 }
 
 /* Upgrade List */

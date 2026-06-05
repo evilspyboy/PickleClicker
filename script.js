@@ -440,7 +440,15 @@ document.addEventListener('DOMContentLoaded', () => {
         devSelectedStickerText.textContent = selectedSticker.id;
 
         // Update UI controls to match selection
-        devScaleInput.value = selectedSticker.dataset.scale || 1;
+        // Convert pixel width back to percentage of background container
+        const bgRect = document.getElementById('background-container').getBoundingClientRect();
+        const stickerWidthPx = selectedSticker.getBoundingClientRect().width;
+        let currentWidthPercent = Math.round((stickerWidthPx / bgRect.width) * 100);
+
+        // Use a fallback if calculation is weird
+        if (!currentWidthPercent || currentWidthPercent <= 0) currentWidthPercent = 20;
+
+        devScaleInput.value = currentWidthPercent;
         devZIndexInput.value = window.getComputedStyle(selectedSticker).zIndex === 'auto' ? '1' : window.getComputedStyle(selectedSticker).zIndex;
         devFlipInput.checked = selectedSticker.dataset.flip === 'true';
 
@@ -500,8 +508,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     devScaleInput.addEventListener('input', (e) => {
         if (selectedSticker) {
-            selectedSticker.dataset.scale = e.target.value;
-            updateStickerTransform(selectedSticker);
+            selectedSticker.style.width = `${e.target.value}%`;
+            updateDevOutput();
         }
     });
 
@@ -520,11 +528,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function updateStickerTransform(el) {
-        const scale = el.dataset.scale || '1';
         const isFlipped = el.dataset.flip === 'true';
         const flipTransform = isFlipped ? 'scaleX(-1)' : '';
 
-        el.style.transform = `translate(-50%, -50%) scale(${scale}) ${flipTransform}`.trim();
+        el.style.transform = `translate(-50%, -50%) ${flipTransform}`.trim();
         updateDevOutput();
     }
 
@@ -533,20 +540,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let outputHTML = '<strong>CSS for standard placements:</strong><br><textarea style="width:100%; height:150px; font-size:10px;">';
 
+        // Helper to convert pixel width to percent of container
+        function getWidthPercent(el) {
+            const bgRect = document.getElementById('background-container').getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+            return Math.round((elRect.width / bgRect.width) * 100);
+        }
+
         // Output for Cat Image
-        const catLeft = catImage.style.left || '50%';
-        const catTop = catImage.style.top || '50%';
-        const catScale = catImage.dataset.scale || '1';
+        const catLeft = catImage.style.left || '63.9983%';
+        const catTop = catImage.style.top || '69.7604%';
+        const catWidth = catImage.style.width || `${getWidthPercent(catImage)}%`;
         const catFlip = catImage.dataset.flip === 'true' ? ' scaleX(-1)' : '';
         const catZIndex = catImage.style.zIndex || window.getComputedStyle(catImage).zIndex;
-        outputHTML += `#cat-image {\n  position: absolute;\n  left: ${catLeft};\n  top: ${catTop};\n  transform: translate(-50%, -50%) scale(${catScale})${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
+        outputHTML += `#cat-image {\n  left: ${catLeft};\n  top: ${catTop};\n  width: ${catWidth};\n  transform: translate(-50%, -50%)${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
 
         // Output for Stickers
         document.querySelectorAll('.sticker').forEach(sticker => {
             const id = sticker.id;
-
-            // Get computed style if inline style is not set
-            const computedStyle = window.getComputedStyle(sticker);
 
             // Since computed left/top are pixels, and the user provided percentages in CSS,
             // we will only output elements that have been explicitly moved via dragging
@@ -554,11 +565,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sticker.style.left && sticker.style.top) {
                 const left = sticker.style.left;
                 const top = sticker.style.top;
-                const scale = sticker.dataset.scale || '0.5';
+                const width = sticker.style.width || `${getWidthPercent(sticker)}%`;
                 const flip = sticker.dataset.flip === 'true' ? ' scaleX(-1)' : '';
                 const zIndex = sticker.style.zIndex || window.getComputedStyle(sticker).zIndex;
 
-                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  transform: translate(-50%, -50%) scale(${scale})${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
+                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  width: ${width};\n  transform: translate(-50%, -50%)${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
             }
         });
         outputHTML += '</textarea>';
