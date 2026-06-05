@@ -150,13 +150,10 @@ body, html {
 
 #background-container {
     position: relative;
-    /* To guarantee a perfect square that never overflows horizontally or vertically */
-    /* By setting width: auto and height: 100% with aspect-ratio: 1/1, and max-width: 100%, */
-    /* flexbox will perfectly contain the 1:1 square whether the parent is wide or tall. */
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
+    /* To guarantee a perfect square that anchors to the width of the screen */
+    /* By forcing 100% width and 1:1 aspect ratio, it will be the maximum possible size */
+    /* without shrinking when the upgrade list takes up vertical space. */
+    width: 100%;
     aspect-ratio: 1 / 1;
     background-color: transparent;
     /* Ensure the container behaves correctly in flex layout */
