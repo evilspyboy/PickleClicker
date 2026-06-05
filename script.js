@@ -12,15 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const upgradeListContEl = document.getElementById('upgrade-list');
     const settingsAreaEl = document.getElementById('settings-area');
 
-    // Initialize Game Screen state - move UI elements out of frame, but keep background
+    // Initialize Game Screen state
     gameScreen.classList.remove('hidden');
-    headerEl.classList.add('ui-offscreen-top');
-    catContainerEl.classList.add('ui-offscreen-bottom');
-    stickersContainerEl.classList.add('ui-offscreen-bottom');
 
-    // Hide upgrades entirely via display property initially
-    upgradeListContEl.style.display = 'none';
-    settingsAreaEl.style.display = 'none';
+    // Hide upgrades using visibility so they still reserve space for the background layout
+    upgradeListContEl.style.visibility = 'hidden';
+    upgradeListContEl.style.opacity = '0';
+    upgradeListContEl.style.pointerEvents = 'none';
+
+    settingsAreaEl.style.visibility = 'hidden';
+    settingsAreaEl.style.opacity = '0';
+    settingsAreaEl.style.pointerEvents = 'none';
 
     startBtn.addEventListener('click', () => {
         // Slide out start screen components
@@ -32,9 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
             catContainerEl.classList.remove('ui-offscreen-bottom');
             stickersContainerEl.classList.remove('ui-offscreen-bottom');
 
-            // Restore upgrade list display
-            upgradeListContEl.style.display = 'grid'; // Originally defined as grid in CSS
-            settingsAreaEl.style.display = 'flex';
+            // Restore upgrade list visibility
+            upgradeListContEl.style.visibility = 'visible';
+            upgradeListContEl.style.opacity = '1';
+            upgradeListContEl.style.pointerEvents = 'auto';
+
+            settingsAreaEl.style.visibility = 'visible';
+            settingsAreaEl.style.opacity = '1';
+            settingsAreaEl.style.pointerEvents = 'auto';
         }, 100); // Slight delay for smoother transition start
 
         // Fully hide start screen container after transition
