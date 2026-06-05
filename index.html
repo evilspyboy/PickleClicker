@@ -31,18 +31,18 @@
 
                     <!-- Stickers Container -->
                     <div id="stickers-container">
-                        <img src="assets/blanket.png" class="sticker hidden" id="sticker-blanket" data-scale="0.21" data-flip="false" alt="Blanket">
-                        <img src="assets/pillow.png" class="sticker hidden" id="sticker-pillow" data-scale="0.23" data-flip="false" alt="Pillow">
-                        <img src="assets/spring_toy.png" class="sticker hidden" id="sticker-spring_toy" data-scale="0.08" data-flip="false" alt="Spring Toy">
-                        <img src="assets/carboard_box.png" class="sticker hidden" id="sticker-carboard_box" data-scale="0.19" data-flip="false" alt="Cardboard Box">
-                        <img src="assets/mouse_toy.png" class="sticker hidden" id="sticker-mouse_toy" data-scale="0.1" data-flip="true" alt="Mouse Toy">
-                        <img src="assets/cat_tree.png" class="sticker hidden" id="sticker-cat_tree" data-scale="0.24" data-flip="true" alt="Cat Tree">
-                        <img src="assets/motivational_poster.png" class="sticker hidden" id="sticker-motivational_poster" data-scale="0.2" data-flip="false" alt="Motivational Poster">
+                        <img src="assets/blanket.png" class="sticker hidden" id="sticker-blanket" data-flip="false" alt="Blanket">
+                        <img src="assets/pillow.png" class="sticker hidden" id="sticker-pillow" data-flip="false" alt="Pillow">
+                        <img src="assets/spring_toy.png" class="sticker hidden" id="sticker-spring_toy" data-flip="false" alt="Spring Toy">
+                        <img src="assets/carboard_box.png" class="sticker hidden" id="sticker-carboard_box" data-flip="false" alt="Cardboard Box">
+                        <img src="assets/mouse_toy.png" class="sticker hidden" id="sticker-mouse_toy" data-flip="true" alt="Mouse Toy">
+                        <img src="assets/cat_tree.png" class="sticker hidden" id="sticker-cat_tree" data-flip="true" alt="Cat Tree">
+                        <img src="assets/motivational_poster.png" class="sticker hidden" id="sticker-motivational_poster" data-flip="false" alt="Motivational Poster">
                     </div>
 
                     <!-- Cat Container -->
                     <div id="cat-container">
-                        <img src="assets/cat_rest.png" id="cat-image" data-scale="0.6" data-flip="false" alt="Cat">
+                        <img src="assets/cat_rest.png" id="cat-image" data-flip="false" alt="Cat">
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
             <button id="dev-bg-toggle">Toggle Background</button>
             <div id="dev-controls">
                 <p>Selected Element: <span id="dev-selected-sticker">None</span></p>
-                <label>Scale: <input type="range" id="dev-scale" min="0.01" max="1.5" step="0.01" value="1"></label><br>
+                <label>Width %: <input type="range" id="dev-scale" min="1" max="100" step="1" value="20"></label><br>
                 <label>Z-Index: <input type="number" id="dev-zindex" value="1" style="width: 50px;"></label><br>
                 <label>Flip (Mirror): <input type="checkbox" id="dev-flip"></label>
                 <div id="dev-output"></div>
