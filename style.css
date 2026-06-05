@@ -195,57 +195,57 @@ body, html {
 }
 
 #sticker-blanket {
-  left: 65.8316%;
-  top: 80.6406%;
-  width: 25%;
+  left: 68.8316%;
+  top: 79.3056%;
+  width: 49%;
   transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-pillow {
-  left: 67.3281%;
-  top: 78.5625%;
-  width: 27%;
+  left: 68.4931%;
+  top: 77.2292%;
+  width: 47%;
   transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-spring_toy {
-  left: 34.4983%;
-  top: 83.6768%;
-  width: 8%;
+  left: 33.9983%;
+  top: 84.0087%;
+  width: 15%;
   transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-carboard_box {
-  left: 56.3316%;
-  top: 43.7607%;
-  width: 22%;
+  left: 56.8316%;
+  top: 43.5938%;
+  width: 34%;
   transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 #sticker-mouse_toy {
-  left: 24.4983%;
-  top: 71.5145%;
-  width: 12%;
+  left: 24.8316%;
+  top: 71.5139%;
+  width: 20%;
   transform: translate(-50%, -50%) scaleX(-1);
   z-index: 1;
 }
 
 #sticker-cat_tree {
-  left: 27.6649%;
-  top: 46.3631%;
-  width: 28%;
+  left: 24.3299%;
+  top: 46.3628%;
+  width: 51%;
   transform: translate(-50%, -50%) scaleX(-1);
   z-index: 1;
 }
 
 #sticker-motivational_poster {
-  left: 73.1667%;
-  top: 22.3258%;
-  width: 24%;
+  left: 76.8333%;
+  top: 24.658%;
+  width: 33%;
   transform: translate(-50%, -50%);
   z-index: 1;
 }
@@ -261,20 +261,20 @@ body, html {
 }
 
 #cat-image {
-    width: 50%;
     height: auto;
     cursor: pointer;
     pointer-events: auto;
     position: absolute;
-    left: 63.9983%;
-    top: 69.7604%;
+    left: 66.8316%;
+    top: 67.2448%;
+    width: 47%;
     transform: translate(-50%, -50%);
     z-index: 50;
     transition: width 0.1s ease-in-out;
 }
 
 #cat-image:active {
-    width: 48%; /* Slightly smaller for the active effect instead of scaling */
+    width: 45%; /* Slightly smaller for the active effect instead of scaling */
 }
 
 /* Upgrade List */
