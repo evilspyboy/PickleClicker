@@ -47,8 +47,89 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fully hide start screen container after transition
         setTimeout(() => {
             startScreen.classList.add('hidden');
+
+            // Show instructions modal after game UI loads if not already seen/game loaded
+            if (totalClicks === 0 && biscuits === 0) {
+                const instrModal = document.getElementById('instructions-modal');
+                if (instrModal) {
+                    instrModal.classList.remove('hidden');
+                }
+            }
         }, 1000);
     });
+
+    // Instructions OK button
+    const instrOkBtn = document.getElementById('instructions-ok');
+    if (instrOkBtn) {
+        instrOkBtn.addEventListener('click', () => {
+            document.getElementById('instructions-modal').classList.add('hidden');
+        });
+    }
+
+    // --- END GAME & LEADERBOARD ---
+    function checkEndGame() {
+        if (lifetimeBiscuits >= 1000000) {
+            const wasEnded = gameEnded;
+            gameEnded = true;
+
+            // Calculate final score
+            const finalScore = totalClicks + totalBiscuitsSpent;
+
+            // Load leaderboard
+            let leaderboard = [];
+            const savedLeaderboard = localStorage.getItem('pickleClickerLeaderboard');
+            if (savedLeaderboard) {
+                try {
+                    leaderboard = JSON.parse(savedLeaderboard);
+                } catch (e) {
+                    console.error("Failed to parse leaderboard");
+                }
+            }
+
+            // Add new score if it wasn't already ended
+            if (!wasEnded) {
+                leaderboard.push(finalScore);
+            }
+
+            // Sort ascending (lower is better)
+            leaderboard.sort((a, b) => a - b);
+
+            // Keep top 5
+            leaderboard = leaderboard.slice(0, 5);
+
+            // Save leaderboard
+            localStorage.setItem('pickleClickerLeaderboard', JSON.stringify(leaderboard));
+
+            // Populate leaderboard UI
+            const listEl = document.getElementById('leaderboard-list');
+            listEl.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const li = document.createElement('li');
+                const scoreValue = i < leaderboard.length ? leaderboard[i] : 0;
+                li.textContent = `${i + 1}. ${scoreValue.toLocaleString()}`;
+
+                // Highlight the newly achieved score exactly once
+                if (scoreValue === finalScore && i < leaderboard.length) {
+                    // Make sure we only highlight it once in case of exact ties
+                    if (!listEl.querySelector('.current-score')) {
+                        li.classList.add('current-score');
+                    }
+                }
+                listEl.appendChild(li);
+            }
+
+            // Show End Game Modal
+            document.getElementById('endgame-modal').classList.remove('hidden');
+        }
+    }
+
+    const endgameResetBtn = document.getElementById('endgame-reset');
+    if (endgameResetBtn) {
+        endgameResetBtn.addEventListener('click', () => {
+            localStorage.removeItem('pickleClickerSave');
+            location.reload();
+        });
+    }
 
     // --- CUSTOM MODAL ---
     function showConfirmModal(message) {
@@ -80,6 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Game Variables
     let biscuits = 0;
     let tapMultiplier = 1;
+    let lifetimeBiscuits = 0;
+    let totalClicks = 0;
+    let totalBiscuitsSpent = 0;
+    let gameEnded = false;
 
     // Upgrades Data
     const defaultUpgradesData = [
@@ -100,8 +185,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let sunbeamTimeRemaining = 0; // in milliseconds
 
     function saveGame() {
+        if (gameEnded) return; // Stop saving state once game ends
         const gameState = {
             biscuits,
+            lifetimeBiscuits,
+            totalClicks,
+            totalBiscuitsSpent,
             tapMultiplier,
             upgradesData,
             sunbeamTimeRemaining
@@ -115,8 +204,17 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const gameState = JSON.parse(savedData);
                 biscuits = gameState.biscuits || 0;
+                lifetimeBiscuits = gameState.lifetimeBiscuits || 0;
+                totalClicks = gameState.totalClicks || 0;
+                totalBiscuitsSpent = gameState.totalBiscuitsSpent || 0;
                 tapMultiplier = gameState.tapMultiplier || 1;
                 sunbeamTimeRemaining = gameState.sunbeamTimeRemaining || 0;
+
+                // Check end game on load in case they somehow refreshed while exactly at 1m+
+                if (lifetimeBiscuits >= 1000000) {
+                    gameEnded = true;
+                    setTimeout(checkEndGame, 1500); // Wait for UI to render then show popup
+                }
 
                 // Merge loaded upgrades with defaults to prevent issues if game updates
                 if (gameState.upgradesData) {
@@ -185,11 +283,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Core Tap Mechanic
     catImage.addEventListener('click', () => {
-        if (devModeActive) return; // Prevent tapping in dev mode
+        if (devModeActive || gameEnded) return; // Prevent tapping in dev mode or end game
+
+        totalClicks++;
 
         // Increment biscuits
-        biscuits += 1 * tapMultiplier;
+        let gain = 1 * tapMultiplier;
+        biscuits += gain;
+        lifetimeBiscuits += gain;
         updateBiscuitDisplay();
+        checkEndGame();
 
         // Update Cat Image Sequence
         catImage.src = catImages[catAnimIndex];
@@ -269,8 +372,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buyUpgrade(index) {
+        if (gameEnded) return;
         const upgrade = upgradesData[index];
         if (biscuits >= upgrade.currentCost) {
+            totalBiscuitsSpent += upgrade.currentCost;
             // Deduct cost
             biscuits -= upgrade.currentCost;
 
@@ -326,11 +431,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Auto-tap 2 times per second and manage time
         sunbeamInterval = setInterval(() => {
+            if (gameEnded) {
+                clearInterval(sunbeamInterval);
+                return;
+            }
             sunbeamTimeRemaining -= 500;
 
             // Trigger auto tap
-            biscuits += 1 * tapMultiplier;
+            let gain = 1 * tapMultiplier;
+            biscuits += gain;
+            lifetimeBiscuits += gain;
             updateBiscuitDisplay();
+            checkEndGame();
 
             // Auto update animation sequence
             catImage.src = catImages[catAnimIndex];

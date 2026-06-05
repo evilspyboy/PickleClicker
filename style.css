@@ -4,6 +4,7 @@
     padding: 0;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
@@ -386,8 +387,8 @@ body, html {
     cursor: pointer;
 }
 
-/* Custom Modal */
-#custom-modal {
+/* General Modals */
+.modal-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -400,11 +401,11 @@ body, html {
     align-items: center;
 }
 
-#custom-modal.hidden {
+.modal-overlay.hidden {
     display: none;
 }
 
-#custom-modal-content {
+.modal-content {
     background-color: #fff;
     border: 4px solid #ffb6c1;
     border-radius: 12px;
@@ -413,21 +414,31 @@ body, html {
     max-width: 300px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-#custom-modal-message {
+.modal-icon {
+    width: 60px;
+    height: auto;
+}
+
+.modal-content p {
     font-size: 16px;
     color: #333;
-    margin-bottom: 20px;
     font-weight: bold;
+    margin: 0;
 }
 
-#custom-modal-buttons {
+.modal-buttons {
     display: flex;
     justify-content: space-around;
+    width: 100%;
 }
 
-#custom-modal-yes, #custom-modal-no {
+.modal-btn {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
@@ -438,18 +449,54 @@ body, html {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: transform 0.1s;
     font-family: inherit;
+    min-width: 80px;
 }
 
-#custom-modal-yes:active, #custom-modal-no:active {
+.modal-btn:active {
     transform: scale(0.95);
 }
 
-#custom-modal-yes {
+.green-btn {
     background-color: #81c784; /* pastel green */
 }
 
-#custom-modal-no {
+.red-btn {
     background-color: #e57373; /* pastel red */
+}
+
+/* Leaderboard */
+#leaderboard-container {
+    width: 100%;
+    background-color: #fafafa;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#leaderboard-container h4 {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#leaderboard-list li {
+    font-size: 14px;
+    padding: 2px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+#leaderboard-list li:last-child {
+    border-bottom: none;
+}
+
+#leaderboard-list li.current-score {
+    font-weight: bold;
+    color: #ffb6c1;
 }
 
 /* Dev Mode Panel */
