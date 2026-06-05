@@ -38,7 +38,9 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px; /* Group items tightly */
+    gap: 0px;
+    /* Shift the entire flex group upwards */
+    padding-bottom: 25%;
     background-color: transparent;
     z-index: 100;
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
@@ -74,7 +76,7 @@ body, html {
 #start-cat {
     width: 45%;
     max-width: 220px;
-    margin: -10px 0; /* Slight negative margin to pull closer to title and button */
+    margin: -15px 0;
 }
 
 #start-btn {

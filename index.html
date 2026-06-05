@@ -8,6 +8,14 @@
 </head>
 <body>
     <div id="app-container">
+        <!-- Start Screen -->
+        <!-- Placed at app-container root so it doesn't get clipped by game-area's overflow constraints -->
+        <div id="start-screen">
+            <img src="assets/title.png" id="start-title" alt="PickleClicker Title">
+            <img src="assets/cat_title.png" id="start-cat" alt="Cat">
+            <img src="assets/go_button.png" id="start-btn" alt="Go Button">
+        </div>
+
         <!-- Game Screen -->
         <div id="game-screen" class="hidden">
             <!-- Header (Biscuits) -->
@@ -21,13 +29,6 @@
             <div id="game-area">
                 <div id="background-container">
                     <img src="assets/bg_game.png" id="bg-image" alt="Background">
-
-                    <!-- Start Screen -->
-                    <div id="start-screen">
-                        <img src="assets/title.png" id="start-title" alt="PickleClicker Title">
-                        <img src="assets/cat_title.png" id="start-cat" alt="Cat">
-                        <img src="assets/go_button.png" id="start-btn" alt="Go Button">
-                    </div>
 
                     <!-- Stickers Container -->
                     <div id="stickers-container" class="ui-offscreen-bottom">
