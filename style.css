@@ -151,13 +151,16 @@ body, html {
 #background-container {
     position: relative;
     /* To guarantee a perfect square that never overflows horizontally or vertically */
-    /* We use min() to take either the full width or full height of the game area, whichever is smaller */
-    width: 100%;
+    /* By setting width: auto and height: 100% with aspect-ratio: 1/1, and max-width: 100%, */
+    /* flexbox will perfectly contain the 1:1 square whether the parent is wide or tall. */
+    width: auto;
     height: 100%;
-    max-width: min(100%, 100vh);
-    max-height: min(100%, 100vw);
+    max-width: 100%;
+    max-height: 100%;
     aspect-ratio: 1 / 1;
-    background-color: #e0f7fa;
+    background-color: transparent;
+    /* Ensure the container behaves correctly in flex layout */
+    flex-shrink: 0;
 }
 
 #bg-image {
@@ -166,7 +169,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Instead of contain, we force it to cover the exact square container, preventing empty borders inside the container */
+    /* Container is perfectly 1:1, so cover or contain works identical, but cover fills any sub-pixel gaps */
     object-fit: cover;
 }
 
