@@ -387,6 +387,10 @@ body, html {
     cursor: pointer;
 }
 
+#dev-mode-btn {
+    display: none;
+}
+
 /* General Modals */
 .modal-overlay {
     position: absolute;
