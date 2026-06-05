@@ -386,6 +386,72 @@ body, html {
     cursor: pointer;
 }
 
+/* Custom Modal */
+#custom-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* slight dim to focus attention */
+    z-index: 150;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#custom-modal.hidden {
+    display: none;
+}
+
+#custom-modal-content {
+    background-color: #fff;
+    border: 4px solid #ffb6c1;
+    border-radius: 12px;
+    padding: 20px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+#custom-modal-message {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#custom-modal-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+#custom-modal-yes, #custom-modal-no {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: transform 0.1s;
+    font-family: inherit;
+}
+
+#custom-modal-yes:active, #custom-modal-no:active {
+    transform: scale(0.95);
+}
+
+#custom-modal-yes {
+    background-color: #81c784; /* pastel green */
+}
+
+#custom-modal-no {
+    background-color: #e57373; /* pastel red */
+}
+
 /* Dev Mode Panel */
 #dev-mode-panel {
     position: absolute;

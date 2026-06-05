@@ -50,6 +50,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     });
 
+    // --- CUSTOM MODAL ---
+    function showConfirmModal(message) {
+        return new Promise((resolve) => {
+            customModalMessage.textContent = message;
+            customModal.classList.remove('hidden');
+
+            const handleYes = () => {
+                cleanup();
+                resolve(true);
+            };
+
+            const handleNo = () => {
+                cleanup();
+                resolve(false);
+            };
+
+            const cleanup = () => {
+                customModal.classList.add('hidden');
+                customModalYes.removeEventListener('click', handleYes);
+                customModalNo.removeEventListener('click', handleNo);
+            };
+
+            customModalYes.addEventListener('click', handleYes);
+            customModalNo.addEventListener('click', handleNo);
+        });
+    }
+
     // Game Variables
     let biscuits = 0;
     let tapMultiplier = 1;
@@ -136,6 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const devZIndexInput = document.getElementById('dev-zindex');
     const devFlipInput = document.getElementById('dev-flip');
     const devOutput = document.getElementById('dev-output');
+
+    // Custom Modal Elements
+    const customModal = document.getElementById('custom-modal');
+    const customModalMessage = document.getElementById('custom-modal-message');
+    const customModalYes = document.getElementById('custom-modal-yes');
+    const customModalNo = document.getElementById('custom-modal-no');
     const devCloseBtn = document.getElementById('dev-close-btn');
     const stickersContainer = document.getElementById('stickers-container');
     const bgImage = document.getElementById('bg-image');
@@ -328,8 +361,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const resetBtn = document.getElementById('reset-icon');
     if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-            if (confirm("Are you sure you want to reset your progress? This cannot be undone.")) {
+        resetBtn.addEventListener('click', async () => {
+            const isConfirmed = await showConfirmModal("Are you sure you want to reset your progress? This cannot be undone.");
+            if (isConfirmed) {
                 localStorage.removeItem('pickleClickerSave');
                 location.reload();
             }
