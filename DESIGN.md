@@ -112,7 +112,7 @@ The following assets are used or required for Game 2. All assets should be trans
 2. `yarn_ball.png` (Yarn Corp)
 3. `robot_salmon.png` (Salmon Tech)
 4. `laser_pointer.png` (Laser Dynamics)
-5. `cardboard_box.png` (Cardboard Box LLC) (Reused from Game 1)
+5. `carboard_box.png` (Cardboard Box LLC) (Reused from Game 1)
 6. `catnip_leaf.png` (Catnip Futures)
 7. `solar_panel.png` (Solar Energy Co)
 8. `spring_toy.png` (Spring Toy Co) (Reused from Game 1)
@@ -121,8 +121,8 @@ The following assets are used or required for Game 2. All assets should be trans
 - `tax_dog.png` (A dog tax officer)
 
 **Tangible Assets (Hiding Money Stickers):**
-- `cardboard_sportscar.png` (Cardboard sports car)
-- `cardboard_yacht.png` (Cardboard yacht)
+- `carboard_sportscar.png` (Cardboard sports car)
+- `carboard_yacht.png` (Cardboard yacht)
 - `gold_statue.png` (Gold cat statue)
 - `diamond_litter.png` (Litter box filled with diamonds)
 - `private_island_litterbox.png` (Massive endgame asset, to be uploaded)
