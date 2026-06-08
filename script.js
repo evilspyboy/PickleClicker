@@ -31,8 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsAreaEl.style.pointerEvents = 'none';
 
     // Check if Game 2 is unlocked
-    if (localStorage.getItem('pickleClickerLeaderboard')) {
-        game2UnlockBtn.classList.remove('hidden');
+    const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
+    if (savedLeaderboardStr) {
+        try {
+            const leaderboard = JSON.parse(savedLeaderboardStr);
+            // Only unlock if at least one score has biscuitsLeft (is an object)
+            const hasValidScore = leaderboard.some(entry => typeof entry === 'object' && entry !== null && 'biscuitsLeft' in entry);
+            if (hasValidScore) {
+                game2UnlockBtn.classList.remove('hidden');
+            }
+        } catch (e) {
+            console.error("Failed to parse leaderboard on load");
+        }
     }
 
     game2UnlockBtn.addEventListener('click', () => {
@@ -50,7 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     game2StartBtn.addEventListener('click', () => {
-        const game2Biscuits = localStorage.getItem('pickleClickerGame2StartingBiscuits') || 1000000;
+        let game2Biscuits = 0;
+        const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
+        if (savedLeaderboardStr) {
+            try {
+                const leaderboard = JSON.parse(savedLeaderboardStr);
+                // Find the best score (lowest) that has biscuitsLeft. Since it's sorted ascending by score,
+                // the first one we find that is an object with biscuitsLeft is the correct one.
+                const bestValidEntry = leaderboard.find(entry => typeof entry === 'object' && entry !== null && 'biscuitsLeft' in entry);
+                if (bestValidEntry) {
+                    game2Biscuits = bestValidEntry.biscuitsLeft;
+                }
+            } catch (e) {
+                console.error("Failed to parse leaderboard for starting balance");
+            }
+        }
         showConfirmModal(`Game 2 coming soon!\nStarting Balance: ${Number(game2Biscuits).toLocaleString()} biscuits`);
     });
 
@@ -116,16 +140,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Save starting biscuits for Game 2
-            localStorage.setItem('pickleClickerGame2StartingBiscuits', biscuits);
-
             // Add new score if it wasn't already ended
             if (!wasEnded) {
-                leaderboard.push(finalScore);
+                leaderboard.push({ score: finalScore, biscuitsLeft: biscuits });
             }
 
             // Sort ascending (lower is better)
-            leaderboard.sort((a, b) => a - b);
+            leaderboard.sort((a, b) => {
+                const scoreA = typeof a === 'object' ? a.score : a;
+                const scoreB = typeof b === 'object' ? b.score : b;
+                return scoreA - scoreB;
+            });
 
             // Keep top 5
             leaderboard = leaderboard.slice(0, 5);
@@ -138,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
             listEl.innerHTML = '';
             for (let i = 0; i < 5; i++) {
                 const li = document.createElement('li');
-                const scoreValue = i < leaderboard.length ? leaderboard[i] : 0;
+                const scoreEntry = i < leaderboard.length ? leaderboard[i] : null;
+                const scoreValue = scoreEntry !== null ? (typeof scoreEntry === 'object' ? scoreEntry.score : scoreEntry) : 0;
                 li.textContent = `${i + 1}. ${scoreValue.toLocaleString()}`;
 
                 // Highlight the newly achieved score exactly once
