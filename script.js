@@ -691,6 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Prepare cat/container for dragging
         if (currentCatImage) {
+            currentCatImage.style.pointerEvents = 'auto'; // ensure it can be clicked
             currentCatImage.style.border = '2px dashed red';
             if (!currentCatImage.dataset.devSetup) {
                 currentCatImage.dataset.devSetup = true;
@@ -712,6 +713,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentBackgroundContainer) {
             currentBackgroundContainer.querySelectorAll('.sticker').forEach(sticker => {
                 sticker.classList.remove('hidden');
+                sticker.style.pointerEvents = 'auto'; // ensure they can be clicked
                 sticker.style.border = '2px dashed red';
 
                 // Add interaction listeners if not already present
@@ -735,12 +737,22 @@ document.addEventListener('DOMContentLoaded', () => {
         devModePanel.classList.add('hidden');
         stickersContainer.style.pointerEvents = 'none';
 
-        // Reset cat border
+        const game2StickersContainer = document.getElementById('game2-stickers-container');
+        if (game2StickersContainer) game2StickersContainer.style.pointerEvents = 'none';
+
+        // Reset cat states
         catImage.style.border = 'none';
+        catImage.style.pointerEvents = '';
+        const game2CatContainer = document.getElementById('game2-cat-container');
+        if (game2CatContainer) {
+            game2CatContainer.style.border = 'none';
+            game2CatContainer.style.pointerEvents = 'none'; // Revert back to none
+        }
 
         // Clean up sticker borders
         document.querySelectorAll('.sticker').forEach(sticker => {
             sticker.style.border = 'none';
+            sticker.style.pointerEvents = ''; // Reset pointer events
         });
 
         // Enforce actual game visibility rules
