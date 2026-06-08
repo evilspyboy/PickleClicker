@@ -38,11 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
     game2UnlockBtn.addEventListener('click', () => {
         startScreen.classList.add('hidden');
         game2StartScreen.classList.remove('hidden');
+        // Pre-load the Game 2 background so it shows behind the start screen if it ever becomes transparent,
+        // or just to have it ready
+        bgImage.src = 'assets/bg_game_stonks.png';
     });
 
     game1SwitchBtn.addEventListener('click', () => {
         game2StartScreen.classList.add('hidden');
         startScreen.classList.remove('hidden');
+        bgImage.src = 'assets/bg_game.png';
     });
 
     game2StartBtn.addEventListener('click', () => {

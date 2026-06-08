@@ -74,9 +74,15 @@ body, html {
     margin: 0;
 }
 
-#start-cat, #game2-start-cat {
+#start-cat {
     width: 45%;
     max-width: 220px;
+    margin: -15px 0;
+}
+
+#game2-start-cat {
+    width: 70%;
+    max-width: 350px;
     margin: -15px 0;
 }
 
