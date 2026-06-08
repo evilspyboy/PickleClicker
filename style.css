@@ -127,7 +127,7 @@ body, html {
     left: 0;
 }
 
-#game2-screen.hidden {
+#game-screen.hidden, #game2-screen.hidden {
     display: none;
 }
 
