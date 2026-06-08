@@ -365,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const game2DevModeBtn = document.getElementById('game2-dev-mode-btn');
     const devModePanel = document.getElementById('dev-mode-panel');
     const devBgToggleBtn = document.getElementById('dev-bg-toggle');
+    const devCatCycleBtn = document.getElementById('dev-cat-cycle-btn');
     const devSelectedStickerText = document.getElementById('dev-selected-sticker');
     const devScaleInput = document.getElementById('dev-scale');
     const devZIndexInput = document.getElementById('dev-zindex');
@@ -757,12 +758,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const businessCatImages = ['assets/business_cat_rest.png', 'assets/business_cat_looking.png', 'assets/business_cat_catnip.png', 'assets/business_cat_crashedout.png'];
+    let currentBusinessCatImageIndex = 0;
+
+    if (devCatCycleBtn) {
+        devCatCycleBtn.addEventListener('click', () => {
+            const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
+            if (isGame2) {
+                const game2CatImg = document.getElementById('game2-cat-image');
+                if (game2CatImg) {
+                    currentBusinessCatImageIndex = (currentBusinessCatImageIndex + 1) % businessCatImages.length;
+                    game2CatImg.src = businessCatImages[currentBusinessCatImageIndex];
+                }
+            } else {
+                alert("Cat image cycle is only configured for Game 2 business cat.");
+            }
+        });
+    }
+
     function startDrag(e) {
         if (!devModeActive) return;
 
-        // Find closest sticker container in case we clicked an inner element like canvas
+        // Find closest sticker container in case we clicked an inner element like canvas or image
         let target = e.target.closest('.sticker');
-        if (!target) target = e.target;
+        if (!target) target = e.target.closest('#cat-image') || e.target.closest('#game2-cat-container') || e.target;
 
         selectedSticker = target;
         devSelectedStickerText.textContent = selectedSticker.id;

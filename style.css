@@ -312,10 +312,10 @@ body, html {
 
 /* Game 2 Specific Placements */
 #game2-graph-container {
-    left: 30%;
-    top: 50%;
-    width: 50%;
-    height: 50%;
+    left: 59.1667%;
+    top: 45.1667%;
+    width: 58%;
+    transform: translate(-50%, -50%);
     background: rgba(255, 255, 255, 0.8);
     border: 2px solid #555;
     border-radius: 8px;
@@ -345,9 +345,10 @@ body, html {
 }
 
 #catnip-meter-container {
-    left: 10%;
-    top: 50%;
-    width: 15%;
+    left: 15.6667%;
+    top: 26.8333%;
+    width: 10%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
