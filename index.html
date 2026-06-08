@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PickleClicker</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="app-container">
@@ -64,6 +65,60 @@
 
             <div id="settings-area">
                 <button id="dev-mode-btn">Developer Mode</button>
+            </div>
+        </div>
+
+        <!-- Game 2 Screen -->
+        <div id="game2-screen" class="hidden">
+            <!-- Header (Biscuits and Billion Goal) -->
+            <div id="game2-header" class="ui-offscreen-top">
+                <div class="game2-header-top">
+                    <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
+                    <span id="game2-biscuit-count">0</span>
+                    <span id="game2-reset-icon" title="Reset Progress">&#x21bb;</span>
+                </div>
+                <div class="billion-progress-container">
+                    <div id="billion-progress-bar" class="progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- Main Game Area -->
+            <div id="game2-area">
+                <div id="game2-background-container">
+                    <img src="assets/bg_game_stonks.png" id="game2-bg-image" alt="Background">
+
+                    <!-- Graph Container (Left Side) -->
+                    <div id="game2-graph-container" class="sticker" data-flip="false">
+                        <canvas id="stonks-chart"></canvas>
+                    </div>
+
+                    <!-- Business Cat Container (Right Side) -->
+                    <div id="game2-cat-container" class="sticker" data-flip="false">
+                        <img src="assets/business_cat_rest.png" id="game2-cat-image" alt="Business Cat">
+                    </div>
+
+                    <!-- Catnip Meter (Vertical) -->
+                    <div id="catnip-meter-container" class="sticker" data-flip="false">
+                        <img src="assets/catnip_bag.png" id="catnip-btn" alt="Catnip">
+                        <div class="catnip-bar-bg">
+                            <div id="catnip-bar-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Game 2 Stickers Container -->
+                    <div id="game2-stickers-container">
+                        <!-- Stickers for assets/businesses will go here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store List (Assets, Shell Companies, Legit Businesses) -->
+            <div id="game2-store-list">
+                <!-- Store items will be injected here via JS -->
+            </div>
+
+            <div id="game2-settings-area">
+                <button id="game2-dev-mode-btn">Developer Mode</button>
             </div>
         </div>
 

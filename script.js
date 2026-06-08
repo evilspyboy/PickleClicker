@@ -18,6 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const upgradeListContEl = document.getElementById('upgrade-list');
     const settingsAreaEl = document.getElementById('settings-area');
 
+    // Game 2 UI Elements
+    const game2Screen = document.getElementById('game2-screen');
+    const game2HeaderEl = document.getElementById('game2-header');
+    const game2BackgroundContEl = document.getElementById('game2-background-container');
+    const game2StoreListContEl = document.getElementById('game2-store-list');
+    const game2SettingsAreaEl = document.getElementById('game2-settings-area');
+    const game2BiscuitCountEl = document.getElementById('game2-biscuit-count');
+
     // Initialize Game Screen state
     gameScreen.classList.remove('hidden');
 
@@ -29,6 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsAreaEl.style.visibility = 'hidden';
     settingsAreaEl.style.opacity = '0';
     settingsAreaEl.style.pointerEvents = 'none';
+
+    // Game 2 initial layout hide
+    if (game2StoreListContEl) {
+        game2StoreListContEl.style.visibility = 'hidden';
+        game2StoreListContEl.style.opacity = '0';
+        game2StoreListContEl.style.pointerEvents = 'none';
+        game2SettingsAreaEl.style.visibility = 'hidden';
+        game2SettingsAreaEl.style.opacity = '0';
+        game2SettingsAreaEl.style.pointerEvents = 'none';
+    }
 
     // Check if Game 2 is unlocked
     const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
@@ -75,7 +93,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Failed to parse leaderboard for starting balance");
             }
         }
-        showConfirmModal(`Game 2 coming soon!\nStarting Balance: ${Number(game2Biscuits).toLocaleString()} biscuits`);
+
+        // Slide out start screen components
+        game2StartScreen.classList.add('slide-up');
+        gameScreen.classList.add('hidden'); // Hide Game 1 container to be safe
+        game2Screen.classList.remove('hidden');
+
+        // Init biscuits visual
+        if(game2BiscuitCountEl) game2BiscuitCountEl.textContent = Number(game2Biscuits).toLocaleString();
+
+        // Prepare to show game 2 UI
+        setTimeout(() => {
+            if(game2HeaderEl) game2HeaderEl.classList.remove('ui-offscreen-top');
+
+            // Re-apply visible state to layout elements
+            if(game2StoreListContEl) {
+                game2StoreListContEl.style.visibility = 'visible';
+                game2StoreListContEl.style.opacity = '1';
+                game2StoreListContEl.style.pointerEvents = 'auto';
+            }
+
+            if(game2SettingsAreaEl) {
+                game2SettingsAreaEl.style.visibility = 'visible';
+                game2SettingsAreaEl.style.opacity = '1';
+                game2SettingsAreaEl.style.pointerEvents = 'auto';
+            }
+
+            if (typeof initStonksChart === 'function') initStonksChart();
+        }, 100);
+
+        setTimeout(() => {
+            game2StartScreen.classList.add('hidden');
+        }, 1000);
     });
 
     startBtn.addEventListener('click', () => {
@@ -313,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Developer Mode Elements
     const devModeBtn = document.getElementById('dev-mode-btn');
+    const game2DevModeBtn = document.getElementById('game2-dev-mode-btn');
     const devModePanel = document.getElementById('dev-mode-panel');
     const devBgToggleBtn = document.getElementById('dev-bg-toggle');
     const devSelectedStickerText = document.getElementById('dev-selected-sticker');
@@ -578,43 +628,106 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- DEVELOPER MODE ---
-    devModeBtn.addEventListener('click', () => {
-        devModeActive = true;
-        devModePanel.classList.remove('hidden');
-        stickersContainer.style.pointerEvents = 'auto'; // allow clicking stickers
+    // --- GAME 2 SPECIFIC LOGIC ---
+    let stonksChartInstance = null;
 
-        // Prepare cat for dragging
-        catImage.style.border = '2px dashed red';
-        if (!catImage.dataset.devSetup) {
-            catImage.dataset.devSetup = true;
+    window.initStonksChart = function() {
+        const ctx = document.getElementById('stonks-chart');
+        if (!ctx) return;
 
-            // Apply absolute positioning if not set
-            if (window.getComputedStyle(catImage).position !== 'absolute' && !catImage.style.position) {
-                catImage.style.position = 'absolute';
-                catImage.style.left = '50%';
-                catImage.style.top = '50%';
-                updateStickerTransform(catImage);
-            }
+        // Prevent re-initialization
+        if (stonksChartInstance) return;
 
-            catImage.addEventListener('mousedown', startDrag);
-            catImage.addEventListener('touchstart', startDrag, {passive: false});
-        }
-
-        // Show all stickers
-        document.querySelectorAll('.sticker').forEach(sticker => {
-            sticker.classList.remove('hidden');
-            sticker.style.border = '2px dashed red';
-
-            // Add interaction listeners if not already present
-            if (!sticker.dataset.devSetup) {
-                sticker.dataset.devSetup = true;
-                sticker.addEventListener('mousedown', startDrag);
-                sticker.addEventListener('touchstart', startDrag, {passive: false});
+        stonksChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                datasets: [
+                    { label: 'Tuna Inc', data: [10, 15, 12, 18, 20, 22, 25, 24, 28, 30], borderColor: '#f06292', tension: 0.1, fill: false, pointRadius: 0 },
+                    { label: 'Yarn Corp', data: [20, 18, 22, 24, 26, 25, 23, 21, 19, 18], borderColor: '#ba68c8', tension: 0.1, fill: false, pointRadius: 0 },
+                    { label: 'Salmon Tech', data: [5, 8, 15, 25, 40, 50, 45, 60, 80, 100], borderColor: '#64b5f6', tension: 0.1, fill: false, pointRadius: 0 },
+                    { label: 'Laser Dynamics', data: [50, 40, 60, 30, 80, 20, 90, 10, 100, 5], borderColor: '#4fc3f7', tension: 0.1, fill: false, pointRadius: 0 },
+                    { label: 'Cardboard Box LLC', data: [30, 30, 31, 30, 29, 30, 30, 31, 30, 30], borderColor: '#81c784', tension: 0.1, fill: false, pointRadius: 0 },
+                    { label: 'Catnip Futures', data: [10, 12, 11, 15, 30, 60, 90, 120, 80, 40], borderColor: '#dce775', tension: 0.1, fill: false, pointRadius: 0 },
+                    { label: 'Solar Energy Co', data: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24], borderColor: '#ffd54f', tension: 0.1, fill: false, pointRadius: 0 },
+                    { label: 'Spring Toy Co', data: [25, 35, 20, 40, 15, 45, 10, 50, 5, 55], borderColor: '#ff8a65', tension: 0.1, fill: false, pointRadius: 0 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                plugins: {
+                    legend: {
+                        display: false // Hide legend to save space
+                    }
+                },
+                scales: {
+                    x: { display: false }, // Hide x axis labels
+                    y: {
+                        display: true,
+                        ticks: {
+                            font: { size: 10 }
+                        }
+                    }
+                }
             }
         });
-        updateDevOutput();
-    });
+    };
+
+    // --- DEVELOPER MODE ---
+    const activateDevMode = (isGame2 = false) => {
+        devModeActive = true;
+        devModePanel.classList.remove('hidden');
+
+        const currentBackgroundContainer = isGame2 ? document.getElementById('game2-background-container') : document.getElementById('background-container');
+        const currentCatImage = isGame2 ? document.getElementById('game2-cat-container') : catImage;
+        const currentStickersContainer = isGame2 ? document.getElementById('game2-stickers-container') : stickersContainer;
+
+        if (currentStickersContainer) {
+            currentStickersContainer.style.pointerEvents = 'auto'; // allow clicking stickers
+        }
+
+        // Prepare cat/container for dragging
+        if (currentCatImage) {
+            currentCatImage.style.border = '2px dashed red';
+            if (!currentCatImage.dataset.devSetup) {
+                currentCatImage.dataset.devSetup = true;
+
+                // Apply absolute positioning if not set
+                if (window.getComputedStyle(currentCatImage).position !== 'absolute' && !currentCatImage.style.position) {
+                    currentCatImage.style.position = 'absolute';
+                    currentCatImage.style.left = '50%';
+                    currentCatImage.style.top = '50%';
+                    updateStickerTransform(currentCatImage);
+                }
+
+                currentCatImage.addEventListener('mousedown', startDrag);
+                currentCatImage.addEventListener('touchstart', startDrag, {passive: false});
+            }
+        }
+
+        // Show all stickers in the current background container
+        if (currentBackgroundContainer) {
+            currentBackgroundContainer.querySelectorAll('.sticker').forEach(sticker => {
+                sticker.classList.remove('hidden');
+                sticker.style.border = '2px dashed red';
+
+                // Add interaction listeners if not already present
+                if (!sticker.dataset.devSetup) {
+                    sticker.dataset.devSetup = true;
+                    sticker.addEventListener('mousedown', startDrag);
+                    sticker.addEventListener('touchstart', startDrag, {passive: false});
+                }
+            });
+        }
+        updateDevOutput(isGame2);
+    };
+
+    if (devModeBtn) devModeBtn.addEventListener('click', () => activateDevMode(false));
+    if (game2DevModeBtn) game2DevModeBtn.addEventListener('click', () => activateDevMode(true));
+
+    /* Legacy Game 1 button retained above */
 
     devCloseBtn.addEventListener('click', () => {
         devModeActive = false;
@@ -646,14 +759,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startDrag(e) {
         if (!devModeActive) return;
-        e.preventDefault();
 
-        selectedSticker = e.target;
+        // Find closest sticker container in case we clicked an inner element like canvas
+        let target = e.target.closest('.sticker');
+        if (!target) target = e.target;
+
+        selectedSticker = target;
         devSelectedStickerText.textContent = selectedSticker.id;
+
+        const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
+        const bgContainer = isGame2 ? document.getElementById('game2-background-container') : document.getElementById('background-container');
 
         // Update UI controls to match selection
         // Convert pixel width back to percentage of background container
-        const bgRect = document.getElementById('background-container').getBoundingClientRect();
+        const bgRect = bgContainer.getBoundingClientRect();
         const stickerWidthPx = selectedSticker.getBoundingClientRect().width;
         let currentWidthPercent = Math.round((stickerWidthPx / bgRect.width) * 100);
 
@@ -665,8 +784,8 @@ document.addEventListener('DOMContentLoaded', () => {
         devFlipInput.checked = selectedSticker.dataset.flip === 'true';
 
         // Visual selection
-        document.querySelectorAll('.sticker').forEach(s => s.style.border = '2px dashed red');
-        catImage.style.border = '2px dashed red';
+        bgContainer.querySelectorAll('.sticker').forEach(s => s.style.border = '2px dashed red');
+        if (!isGame2) catImage.style.border = '2px dashed red';
         selectedSticker.style.border = '4px solid blue';
 
         isDragging = true;
@@ -692,8 +811,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
         let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
 
+        const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
+        const bgContainer = isGame2 ? document.getElementById('game2-background-container') : document.getElementById('background-container');
+
         // Use background-container as the reference for percentage coordinates
-        const containerRect = document.getElementById('background-container').getBoundingClientRect();
+        const containerRect = bgContainer.getBoundingClientRect();
 
         // Calculate new center position in percentages relative to container
         // We use the scaled bounds (getBoundingClientRect) for the width/height to properly counteract the dragOffsetX/Y
@@ -707,7 +829,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedSticker.style.left = `${leftPercent}%`;
         selectedSticker.style.top = `${topPercent}%`;
 
-        updateDevOutput();
+        updateDevOutput(isGame2);
     }
 
     function endDrag() {
@@ -721,14 +843,16 @@ document.addEventListener('DOMContentLoaded', () => {
     devScaleInput.addEventListener('input', (e) => {
         if (selectedSticker) {
             selectedSticker.style.width = `${e.target.value}%`;
-            updateDevOutput();
+            const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
+            updateDevOutput(isGame2);
         }
     });
 
     devZIndexInput.addEventListener('input', (e) => {
         if (selectedSticker) {
             selectedSticker.style.zIndex = e.target.value;
-            updateDevOutput();
+            const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
+            updateDevOutput(isGame2);
         }
     });
 
@@ -744,31 +868,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const flipTransform = isFlipped ? 'scaleX(-1)' : '';
 
         el.style.transform = `translate(-50%, -50%) ${flipTransform}`.trim();
-        updateDevOutput();
+        const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
+        updateDevOutput(isGame2);
     }
 
-    function updateDevOutput() {
+    function updateDevOutput(isGame2 = false) {
         if (!devModeActive) return;
 
         let outputHTML = '<strong>CSS for standard placements:</strong><br><textarea style="width:100%; height:150px; font-size:10px;">';
 
+        const currentBackgroundContainer = isGame2 ? document.getElementById('game2-background-container') : document.getElementById('background-container');
+        if (!currentBackgroundContainer) return;
+
         // Helper to convert pixel width to percent of container
         function getWidthPercent(el) {
-            const bgRect = document.getElementById('background-container').getBoundingClientRect();
+            const bgRect = currentBackgroundContainer.getBoundingClientRect();
             const elRect = el.getBoundingClientRect();
             return Math.round((elRect.width / bgRect.width) * 100);
         }
 
-        // Output for Cat Image
-        const catLeft = catImage.style.left || '63.9983%';
-        const catTop = catImage.style.top || '69.7604%';
-        const catWidth = catImage.style.width || `${getWidthPercent(catImage)}%`;
-        const catFlip = catImage.dataset.flip === 'true' ? ' scaleX(-1)' : '';
-        const catZIndex = catImage.style.zIndex || window.getComputedStyle(catImage).zIndex;
-        outputHTML += `#cat-image {\n  left: ${catLeft};\n  top: ${catTop};\n  width: ${catWidth};\n  transform: translate(-50%, -50%)${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
+        if (!isGame2) {
+            // Output for Cat Image (Game 1)
+            const catLeft = catImage.style.left || '63.9983%';
+            const catTop = catImage.style.top || '69.7604%';
+            const catWidth = catImage.style.width || `${getWidthPercent(catImage)}%`;
+            const catFlip = catImage.dataset.flip === 'true' ? ' scaleX(-1)' : '';
+            const catZIndex = catImage.style.zIndex || window.getComputedStyle(catImage).zIndex;
+            outputHTML += `#cat-image {\n  left: ${catLeft};\n  top: ${catTop};\n  width: ${catWidth};\n  transform: translate(-50%, -50%)${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
+        }
 
-        // Output for Stickers
-        document.querySelectorAll('.sticker').forEach(sticker => {
+        // Output for Stickers in current container
+        currentBackgroundContainer.querySelectorAll('.sticker').forEach(sticker => {
             const id = sticker.id;
 
             // Since computed left/top are pixels, and the user provided percentages in CSS,
