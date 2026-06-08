@@ -748,6 +748,11 @@ document.addEventListener('DOMContentLoaded', () => {
             game2CatContainer.style.border = 'none';
             game2CatContainer.style.pointerEvents = 'none'; // Revert back to none
         }
+        const game2CrashedCatContainer = document.getElementById('game2-crashedcat-container');
+        if (game2CrashedCatContainer) {
+            game2CrashedCatContainer.style.border = 'none';
+            game2CrashedCatContainer.style.pointerEvents = 'none'; // Revert back to none
+        }
 
         // Clean up sticker borders
         document.querySelectorAll('.sticker').forEach(sticker => {
@@ -777,18 +782,21 @@ document.addEventListener('DOMContentLoaded', () => {
         devCatCycleBtn.addEventListener('click', () => {
             const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
             if (isGame2) {
+                const game2CatCont = document.getElementById('game2-cat-container');
                 const game2CatImg = document.getElementById('game2-cat-image');
-                if (game2CatImg) {
+                const game2CrashedCont = document.getElementById('game2-crashedcat-container');
+
+                if (game2CatImg && game2CrashedCont && game2CatCont) {
                     currentBusinessCatImageIndex = (currentBusinessCatImageIndex + 1) % businessCatImages.length;
                     const nextSrc = businessCatImages[currentBusinessCatImageIndex];
-                    game2CatImg.src = nextSrc;
 
-                    // The crashed out cat image has smaller dimensions and needs to be scaled up slightly
-                    // and shifted to align its bottom edge with the others.
                     if (nextSrc.includes('crashedout')) {
-                        game2CatImg.style.transform = 'scale(1.2) translateY(8%)';
+                        game2CatCont.classList.add('hidden');
+                        game2CrashedCont.classList.remove('hidden');
                     } else {
-                        game2CatImg.style.transform = 'none';
+                        game2CrashedCont.classList.add('hidden');
+                        game2CatCont.classList.remove('hidden');
+                        game2CatImg.src = nextSrc;
                     }
                 }
             } else {
@@ -802,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Find closest sticker container in case we clicked an inner element like canvas or image
         let target = e.target.closest('.sticker');
-        if (!target) target = e.target.closest('#cat-image') || e.target.closest('#game2-cat-container') || e.target;
+        if (!target) target = e.target.closest('#cat-image') || e.target.closest('#game2-cat-container') || e.target.closest('#game2-crashedcat-container') || e.target;
 
         selectedSticker = target;
         devSelectedStickerText.textContent = selectedSticker.id;

@@ -73,11 +73,19 @@
             <!-- Header (Biscuits and Billion Goal) -->
             <div id="game2-header" class="ui-offscreen-top">
                 <div class="game2-header-top">
-                    <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
-                    <span id="game2-biscuit-count">0</span>
+                    <div class="biscuit-box">
+                        <span class="box-label">Liquid</span>
+                        <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
+                        <span id="game2-biscuit-count">0</span>
+                    </div>
+                    <div class="biscuit-box">
+                        <span class="box-label">Net Worth</span>
+                        <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
+                        <span id="game2-networth-count">0</span>
+                    </div>
                     <span id="game2-reset-icon" title="Reset Progress">&#x21bb;</span>
                 </div>
-                <div class="billion-progress-container">
+                <div class="billion-progress-container" title="Progress to 1 Billion Net Worth">
                     <div id="billion-progress-bar" class="progress-bar"></div>
                 </div>
             </div>
@@ -97,6 +105,10 @@
                         <img src="assets/business_cat_rest.png" id="game2-cat-image" alt="Business Cat">
                     </div>
 
+                    <div id="game2-crashedcat-container" class="sticker hidden" data-flip="false">
+                        <img src="assets/business_cat_crashedout.png" id="game2-crashedcat-image" alt="Crashed Out Cat">
+                    </div>
+
                     <!-- Catnip Meter (Vertical) -->
                     <div id="catnip-meter-container" class="sticker" data-flip="false">
                         <img src="assets/catnip_bag.png" id="catnip-btn" alt="Catnip">
@@ -110,6 +122,19 @@
                         <!-- Stickers for assets/businesses will go here -->
                     </div>
                 </div>
+            </div>
+
+            <!-- Stonks Grid -->
+            <div id="stonks-grid">
+                <!-- 8 Stonks will be injected here or hardcoded -->
+                <div class="stonk-item"><img src="assets/tuna_can.png" class="stonk-icon" alt="Tuna Inc"><div class="stonk-info"><span class="stonk-name">Tuna Inc</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
+                <div class="stonk-item"><img src="assets/yarn_ball.png" class="stonk-icon" alt="Yarn Corp"><div class="stonk-info"><span class="stonk-name">Yarn Corp</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
+                <div class="stonk-item"><img src="assets/robot_salmon.png" class="stonk-icon" alt="Salmon Tech"><div class="stonk-info"><span class="stonk-name">Salmon Tech</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
+                <div class="stonk-item"><img src="assets/laser_pointer.png" class="stonk-icon" alt="Laser Dynamics"><div class="stonk-info"><span class="stonk-name">Laser Dyn</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
+                <div class="stonk-item"><img src="assets/carboard_box.png" class="stonk-icon" alt="Cardboard Box LLC"><div class="stonk-info"><span class="stonk-name">Box LLC</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
+                <div class="stonk-item"><img src="assets/catnip_leaf.png" class="stonk-icon" alt="Catnip Futures"><div class="stonk-info"><span class="stonk-name">Catnip Fut</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
+                <div class="stonk-item"><img src="assets/solar_panel.png" class="stonk-icon" alt="Solar Energy Co"><div class="stonk-info"><span class="stonk-name">Solar Co</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
+                <div class="stonk-item"><img src="assets/spring_toy.png" class="stonk-icon" alt="Spring Toy Co"><div class="stonk-info"><span class="stonk-name">Spring Co</span><span class="stonk-price">100 B</span><span class="stonk-shares">0 Held</span></div><div class="stonk-controls"><button class="stonk-btn sell">-</button><button class="stonk-btn buy">+</button></div></div>
             </div>
 
             <!-- Store List (Assets, Shell Companies, Legit Businesses) -->
