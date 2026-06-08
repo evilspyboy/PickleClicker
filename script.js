@@ -780,7 +780,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const game2CatImg = document.getElementById('game2-cat-image');
                 if (game2CatImg) {
                     currentBusinessCatImageIndex = (currentBusinessCatImageIndex + 1) % businessCatImages.length;
-                    game2CatImg.src = businessCatImages[currentBusinessCatImageIndex];
+                    const nextSrc = businessCatImages[currentBusinessCatImageIndex];
+                    game2CatImg.src = nextSrc;
+
+                    // The crashed out cat image has smaller dimensions and needs to be scaled up slightly
+                    // and shifted to align its bottom edge with the others.
+                    if (nextSrc.includes('crashedout')) {
+                        game2CatImg.style.transform = 'scale(1.2) translateY(8%)';
+                    } else {
+                        game2CatImg.style.transform = 'none';
+                    }
                 }
             } else {
                 alert("Cat image cycle is only configured for Game 2 business cat.");
