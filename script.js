@@ -2,8 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("PickleClicker initialized");
 
     const startScreen = document.getElementById('start-screen');
+    const game2StartScreen = document.getElementById('game2-start-screen');
     const gameScreen = document.getElementById('game-screen');
     const startBtn = document.getElementById('start-btn');
+    const game2StartBtn = document.getElementById('game2-start-btn');
+
+    // Toggle Buttons
+    const game2UnlockBtn = document.getElementById('game2-unlock-btn');
+    const game1SwitchBtn = document.getElementById('game1-switch-btn');
 
     // UI Elements for Transition
     const headerEl = document.getElementById('header');
@@ -23,6 +29,30 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsAreaEl.style.visibility = 'hidden';
     settingsAreaEl.style.opacity = '0';
     settingsAreaEl.style.pointerEvents = 'none';
+
+    // Check if Game 2 is unlocked
+    if (localStorage.getItem('pickleClickerLeaderboard')) {
+        game2UnlockBtn.classList.remove('hidden');
+    }
+
+    game2UnlockBtn.addEventListener('click', () => {
+        startScreen.classList.add('hidden');
+        game2StartScreen.classList.remove('hidden');
+        // Pre-load the Game 2 background so it shows behind the start screen if it ever becomes transparent,
+        // or just to have it ready
+        bgImage.src = 'assets/bg_game_stonks.png';
+    });
+
+    game1SwitchBtn.addEventListener('click', () => {
+        game2StartScreen.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+        bgImage.src = 'assets/bg_game.png';
+    });
+
+    game2StartBtn.addEventListener('click', () => {
+        const game2Biscuits = localStorage.getItem('pickleClickerGame2StartingBiscuits') || 1000000;
+        showConfirmModal(`Game 2 coming soon!\nStarting Balance: ${Number(game2Biscuits).toLocaleString()} biscuits`);
+    });
 
     startBtn.addEventListener('click', () => {
         // Slide out start screen components
@@ -85,6 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error("Failed to parse leaderboard");
                 }
             }
+
+            // Save starting biscuits for Game 2
+            localStorage.setItem('pickleClickerGame2StartingBiscuits', biscuits);
 
             // Add new score if it wasn't already ended
             if (!wasEnded) {
