@@ -61,7 +61,11 @@ The application will launch into a **Hub Screen** where the player can choose wh
     - *Clean Audit:* If the investigation fails, the player only pays the liquid penalty, and the popup reads *"The Tax Office audited your liquid accounts but found no hidden assets."*
 - **Businesses & Assets:** Players use liquid biscuits to buy Tangible Assets (e.g., Cat Yacht, Solid Gold Litterbox) and Businesses. Both can be bought and sold.
   - **Tangible Assets (Hiding Wealth):** Act as safe havens to hide biscuits from standard liquid biscuit audits, but carry the risk of seizure if the player's profile looks too suspicious. They have no direct effect on the market. Their buy/sell price remains fixed, providing a stable (but risky) vault for wealth. The game will feature scaling assets with massive price tags (e.g., Solid Gold Litterbox vs. Private Island Litterbox).
-  - **Shell Companies:** Like Tangible Assets, these act as fixed-price vaults to hide money from standard audits. However, they are highly illegal and provide zero "legitimate cover." If an aggressive audit happens, they are almost guaranteed to be seized. They have no effect on the stonk market.
+  - **Shell Companies:** Like Tangible Assets, these act as fixed-price vaults to hide money from standard audits. However, they are highly illegal and provide zero "legitimate cover." If an aggressive audit happens, they are almost guaranteed to be seized. They have no effect on the stonk market, but they now provide unique strategic benefits:
+    - *A Literal Shell Company:* Parks money and generates a passive "off the books" income stream (extra biscuits outside the stonks market).
+    - *Three Dogs in a Trenchcoat Inc.:* Parks money and generates a passive "off the books" income stream.
+    - *Money Laundromat (Cash Laundry):* Lowers the player's base Audit Exposure percentage.
+    - *Shadow Board:* Does not earn passive income but acts as a "get out of jail free" card, providing a chance to make an audit go away completely if one triggers.
   - **Legit Businesses (Market Manipulators):** Active market players that align with the 8 Stonks. Owning them adds a **+X velocity modifier** to the associated Stonk's baseline growth rate over time. They also provide "legitimate" cover for your wealth against the Tax Office.
     - *Volatility & Cost:* Businesses are tiered. A cheap business (e.g., Cardboard Recycling Plant) adds a small velocity modifier and has a highly stable market—it takes many purchases to flood and crash it. A high-end business (e.g., Solar Farm) adds a massive velocity modifier but operates in a highly volatile market—buying just a few too many will rapidly flood and crash the market.
     - *Business Value Fluctuations:* Unlike Tangible Assets, the buy/sell price of a Legit Business is tied directly to the current price of its associated Stonk. Players can trade businesses for profit or loss.
@@ -123,6 +127,7 @@ Since Game 2 is currently in the design phase, the following assets need to be c
 - A Literal Shell Company (A stand selling seashells)
 - Three Dogs in a Trenchcoat Inc.
 - Money Laundromat (A literal washing machine full of biscuits)
+- A Shadow Board (A mysterious group of silhouetted cats in a boardroom)
 
 ---
 
