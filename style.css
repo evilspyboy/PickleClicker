@@ -312,8 +312,8 @@ body, html {
 
 /* Game 2 Specific Placements */
 #game2-graph-container {
-    left: 59.1667%;
-    top: 45.1667%;
+    left: 56.3333%;
+    top: 36.3316%;
     width: 58%;
     transform: translate(-50%, -50%);
     background: rgba(255, 255, 255, 0.8);
@@ -332,9 +332,10 @@ body, html {
 }
 
 #game2-cat-container {
-    left: 80%;
-    top: 60%;
-    width: 35%;
+    left: 23.1667%;
+    top: 75.1649%;
+    width: 23%;
+    transform: translate(-50%, -50%);
     z-index: 50;
     pointer-events: none;
 }
@@ -342,11 +343,13 @@ body, html {
 #game2-cat-image {
     width: 100%;
     height: auto;
+    display: block;
+    transform-origin: bottom center;
 }
 
 #catnip-meter-container {
-    left: 15.6667%;
-    top: 26.8333%;
+    left: 15.8333%;
+    top: 27.8316%;
     width: 10%;
     transform: translate(-50%, -50%);
     display: flex;
