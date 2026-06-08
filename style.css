@@ -29,7 +29,7 @@ body, html {
 }
 
 /* Start Screen */
-#start-screen {
+#start-screen, #game2-start-screen {
     position: absolute;
     top: 0;
     left: 0;
@@ -47,13 +47,13 @@ body, html {
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
-#start-screen.slide-up {
+#start-screen.slide-up, #game2-start-screen.slide-up {
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
 }
 
-#start-screen.hidden {
+#start-screen.hidden, #game2-start-screen.hidden {
     display: none;
 }
 
@@ -68,27 +68,46 @@ body, html {
     opacity: 0;
 }
 
-#start-title {
+#start-title, #game2-start-title {
     width: 60%;
     max-width: 300px;
     margin: 0;
 }
 
-#start-cat {
+#start-cat, #game2-start-cat {
     width: 45%;
     max-width: 220px;
     margin: -15px 0;
 }
 
-#start-btn {
+#start-btn, #game2-start-btn {
     width: 45%;
     max-width: 220px;
     cursor: pointer;
     margin: 0;
 }
 
-#start-btn:active {
+#start-btn:active, #game2-start-btn:active {
     transform: scale(0.95);
+}
+
+.corner-toggle {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 15%;
+    max-width: 60px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    z-index: 101;
+}
+
+.corner-toggle:active {
+    transform: scale(0.9);
+}
+
+.corner-toggle.hidden {
+    display: none;
 }
 
 /* Game Screen */
