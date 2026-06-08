@@ -117,7 +117,7 @@ body, html {
 }
 
 /* Game Screen */
-#game-screen {
+#game-screen, #game2-screen {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -127,8 +127,12 @@ body, html {
     left: 0;
 }
 
+#game2-screen.hidden {
+    display: none;
+}
+
 /* Header */
-#header {
+#header, #game2-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -143,7 +147,35 @@ body, html {
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
-#reset-icon {
+#game2-header {
+    flex-direction: column;
+    padding: 0;
+}
+
+.game2-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+    position: relative;
+}
+
+.billion-progress-container {
+    width: 100%;
+    height: 6px;
+    background-color: #ddd;
+    position: relative;
+}
+
+#billion-progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #ffd700; /* Gold */
+    transition: width 0.2s ease-in-out;
+}
+
+#reset-icon, #game2-reset-icon {
     position: absolute;
     right: 15px;
     top: 50%;
@@ -154,7 +186,7 @@ body, html {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-#reset-icon:active {
+#reset-icon:active, #game2-reset-icon:active {
     transform: translateY(-50%) scale(0.9);
 }
 
@@ -165,7 +197,7 @@ body, html {
 }
 
 /* Game Area */
-#game-area {
+#game-area, #game2-area {
     position: relative;
     width: 100%;
     flex: 1 1 auto;
@@ -176,7 +208,7 @@ body, html {
     align-items: center;
 }
 
-#background-container {
+#background-container, #game2-background-container {
     position: relative;
     /* To guarantee a perfect square that anchors to the width of the screen */
     /* By forcing 100% width and 1:1 aspect ratio, it will be the maximum possible size */
@@ -188,7 +220,7 @@ body, html {
     flex-shrink: 0;
 }
 
-#bg-image {
+#bg-image, #game2-bg-image {
     position: absolute;
     top: 0;
     left: 0;
@@ -198,7 +230,7 @@ body, html {
     object-fit: cover;
 }
 
-#stickers-container {
+#stickers-container, #game2-stickers-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -278,6 +310,82 @@ body, html {
   z-index: 1;
 }
 
+/* Game 2 Specific Placements */
+#game2-graph-container {
+    left: 30%;
+    top: 50%;
+    width: 50%;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid #555;
+    border-radius: 8px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+#stonks-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#game2-cat-container {
+    left: 80%;
+    top: 60%;
+    width: 35%;
+    z-index: 50;
+    pointer-events: none;
+}
+
+#game2-cat-image {
+    width: 100%;
+    height: auto;
+}
+
+#catnip-meter-container {
+    left: 10%;
+    top: 50%;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 60;
+}
+
+#catnip-btn {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#catnip-btn:active {
+    transform: scale(0.9);
+}
+
+.catnip-bar-bg {
+    width: 20px;
+    height: 100px;
+    background-color: #ddd;
+    border: 2px solid #888;
+    border-radius: 10px;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+#catnip-bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background-color: #81c784; /* Green */
+    transition: height 0.2s, background-color 0.2s;
+}
+
 #cat-container {
     position: absolute;
     top: 0;
@@ -305,8 +413,8 @@ body, html {
     width: 45%; /* Slightly smaller for the active effect instead of scaling */
 }
 
-/* Upgrade List */
-#upgrade-list {
+/* Upgrade List & Store List */
+#upgrade-list, #game2-store-list {
     flex: 1 1 40%;
     overflow-y: auto;
     background-color: #fff;
@@ -395,7 +503,7 @@ body, html {
 }
 
 /* Settings Area */
-#settings-area {
+#settings-area, #game2-settings-area {
     padding: 10px;
     display: flex;
     justify-content: center;
@@ -404,7 +512,7 @@ body, html {
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
-#settings-area button {
+#settings-area button, #game2-settings-area button {
     padding: 8px 12px;
     background: #ccc;
     border: none;
@@ -412,8 +520,8 @@ body, html {
     cursor: pointer;
 }
 
-#dev-mode-btn {
-    display: none;
+#dev-mode-btn, #game2-dev-mode-btn {
+    display: block; /* Make it visible so user can position items easily */
 }
 
 /* General Modals */
