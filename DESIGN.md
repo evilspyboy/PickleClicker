@@ -88,46 +88,59 @@ The application will launch into a **Hub Screen** where the player can choose wh
 
 ---
 
-## 5. Required Assets List
-Since Game 2 is currently in the design phase, the following assets need to be created before development can fully begin. All assets should be transparent PNGs and maintain the cozy, pastel aesthetic of Game 1.
+## 5. Game 2 Visual Assets List
+The following assets are used or required for Game 2. All assets should be transparent PNGs and maintain the cozy, pastel aesthetic of Game 1.
 
-**Hub & UI Assets:**
-- Game 2 Lock/Unlock icons or Hub Button graphics.
+**Hub & Transition Mechanics:**
+- When a user finishes the first game, they can either restart or access Game 2.
+- On the Game 1 main screen at the bottom right corner, a small bag of catnip icon (`catnip_bag.png`) allows players with a high score in Game 1 to switch to Game 2.
+- In Game 2 ("Mr. Pickles Commits Tax Fraud"), a small biscuit image (`biscuit.png`) will switch back to Game 1.
+
+**Game 2 UI & Titles:**
+- `bg_game_stonks.png` (The 2nd game background image)
+- `stonks_title.png` (Text that says "Mr. Pickles Commits Tax Fraud")
+- `tax_fraud_title_cat.png` (An image of the cat to use for the 2nd game front page)
 
 **Mr. Pickles (Business Cat):**
-- `business_cat_rest.png` (Idle state, perhaps wearing a tie or glasses).
-- `business_cat_active.png` (Optional: If clicked, maybe he checks a pager or phone).
+- `business_cat_rest.png` (Idle state)
+- `business_cat_looking.png` (Cat looking to the left if something happens)
+- `business_cat_catnip.png` (Cat under the influence of catnip)
+- `business_cat_crashedout.png` (Cat crashed out from having too much catnip/filled the catnip bar)
 
 **Stonks Icons (8 Total):**
-1. Tuna Can (`Tuna Inc`)
-2. Yarn Ball (`Yarn Corp`)
-3. Salmon (`Salmon Tech`)
-4. Laser Pointer (`Laser Dynamics`)
-5. Cardboard Box (`Cardboard Box LLC`)
-6. Catnip Leaf (`Catnip Futures`)
-7. Solar Panel (`Solar Energy Co`)
-8. Spring Toy (`Spring Toy Co`)
-- Tax Office/Dog icon (for the Tax Audit warning)
+1. `tuna_can.png` (Tuna Inc)
+2. `yarn_ball.png` (Yarn Corp)
+3. `robot_salmon.png` (Salmon Tech)
+4. `laser_pointer.png` (Laser Dynamics)
+5. `carboard_box.png` (Cardboard Box LLC) (Reused from Game 1)
+6. `catnip_leaf.png` (Catnip Futures)
+7. `solar_panel.png` (Solar Energy Co)
+8. `spring_toy.png` (Spring Toy Co) (Reused from Game 1)
+
+**Tax Audit Warning:**
+- `tax_dog.png` (A dog tax officer)
 
 **Tangible Assets (Hiding Money Stickers):**
-- Fancy Sports Car (or Cardboard Box shaped like a car)
-- Cat Yacht / Boat
-- Solid Gold Litterbox
-- Private Island Litterbox (Massive endgame asset)
-- Designer Suit / Briefcase
+- `carboard_sportscar.png` (Cardboard sports car)
+- `carboard_yacht.png` (Cardboard yacht)
+- `gold_statue.png` (Gold cat statue)
+- `diamond_litter.png` (Litter box filled with diamonds)
+- `private_island_litterbox.png` (Massive endgame asset, to be uploaded)
 
 **Legit Businesses (Market Manipulator Stickers):**
-- Fish Market (Boosts Tuna/Salmon)
-- Cardboard Recycling Plant (Boosts Cardboard Box LLC)
-- Catnip Dispensary (Boosts Catnip Futures)
-- Laser Pointer Factory (Boosts Laser Dynamics)
-- Solar Farm (Boosts Solar Energy Co)
+- `business_storagecompany.png` (Storage company that stores boxes - boosts Cardboard Box LLC)
+- `business_petstore.png` (Pet toy store - boosts Laser Dynamics/Active Toys)
+- `business_dispensary.png` (Catnip dispensary - boosts Catnip Futures)
+- `business_solarfarm.png` (Solar farm - boosts Solar Energy Co)
 
 **Shell Companies (Meme Stickers):**
-- A Literal Shell Company (A stand selling seashells)
-- Three Dogs in a Trenchcoat Inc.
-- Money Laundromat (A literal washing machine full of biscuits)
-- A Shadow Board (A mysterious group of silhouetted cats in a boardroom)
+- `shell_shellcompany.png` (A shell company that sells shells)
+- `shell_3dogstrenchcoat.png` (3 dogs in a trenchcoat)
+- `shell_cashlaundry.png` (A cash laundry)
+- `shell_shadowboard.png` (A shadow board)
+
+**Other Items:**
+- `catnip_bag.png` (A bag of catnip for the player to give Mr. Pickles to up the catnip meter)
 
 ---
 
