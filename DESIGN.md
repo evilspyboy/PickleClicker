@@ -28,23 +28,37 @@ The application will launch into a **Hub Screen** where the player can choose wh
 
 ## 3. Game 2: Mr. Pickles Commits Tax Fraud
 **Core Concept:** An idle stock-trading / investment game. Mr. Pickles is now a "Business Cat" who rests while his money works for him (or gets hidden from the IRS). There is no core clicking mechanic to generate money; all wealth generation comes from the "Stonks Market".
-- **Goal:** Reach 1 Billion Biscuits in Total Net Worth (Liquid Cash + Value of Tangible Assets).
+- **Goal:** Reach 1 Billion Biscuits in Total Net Worth (Liquid Biscuits + Value of Tangible Assets).
 
 ### Layout
-- **Header:** Displays "Net Worth" and "Liquid Cash" balances.
-- **Game Area:** Similar to Game 1, featuring a central "Business Cat" Mr. Pickles and a background where purchased assets and businesses (stickers) will be placed.
-- **Stonks Panel:** Replaces the upgrade list from Game 1. A grid/list of available Stonks (e.g., Tuna Inc., Yarn Corp) with their current fluctuating prices, and Buy/Sell buttons.
-- **Catnip Button:** A special button located near the Stonks Panel used to pump the market.
+- **Header:** Displays "Net Worth" and "Liquid Biscuits" balances, and the Catnip Meter.
+- **Game Area (Top Half):**
+  - **Background:** An Office environment.
+  - **Mr. Pickles:** A Business Cat (wearing a tie) positioned on the left side.
+  - **Stonks Chart:** A stock market ticker line chart displayed on the right side, visually showing the stonks going up and down in real-time.
+- **Stonks Panel (Middle):** A list displayed directly under the game area showing each of the 8 Stonks. Each entry will have its cozy icon, the current price, and big `+` (Buy 100) and `-` (Sell 100) buttons to keep interactions simple and fast.
+- **Assets & Businesses Panel (Bottom):** Similar to the upgrade list in Game 1, this area allows players to buy and sell Tangible Assets, Shell Companies, and Legit Businesses. Buying an asset adds its cozy sticker to the Office background.
 
 ### Mechanics
-- **The Stonks Market:** Players invest their liquid biscuits into volatile "Stonks". Prices tick up and down every few seconds based on random market forces. Players aim to buy low and sell high.
-- **Tax Audits:** The IRS (Internal Ruff-enue Service) periodically conducts an audit (e.g., every 60 seconds). During an audit, a large percentage (e.g., 30%) of the player's **liquid cash** is seized.
-- **Businesses & Assets:** To protect their wealth from audits, players can use liquid cash to buy Tangible Assets (e.g., Cat Yacht, Solid Gold Litterbox) and Businesses.
-  - **Shell Companies:** Some businesses act purely as safe havens to hide money from the IRS. They are immune to tax audits.
-  - **Legit Businesses:** Other businesses act as active market players. Owning them changes the Stonks Market (e.g., owning a Fishing Fleet boosts "Tuna Inc." stonk baseline).
-  - **Market Flooding Risk:** If a player buys *too many* of a certain legit business, they flood the market. This drives down demand and crashes the associated stonk prices.
-  - Buying assets and businesses adds new stickers to the background. Players can sell them back if they need liquid cash to buy Stonks.
-- **Catnip:** A "pump" button that temporarily inflates Stonk prices. However, there is a hidden "high" meter. If the player presses the button too frequently, the market crashes, causing Stonk values to plummet dramatically.
+- **The Stonks Market & Economy:** Players invest liquid biscuits into 8 volatile "Stonks" (e.g., Tuna Inc, Yarn Corp, Salmon Tech, Laser Dynamics, Cardboard Box LLC, Catnip Futures, Sunbeam Energy, Spring Toy Co). Prices tick up and down mapped to the visual line chart. Stonks are bought/sold in lots of 100 per click.
+  - **Complex Relationships:** The economy is a complex system. Rather than simple pairs, stonks impact multiple other stonks in different ways (e.g., a rise in Food stonks might slightly depress Active Toy stonks but boost Rest stonks), making the market harder to perfectly predict.
+- **Tax Audits (The Popup Event):** The IRS (Internal Ruff-enue Service) periodically conducts an audit (e.g., every 60 seconds). The audit functions as a simple popup modal (like a Monopoly "Chance" card) informing the player of the outcome.
+  - **Standard Penalty:** A large percentage (e.g., 30%) of the player's **liquid biscuits** is automatically seized.
+  - **Audit Risk & Suspicion:** If a player has a massive amount of hidden biscuits (Tangible Assets/Shell Companies) but very few Legit Businesses to explain that wealth, the IRS becomes highly suspicious, triggering an "aggressive" audit.
+  - **Asset Seizure:** During an aggressive audit, there is a random chance the IRS "finds something." The popup will display a message like *"The IRS found your hidden offshore accounts! They seized a Solid Gold Litterbox!"* If they have no Tangible Assets, they seize Legit Businesses.
+  - **Clean Audit:** If the player balances their wealth well with Legit Businesses, the popup might say *"The IRS audited you and found nothing suspicious."*
+- **Businesses & Assets:** Players use liquid biscuits to buy Tangible Assets (e.g., Cat Yacht, Solid Gold Litterbox) and Businesses. Both can be bought and sold.
+  - **Tangible Assets (Hiding Wealth):** Act as safe havens to hide biscuits from standard liquid biscuit audits, but carry the risk of seizure if the player's profile looks too suspicious. They have no direct effect on the market. Their buy/sell price remains fixed, providing a stable (but risky) vault for wealth. The game will feature scaling assets with massive price tags (e.g., Solid Gold Litterbox vs. Private Island Litterbox).
+  - **Legit Businesses (Market Manipulators):** Active market players that align with the 8 Stonks. Owning them pushes the associated Stonk's baseline price up and provides "legitimate" cover for your wealth against the IRS.
+    - *Business Value Fluctuations:* Unlike Tangible Assets, the buy/sell price of a Legit Business is tied to the current price of its associated Stonk. Players can trade businesses for profit or loss.
+  - **Market Flooding Risk (The Bubble):** If a player buys *too many* of a specific Legit Business (e.g., too many Fish Markets), they saturate the market. This drives down demand and crashes the associated stonk. To recover the market, the player is forced to sell off those businesses, potentially at a massive loss due to the crashed stonk price. This crash creates ripple effects across the complex web of other stonks.
+  - Buying assets and businesses adds new stickers to the background.
+- **Catnip (Risk vs. Reward):**
+  - Players can use "Catnip" for a universal market boost.
+  - Using it fills a visible **Catnip Meter**.
+  - The meter degrades (cools down) slowly over time back to zero.
+  - **The Crash:** If the player uses too much catnip and maxes out the meter, the market crashes! All stonks take a massive tumble due to "panic selling in a catnip infused state".
+  - **Catnip Audit Risk:** If a Tax Audit happens while the player is crashed out from too much catnip, it guarantees an aggressive audit where the IRS is highly likely to seize assets.
 
 ---
 
@@ -66,20 +80,34 @@ Since Game 2 is currently in the design phase, the following assets need to be c
 - `business_cat_rest.png` (Idle state, perhaps wearing a tie or glasses).
 - `business_cat_active.png` (Optional: If clicked, maybe he checks a pager or phone).
 
-**Stonks Icons:**
-- Tuna Can (Tuna Inc.)
-- Yarn Ball (Yarn Corp.)
-- Laser Pointer (Laser Dynamics)
-- Catnip icon (for the pump button)
+**Stonks Icons (8 Total):**
+1. Tuna Can (`Tuna Inc`)
+2. Yarn Ball (`Yarn Corp`)
+3. Salmon (`Salmon Tech`)
+4. Laser Pointer (`Laser Dynamics`)
+5. Cardboard Box (`Cardboard Box LLC`)
+6. Catnip Leaf (`Catnip Futures`)
+7. Sunbeam (`Sunbeam Energy`)
+8. Spring Toy (`Spring Toy Co`)
 - IRS/Dog icon (for the Tax Audit warning)
 
-**Tangible Assets & Businesses (Stickers):**
+**Tangible Assets (Hiding Money Stickers):**
 - Fancy Sports Car (or Cardboard Box shaped like a car)
 - Cat Yacht / Boat
-- Mansion / Giant Fancy Cat Tree
 - Solid Gold Litterbox
+- Private Island Litterbox (Massive endgame asset)
 - Designer Suit / Briefcase
-- Storefronts (for Legit Businesses and Shell Companies)
+
+**Legit Businesses (Market Manipulator Stickers):**
+- Fish Market (Boosts Tuna/Salmon)
+- Cardboard Recycling Plant (Boosts Cardboard Box LLC)
+- Catnip Dispensary (Boosts Catnip Futures)
+- Laser Pointer Factory (Boosts Laser Dynamics)
+
+**Shell Companies (Meme Stickers):**
+- A Literal Shell Company (A stand selling seashells)
+- Three Dogs in a Trenchcoat Inc.
+- Money Laundromat (A literal washing machine full of biscuits)
 
 ---
 
