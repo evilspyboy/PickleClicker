@@ -70,28 +70,23 @@
 
         <!-- Game 2 Screen -->
         <div id="game2-screen" class="hidden">
-            <!-- Header (Biscuits and Billion Goal) -->
-            <div id="game2-header-wrapper" class="ui-offscreen-top">
-                <div id="game2-header">
-                    <span class="header-label">Liquid:</span>
-                    <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
-                    <span id="game2-biscuit-count" style="margin-right: 10px;">0</span>
-
-                    <span class="header-label">Net:</span>
-                    <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
-                    <span id="game2-networth-count">0</span>
-
-                    <span id="game2-reset-icon" title="Reset Progress">&#x21bb;</span>
-                </div>
-                <div class="billion-progress-container" title="Progress to 1 Billion Net Worth">
-                    <div id="billion-progress-bar" class="progress-bar"></div>
-                </div>
+            <!-- Header (Biscuits) -->
+            <div id="game2-header" class="ui-offscreen-top">
+                <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
+                <span id="game2-biscuit-count">0</span>
+                <span id="game2-reset-icon" title="Reset Progress">&#x21bb;</span>
             </div>
 
             <!-- Main Game Area -->
             <div id="game2-area">
                 <div id="game2-background-container">
                     <img src="assets/bg_game_stonks.png" id="game2-bg-image" alt="Background">
+
+                    <!-- Net Worth Billion Goal Progress -->
+                    <div id="billion-progress-container" class="sticker" data-flip="false" title="Progress to 1 Billion Net Worth">
+                        <span class="billion-label">Net Worth Goal</span>
+                        <div id="billion-progress-bar" class="progress-bar"></div>
+                    </div>
 
                     <!-- Graph Container (Left Side) -->
                     <div id="game2-graph-container" class="sticker" data-flip="false">

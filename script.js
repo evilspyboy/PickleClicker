@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game 2 UI Elements
     const game2Screen = document.getElementById('game2-screen');
-    const game2HeaderEl = document.getElementById('game2-header-wrapper');
+    const game2HeaderEl = document.getElementById('game2-header');
     const game2BackgroundContEl = document.getElementById('game2-background-container');
     const game2StoreListContEl = document.getElementById('game2-store-list');
     const game2SettingsAreaEl = document.getElementById('game2-settings-area');
@@ -810,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Find closest sticker container in case we clicked an inner element like canvas or image
         let target = e.target.closest('.sticker');
-        if (!target) target = e.target.closest('#cat-image') || e.target.closest('#game2-cat-container') || e.target.closest('#game2-crashedcat-container') || e.target.closest('#stonks-grid') || e.target;
+        if (!target) target = e.target.closest('#cat-image') || e.target.closest('#game2-cat-container') || e.target.closest('#game2-crashedcat-container') || e.target.closest('#stonks-grid') || e.target.closest('#billion-progress-container') || e.target;
 
         selectedSticker = target;
         devSelectedStickerText.textContent = selectedSticker.id;
