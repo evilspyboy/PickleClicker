@@ -639,19 +639,44 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prevent re-initialization
         if (stonksChartInstance) return;
 
+        // Preload icons for the chart
+        const createStonkIcon = (src) => {
+            const img = new Image();
+            img.src = src;
+            img.width = 24;
+            img.height = 24;
+            return img;
+        };
+
+        const icons = {
+            tuna: createStonkIcon('assets/tuna_can.png'),
+            yarn: createStonkIcon('assets/yarn_ball.png'),
+            salmon: createStonkIcon('assets/robot_salmon.png'),
+            laser: createStonkIcon('assets/laser_pointer.png'),
+            box: createStonkIcon('assets/carboard_box.png'),
+            catnip: createStonkIcon('assets/catnip_leaf.png'),
+            solar: createStonkIcon('assets/solar_panel.png'),
+            spring: createStonkIcon('assets/spring_toy.png')
+        };
+
+        // Custom function to only show the icon on the last data point
+        const getPointStyle = (icon) => (context) => {
+            return context.dataIndex === context.dataset.data.length - 1 ? icon : false;
+        };
+
         stonksChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
                 datasets: [
-                    { label: 'Tuna Inc', data: [10, 15, 12, 18, 20, 22, 25, 24, 28, 30], borderColor: '#f06292', tension: 0.1, fill: false, pointRadius: 0 },
-                    { label: 'Yarn Corp', data: [20, 18, 22, 24, 26, 25, 23, 21, 19, 18], borderColor: '#ba68c8', tension: 0.1, fill: false, pointRadius: 0 },
-                    { label: 'Salmon Tech', data: [5, 8, 15, 25, 40, 50, 45, 60, 80, 100], borderColor: '#64b5f6', tension: 0.1, fill: false, pointRadius: 0 },
-                    { label: 'Laser Dynamics', data: [50, 40, 60, 30, 80, 20, 90, 10, 100, 5], borderColor: '#4fc3f7', tension: 0.1, fill: false, pointRadius: 0 },
-                    { label: 'Cardboard Box LLC', data: [30, 30, 31, 30, 29, 30, 30, 31, 30, 30], borderColor: '#81c784', tension: 0.1, fill: false, pointRadius: 0 },
-                    { label: 'Catnip Futures', data: [10, 12, 11, 15, 30, 60, 90, 120, 80, 40], borderColor: '#dce775', tension: 0.1, fill: false, pointRadius: 0 },
-                    { label: 'Solar Energy Co', data: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24], borderColor: '#ffd54f', tension: 0.1, fill: false, pointRadius: 0 },
-                    { label: 'Spring Toy Co', data: [25, 35, 20, 40, 15, 45, 10, 50, 5, 55], borderColor: '#ff8a65', tension: 0.1, fill: false, pointRadius: 0 }
+                    { label: 'Tuna Inc', data: [10, 15, 12, 18, 20, 22, 25, 24, 28, 30], borderColor: '#f06292', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.tuna), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Yarn Corp', data: [20, 18, 22, 24, 26, 25, 23, 21, 19, 18], borderColor: '#ba68c8', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.yarn), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Salmon Tech', data: [5, 8, 15, 25, 40, 50, 45, 60, 80, 100], borderColor: '#64b5f6', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.salmon), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Laser Dynamics', data: [50, 40, 60, 30, 80, 20, 90, 10, 100, 5], borderColor: '#4fc3f7', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.laser), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Cardboard Box LLC', data: [30, 30, 31, 30, 29, 30, 30, 31, 30, 30], borderColor: '#81c784', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.box), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Catnip Futures', data: [10, 12, 11, 15, 30, 60, 90, 120, 80, 40], borderColor: '#dce775', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.catnip), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Solar Energy Co', data: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24], borderColor: '#ffd54f', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.solar), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Spring Toy Co', data: [25, 35, 20, 40, 15, 45, 10, 50, 5, 55], borderColor: '#ff8a65', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.spring), pointRadius: 10, pointHoverRadius: 12 }
                 ]
             },
             options: {
