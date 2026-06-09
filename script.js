@@ -670,14 +670,14 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
                 datasets: [
-                    { label: 'Tuna Inc', data: [10, 15, 12, 18, 20, 22, 25, 24, 28, 30], borderColor: '#f06292', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.tuna), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Yarn Corp', data: [20, 18, 22, 24, 26, 25, 23, 21, 19, 18], borderColor: '#ba68c8', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.yarn), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Salmon Tech', data: [5, 8, 15, 25, 40, 50, 45, 60, 80, 100], borderColor: '#64b5f6', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.salmon), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Laser Dynamics', data: [50, 40, 60, 30, 80, 20, 90, 10, 100, 5], borderColor: '#4fc3f7', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.laser), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Cardboard Box LLC', data: [30, 30, 31, 30, 29, 30, 30, 31, 30, 30], borderColor: '#81c784', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.box), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Catnip Futures', data: [10, 12, 11, 15, 30, 60, 90, 120, 80, 40], borderColor: '#dce775', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.catnip), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Solar Energy Co', data: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24], borderColor: '#ffd54f', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.solar), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Spring Toy Co', data: [25, 35, 20, 40, 15, 45, 10, 50, 5, 55], borderColor: '#ff8a65', tension: 0.1, fill: false, pointStyle: getPointStyle(icons.spring), pointRadius: 10, pointHoverRadius: 12 }
+                    { label: 'Tuna Inc', data: [10, 15, 12, 18, 20, 22, 25, 24, 28, 30], borderColor: '#f06292', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.tuna), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Yarn Corp', data: [20, 18, 22, 24, 26, 25, 23, 21, 19, 18], borderColor: '#ba68c8', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.yarn), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Salmon Tech', data: [5, 8, 15, 25, 40, 50, 45, 60, 80, 100], borderColor: '#64b5f6', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.salmon), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Laser Dynamics', data: [50, 40, 60, 30, 80, 20, 90, 10, 100, 5], borderColor: '#4fc3f7', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.laser), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Cardboard Box LLC', data: [30, 30, 31, 30, 29, 30, 30, 31, 30, 30], borderColor: '#81c784', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.box), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Catnip Futures', data: [10, 12, 11, 15, 30, 60, 90, 120, 80, 40], borderColor: '#dce775', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.catnip), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Solar Energy Co', data: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24], borderColor: '#ffd54f', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.solar), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Spring Toy Co', data: [25, 35, 20, 40, 15, 45, 10, 50, 5, 55], borderColor: '#ff8a65', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.spring), pointRadius: 10, pointHoverRadius: 12 }
                 ]
             },
             options: {
@@ -690,12 +690,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 },
                 scales: {
-                    x: { display: false }, // Hide x axis labels
+                    x: {
+                        display: false, // Hide x axis labels and grid
+                        grid: { display: false, drawBorder: false }
+                    },
                     y: {
-                        display: true,
-                        ticks: {
-                            font: { size: 10 }
-                        }
+                        display: false,  // Hide y axis per request
+                        grid: { display: false, drawBorder: false }
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 15 // Ensure the icon on the last point isn't cut off
                     }
                 }
             }
