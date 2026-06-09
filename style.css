@@ -435,19 +435,22 @@ body, html {
 
 /* Stonks Grid */
 #stonks-grid {
+    left: 50%;
+    top: 50%;
+    width: 60%;
+    position: absolute;
+    transform: translate(-50%, -50%);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
     gap: 5px;
-    padding: 10px;
-    background-color: #e0e0e0;
-    border-bottom: 4px solid #ffb6c1;
-    z-index: 10; /* Ensure it stays above background but below modals */
+    background-color: transparent;
+    z-index: 60; /* Above the chart */
 }
 
 .stonk-item {
-    background-color: #fff;
-    border: 2px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white to match ticker aesthetics */
+    border: 1px solid #555;
     border-radius: 6px;
     display: flex;
     flex-direction: column;
