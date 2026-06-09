@@ -335,9 +335,10 @@ body, html {
 
 /* Game 2 Specific Placements */
 #game2-graph-container {
-    left: 60.6615%;
-    top: 40.6528%;
-    width: 76%;
+    left: 57.8281%;
+    top: 41.6528%;
+    width: 62%;
+    height: 40%;
     transform: translate(-50%, -50%);
     background: rgba(255, 255, 255, 0.5); /* More see-through */
     border: 2px solid #555;
@@ -380,9 +381,10 @@ body, html {
 }
 
 #catnip-meter-container {
-    left: 15.8333%;
-    top: 27.8316%;
+    left: 17.3299%;
+    top: 35.8316%;
     width: 10%;
+    height: 44%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
@@ -403,7 +405,7 @@ body, html {
 
 .catnip-bar-bg {
     width: 20px;
-    height: 100px;
+    flex: 1;
     background-color: #ddd;
     border: 2px solid #888;
     border-radius: 10px;
@@ -451,9 +453,10 @@ body, html {
 
 /* Stonks Grid */
 #stonks-grid {
-    left: 62%;
-    top: 76%;
-    width: 55%;
+    left: 62.8333%;
+    top: 76.3333%;
+    width: 52%;
+    height: 27%;
     position: absolute;
     transform: translate(-50%, -50%);
     display: grid;
