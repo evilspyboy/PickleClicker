@@ -810,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Find closest sticker container in case we clicked an inner element like canvas or image
         let target = e.target.closest('.sticker');
-        if (!target) target = e.target.closest('#cat-image') || e.target.closest('#game2-cat-container') || e.target.closest('#game2-crashedcat-container') || e.target;
+        if (!target) target = e.target.closest('#cat-image') || e.target.closest('#game2-cat-container') || e.target.closest('#game2-crashedcat-container') || e.target.closest('#stonks-grid') || e.target;
 
         selectedSticker = target;
         devSelectedStickerText.textContent = selectedSticker.id;
