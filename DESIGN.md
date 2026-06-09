@@ -10,6 +10,7 @@ The application will launch into a **Hub Screen** where the player can choose wh
 - **Game 2 (Mr. Pickles Commits Tax Fraud):** Locked initially. The player must complete Game 1 (reach 1,000,000 biscuits) to unlock it.
 - **Progression Link:** Once Game 1 is completed, the player's best score (calculated as fewest clicks + biscuits spent; lower is better) determines their starting balance in Game 2. The base starting balance for Game 2 is 1,000,000 biscuits, with bonuses applied for better Game 1 scores. Players can replay Game 1 to try to achieve a better score, which will give them a higher starting balance for Game 2.
 - **Game 3 (Mr. Pickles Colonises Mars):** Unlocked after beating Game 2.
+- **Game 4 (World of Picklecraft):** Unlocked after beating Game 3.
 
 ---
 
@@ -88,7 +89,19 @@ The application will launch into a **Hub Screen** where the player can choose wh
 
 ---
 
-## 5. Game 2 Visual Assets List
+## 5. Game 4: World of Picklecraft (Concept)
+**Core Concept:** A cozy, turn-based RPG tapping game set in a D&D-inspired world.
+- **Unlock Requirement:** Complete Game 3 ("Mr. Pickles Colonises Mars").
+- **Theme:** After building his rocket in Game 3, Mr. Pickles lands on a new world heavily inspired by Dungeons & Dragons. He embarks on a fantasy adventure.
+- **Mechanics:**
+  - **Combat:** A simple turn-based RPG system where players tap to attack creatures.
+  - **Classes:** Mr. Pickles can take on classic RPG classes such as Wizard, Warrior, Bard, or Thief.
+  - **Gear & Stats:** Players can acquire and equip gear to alter Mr. Pickles' stats, changing his effectiveness in combat.
+  - **Visuals:** Maintains the same "cozy sticker style" as previous games, with new stickers for enemies, gear, and class outfits (e.g., wizard hat, warrior sword). This is purely conceptual and specific assets will be defined later.
+
+---
+
+## 6. Game 2 Visual Assets List
 The following assets are used or required for Game 2. All assets should be transparent PNGs and maintain the cozy, pastel aesthetic of Game 1.
 
 **Hub & Transition Mechanics:**
@@ -144,7 +157,7 @@ The following assets are used or required for Game 2. All assets should be trans
 
 ---
 
-## 6. Developer Mode
+## 7. Developer Mode
 **What it is:** The application contains a built-in Developer Mode designed to assist in positioning absolute visual elements (stickers) on the screen.
 **Why we have it:** Game visual assets are designed as transparent PNGs that layer on top of each other and scale proportionally across mobile and desktop devices. Determining the exact percentage-based `left`, `top`, `width`, and `z-index` values manually is tedious.
 **How it works:**
