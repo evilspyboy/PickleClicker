@@ -368,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const devCatCycleBtn = document.getElementById('dev-cat-cycle-btn');
     const devSelectedStickerText = document.getElementById('dev-selected-sticker');
     const devScaleInput = document.getElementById('dev-scale');
+    const devHeightInput = document.getElementById('dev-height');
     const devZIndexInput = document.getElementById('dev-zindex');
     const devFlipInput = document.getElementById('dev-flip');
     const devOutput = document.getElementById('dev-output');
@@ -846,13 +847,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update UI controls to match selection
         // Convert pixel width back to percentage of background container
         const bgRect = bgContainer.getBoundingClientRect();
-        const stickerWidthPx = selectedSticker.getBoundingClientRect().width;
-        let currentWidthPercent = Math.round((stickerWidthPx / bgRect.width) * 100);
+        const stickerRect = selectedSticker.getBoundingClientRect();
+
+        let currentWidthPercent = Math.round((stickerRect.width / bgRect.width) * 100);
+        let currentHeightPercent = Math.round((stickerRect.height / bgRect.height) * 100);
 
         // Use a fallback if calculation is weird
         if (!currentWidthPercent || currentWidthPercent <= 0) currentWidthPercent = 20;
+        if (!currentHeightPercent || currentHeightPercent <= 0) currentHeightPercent = 20;
 
         devScaleInput.value = currentWidthPercent;
+        if (devHeightInput) devHeightInput.value = currentHeightPercent;
         devZIndexInput.value = window.getComputedStyle(selectedSticker).zIndex === 'auto' ? '1' : window.getComputedStyle(selectedSticker).zIndex;
         devFlipInput.checked = selectedSticker.dataset.flip === 'true';
 
@@ -921,6 +926,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    if (devHeightInput) {
+        devHeightInput.addEventListener('input', (e) => {
+            if (selectedSticker) {
+                selectedSticker.style.height = `${e.target.value}%`;
+                const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
+                updateDevOutput(isGame2);
+            }
+        });
+    }
+
     devZIndexInput.addEventListener('input', (e) => {
         if (selectedSticker) {
             selectedSticker.style.zIndex = e.target.value;
@@ -960,14 +975,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return Math.round((elRect.width / bgRect.width) * 100);
         }
 
+        function getHeightPercent(el) {
+            const bgRect = currentBackgroundContainer.getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+            return Math.round((elRect.height / bgRect.height) * 100);
+        }
+
         if (!isGame2) {
             // Output for Cat Image (Game 1)
             const catLeft = catImage.style.left || '63.9983%';
             const catTop = catImage.style.top || '69.7604%';
             const catWidth = catImage.style.width || `${getWidthPercent(catImage)}%`;
+            const catHeight = catImage.style.height ? `\n  height: ${catImage.style.height};` : '';
             const catFlip = catImage.dataset.flip === 'true' ? ' scaleX(-1)' : '';
             const catZIndex = catImage.style.zIndex || window.getComputedStyle(catImage).zIndex;
-            outputHTML += `#cat-image {\n  left: ${catLeft};\n  top: ${catTop};\n  width: ${catWidth};\n  transform: translate(-50%, -50%)${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
+            outputHTML += `#cat-image {\n  left: ${catLeft};\n  top: ${catTop};\n  width: ${catWidth};${catHeight}\n  transform: translate(-50%, -50%)${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
         }
 
         // Output for Stickers in current container
@@ -981,10 +1003,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const left = sticker.style.left;
                 const top = sticker.style.top;
                 const width = sticker.style.width || `${getWidthPercent(sticker)}%`;
+                const height = sticker.style.height ? `\n  height: ${sticker.style.height};` : '';
                 const flip = sticker.dataset.flip === 'true' ? ' scaleX(-1)' : '';
                 const zIndex = sticker.style.zIndex || window.getComputedStyle(sticker).zIndex;
 
-                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  width: ${width};\n  transform: translate(-50%, -50%)${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
+                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  width: ${width};${height}\n  transform: translate(-50%, -50%)${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
             }
         });
         outputHTML += '</textarea>';

@@ -163,8 +163,8 @@ body, html {
 }
 
 #billion-progress-container {
-    left: 62.3299%;
-    top: 15%;
+    left: 56.4965%;
+    top: 16.5%;
     width: 56%;
     height: 36px;
     background-color: #ddd;
@@ -335,9 +335,9 @@ body, html {
 
 /* Game 2 Specific Placements */
 #game2-graph-container {
-    left: 62.3299%;
-    top: 34.8316%;
-    width: 56%;
+    left: 60.6615%;
+    top: 40.6528%;
+    width: 76%;
     transform: translate(-50%, -50%);
     background: rgba(255, 255, 255, 0.8);
     border: 2px solid #555;
@@ -452,7 +452,7 @@ body, html {
 /* Stonks Grid */
 #stonks-grid {
     left: 62%;
-    top: 69.6667%;
+    top: 76%;
     width: 55%;
     position: absolute;
     transform: translate(-50%, -50%);
@@ -465,7 +465,6 @@ body, html {
 }
 
 .stonk-item {
-    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white to match ticker aesthetics */
     border: 1px solid #555;
     border-radius: 6px;
     display: flex;
@@ -473,6 +472,8 @@ body, html {
     align-items: center;
     padding: 5px;
     text-align: center;
+    color: #fff; /* Default text color for dark backgrounds */
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5); /* Improve readability on colored backgrounds */
 }
 
 .stonk-icon {
@@ -490,8 +491,8 @@ body, html {
 }
 
 .stonk-name { font-weight: bold; }
-.stonk-price { color: #2e7d32; }
-.stonk-shares { color: #555; }
+.stonk-price { font-weight: bold; }
+.stonk-shares { opacity: 0.9; }
 
 .stonk-controls {
     display: flex;
