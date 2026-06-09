@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game 2 UI Elements
     const game2Screen = document.getElementById('game2-screen');
-    const game2HeaderEl = document.getElementById('game2-header');
+    const game2HeaderEl = document.getElementById('game2-header-wrapper');
     const game2BackgroundContEl = document.getElementById('game2-background-container');
     const game2StoreListContEl = document.getElementById('game2-store-list');
     const game2SettingsAreaEl = document.getElementById('game2-settings-area');

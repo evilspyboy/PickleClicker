@@ -144,21 +144,22 @@ body, html {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     z-index: 10;
     position: relative;
+}
+
+#header.ui-offscreen-top, #game2-header-wrapper.ui-offscreen-top {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+#header, #game2-header-wrapper {
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
 
-#game2-header {
-    flex-direction: column;
-    padding: 0;
-}
-
-.game2-header-top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    width: 100%;
-    position: relative;
+.header-label {
+    font-size: 14px;
+    margin-right: 5px;
+    margin-left: 10px;
+    opacity: 0.9;
 }
 
 .billion-progress-container {
@@ -312,9 +313,9 @@ body, html {
 
 /* Game 2 Specific Placements */
 #game2-graph-container {
-    left: 56.3333%;
-    top: 36.3316%;
-    width: 58%;
+    left: 62.3299%;
+    top: 34.8316%;
+    width: 56%;
     transform: translate(-50%, -50%);
     background: rgba(255, 255, 255, 0.8);
     border: 2px solid #555;
@@ -331,9 +332,18 @@ body, html {
     height: 100% !important;
 }
 
-#game2-cat-container, #game2-crashedcat-container {
-    left: 23.1667%;
-    top: 75.1649%;
+#game2-cat-container {
+    left: 22.3333%;
+    top: 72.6632%;
+    width: 23%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    pointer-events: none;
+}
+
+#game2-crashedcat-container {
+    left: 22.5%;
+    top: 79.9965%;
     width: 23%;
     transform: translate(-50%, -50%);
     z-index: 50;
@@ -417,27 +427,11 @@ body, html {
     width: 45%; /* Slightly smaller for the active effect instead of scaling */
 }
 
-/* Game 2 Header Biscuit Boxes */
-.biscuit-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(0,0,0,0.2);
-    border-radius: 8px;
-    padding: 5px 10px;
-    margin: 0 10px;
-}
-
-.box-label {
-    font-size: 12px;
-    opacity: 0.8;
-}
-
 /* Stonks Grid */
 #stonks-grid {
-    left: 50%;
-    top: 50%;
-    width: 60%;
+    left: 62%;
+    top: 69.6667%;
+    width: 55%;
     position: absolute;
     transform: translate(-50%, -50%);
     display: grid;
@@ -445,7 +439,7 @@ body, html {
     grid-template-rows: repeat(2, 1fr);
     gap: 5px;
     background-color: transparent;
-    z-index: 60; /* Above the chart */
+    z-index: 59; /* Above the chart */
 }
 
 .stonk-item {

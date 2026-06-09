@@ -71,18 +71,16 @@
         <!-- Game 2 Screen -->
         <div id="game2-screen" class="hidden">
             <!-- Header (Biscuits and Billion Goal) -->
-            <div id="game2-header" class="ui-offscreen-top">
-                <div class="game2-header-top">
-                    <div class="biscuit-box">
-                        <span class="box-label">Liquid</span>
-                        <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
-                        <span id="game2-biscuit-count">0</span>
-                    </div>
-                    <div class="biscuit-box">
-                        <span class="box-label">Net Worth</span>
-                        <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
-                        <span id="game2-networth-count">0</span>
-                    </div>
+            <div id="game2-header-wrapper" class="ui-offscreen-top">
+                <div id="game2-header">
+                    <span class="header-label">Liquid:</span>
+                    <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
+                    <span id="game2-biscuit-count" style="margin-right: 10px;">0</span>
+
+                    <span class="header-label">Net:</span>
+                    <img src="assets/biscuit.png" class="biscuit-icon" alt="Biscuit">
+                    <span id="game2-networth-count">0</span>
+
                     <span id="game2-reset-icon" title="Reset Progress">&#x21bb;</span>
                 </div>
                 <div class="billion-progress-container" title="Progress to 1 Billion Net Worth">
