@@ -166,7 +166,7 @@ body, html {
     left: 62.3299%;
     top: 15%;
     width: 56%;
-    height: 12px;
+    height: 36px;
     background-color: #ddd;
     position: absolute;
     transform: translate(-50%, -50%);
@@ -180,10 +180,10 @@ body, html {
     position: absolute;
     width: 100%;
     text-align: center;
-    font-size: 8px;
+    font-size: 14px;
     font-weight: bold;
     color: #333;
-    line-height: 12px;
+    line-height: 36px;
     z-index: 2;
 }
 
