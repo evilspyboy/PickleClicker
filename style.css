@@ -331,7 +331,7 @@ body, html {
     height: 100% !important;
 }
 
-#game2-cat-container {
+#game2-cat-container, #game2-crashedcat-container {
     left: 23.1667%;
     top: 75.1649%;
     width: 23%;
@@ -340,7 +340,7 @@ body, html {
     pointer-events: none;
 }
 
-#game2-cat-image {
+#game2-cat-image, #game2-crashedcat-image {
     width: 100%;
     height: auto;
     display: block;
@@ -417,8 +417,89 @@ body, html {
     width: 45%; /* Slightly smaller for the active effect instead of scaling */
 }
 
+/* Game 2 Header Biscuit Boxes */
+.biscuit-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 5px 10px;
+    margin: 0 10px;
+}
+
+.box-label {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Stonks Grid */
+#stonks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 5px;
+    padding: 10px;
+    background-color: #e0e0e0;
+    border-bottom: 4px solid #ffb6c1;
+    z-index: 10; /* Ensure it stays above background but below modals */
+}
+
+.stonk-item {
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    text-align: center;
+}
+
+.stonk-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin-bottom: 2px;
+}
+
+.stonk-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+.stonk-name { font-weight: bold; }
+.stonk-price { color: #2e7d32; }
+.stonk-shares { color: #555; }
+
+.stonk-controls {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+    width: 100%;
+    justify-content: center;
+}
+
+.stonk-btn {
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stonk-btn.buy { background-color: #4CAF50; color: white; }
+.stonk-btn.sell { background-color: #f44336; color: white; }
+.stonk-btn:active { transform: scale(0.9); }
+
 /* Upgrade List & Store List */
-#upgrade-list, #game2-store-list {
+#upgrade-list {
     flex: 1 1 40%;
     overflow-y: auto;
     background-color: #fff;
@@ -426,6 +507,18 @@ body, html {
     padding: 10px;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    gap: 10px;
+    transition: height 1s ease-in-out, opacity 1s ease-in-out, flex-basis 1s ease-in-out;
+}
+
+#game2-store-list {
+    flex: 1 1 40%;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 columns for Game 2 store items */
     grid-auto-rows: min-content;
     gap: 10px;
     transition: height 1s ease-in-out, opacity 1s ease-in-out, flex-basis 1s ease-in-out;
