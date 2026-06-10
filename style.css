@@ -48,7 +48,7 @@ body, html {
     width: 100%;
     aspect-ratio: 1 / 1;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Base placements for start screen elements */
@@ -91,10 +91,10 @@ body, html {
 }
 
 #dev-mode-start1-btn, #dev-mode-start2-btn {
-    position: absolute;
+    position: fixed;
     bottom: 5px;
     right: 5px;
-    z-index: 1000;
+    z-index: 2000;
 }
 
 /* UI Transitions */
@@ -964,7 +964,7 @@ body, html {
     background: rgba(0,0,0,0.8);
     color: white;
     padding: 15px;
-    z-index: 200;
+    z-index: 2000;
 }
 
 #dev-mode-panel.hidden {

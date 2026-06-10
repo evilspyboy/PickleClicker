@@ -1249,7 +1249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return Math.round((elRect.height / bgRect.height) * 100);
         }
 
-        if (!isGame2) {
+        if (context === 'game1') {
             // Output for Cat Image (Game 1)
             const catLeft = catImage.style.left || '63.9983%';
             const catTop = catImage.style.top || '69.7604%';
@@ -1267,16 +1267,28 @@ document.addEventListener('DOMContentLoaded', () => {
             // Since computed left/top are pixels, and the user provided percentages in CSS,
             // we will only output elements that have been explicitly moved via dragging
             // to avoid overwriting their CSS with incorrect pixel/default values.
-            if (sticker.style.left && sticker.style.top) {
-                const left = sticker.style.left;
-                const top = sticker.style.top;
-                const width = sticker.style.width || `${getWidthPercent(sticker)}%`;
-                const height = sticker.style.height ? `\n  height: ${sticker.style.height};` : '';
-                const flip = sticker.dataset.flip === 'true' ? ' scaleX(-1)' : '';
-                const zIndex = sticker.style.zIndex || window.getComputedStyle(sticker).zIndex;
+            // If they are missing we will derive from the percentage offset manually to ensure it always outputs
+            let left = sticker.style.left;
+            let top = sticker.style.top;
 
-                outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  width: ${width};${height}\n  transform: translate(-50%, -50%)${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
+            if (!left || !top) {
+                const bgRect = currentBackgroundContainer.getBoundingClientRect();
+                const elRect = sticker.getBoundingClientRect();
+
+                // Calculate percentage relative to center of the element according to the -50%, -50% translate logic
+                const centerX = elRect.left + (elRect.width / 2) - bgRect.left;
+                const centerY = elRect.top + (elRect.height / 2) - bgRect.top;
+
+                left = `${(centerX / bgRect.width) * 100}%`;
+                top = `${(centerY / bgRect.height) * 100}%`;
             }
+
+            const width = sticker.style.width || `${getWidthPercent(sticker)}%`;
+            const height = sticker.style.height ? `\n  height: ${sticker.style.height};` : '';
+            const flip = sticker.dataset.flip === 'true' ? ' scaleX(-1)' : '';
+            const zIndex = sticker.style.zIndex || window.getComputedStyle(sticker).zIndex;
+
+            outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  width: ${width};${height}\n  transform: translate(-50%, -50%)${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
         });
         outputHTML += '</textarea>';
         devOutput.innerHTML = outputHTML;
