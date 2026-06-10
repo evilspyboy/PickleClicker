@@ -528,6 +528,18 @@ body, html {
     transform: scale(0.9);
 }
 
+@keyframes catnipShake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-30deg); }
+    50% { transform: rotate(30deg); }
+    75% { transform: rotate(-30deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.shake-anim {
+    animation: catnipShake 0.3s ease-in-out;
+}
+
 .catnip-bar-bg {
     width: 45cqw;
     flex: 1;
