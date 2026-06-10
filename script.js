@@ -432,6 +432,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Developer Mode Elements
     const devModeBtn = document.getElementById('dev-mode-btn');
     const game2DevModeBtn = document.getElementById('game2-dev-mode-btn');
+    const start1DevModeBtn = document.getElementById('dev-mode-start1-btn');
+    const start2DevModeBtn = document.getElementById('dev-mode-start2-btn');
     const devModePanel = document.getElementById('dev-mode-panel');
     const devBgToggleBtn = document.getElementById('dev-bg-toggle');
     const devCatCycleBtn = document.getElementById('dev-cat-cycle-btn');
@@ -928,20 +930,33 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- DEVELOPER MODE ---
-    const activateDevMode = (isGame2 = false) => {
+    const activateDevMode = (context = 'game1') => {
         devModeActive = true;
         devModePanel.classList.remove('hidden');
 
-        const currentBackgroundContainer = isGame2 ? document.getElementById('game2-background-container') : document.getElementById('background-container');
-        const currentCatImage = isGame2 ? document.getElementById('game2-cat-container') : catImage;
-        const currentStickersContainer = isGame2 ? document.getElementById('game2-stickers-container') : stickersContainer;
+        let currentBackgroundContainer, currentCatImage, currentStickersContainer;
+
+        if (context === 'game1') {
+            currentBackgroundContainer = document.getElementById('background-container');
+            currentCatImage = catImage;
+            currentStickersContainer = stickersContainer;
+        } else if (context === 'game2') {
+            currentBackgroundContainer = document.getElementById('game2-background-container');
+            currentCatImage = document.getElementById('game2-cat-container');
+            currentStickersContainer = document.getElementById('game2-stickers-container');
+        } else if (context === 'start1') {
+            currentBackgroundContainer = document.getElementById('start-background-container');
+            // start screen items will be picked up generically as .sticker
+        } else if (context === 'start2') {
+            currentBackgroundContainer = document.getElementById('game2-start-background-container');
+        }
 
         if (currentStickersContainer) {
             currentStickersContainer.style.pointerEvents = 'auto'; // allow clicking stickers
         }
 
         // Prepare cat/container for dragging
-        if (currentCatImage) {
+        if (currentCatImage && (context === 'game1' || context === 'game2')) {
             currentCatImage.style.pointerEvents = 'auto'; // ensure it can be clicked
             currentCatImage.style.border = '2px dashed red';
             if (!currentCatImage.dataset.devSetup) {
@@ -975,11 +990,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
-        updateDevOutput(isGame2);
+        updateDevOutput(context);
     };
 
-    if (devModeBtn) devModeBtn.addEventListener('click', () => activateDevMode(false));
-    if (game2DevModeBtn) game2DevModeBtn.addEventListener('click', () => activateDevMode(true));
+    if (devModeBtn) devModeBtn.addEventListener('click', () => activateDevMode('game1'));
+    if (game2DevModeBtn) game2DevModeBtn.addEventListener('click', () => activateDevMode('game2'));
+    if (start1DevModeBtn) start1DevModeBtn.addEventListener('click', () => activateDevMode('start1'));
+    if (start2DevModeBtn) start2DevModeBtn.addEventListener('click', () => activateDevMode('start2'));
 
     /* Legacy Game 1 button retained above */
 
@@ -1132,7 +1149,11 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedSticker.style.left = `${leftPercent}%`;
         selectedSticker.style.top = `${topPercent}%`;
 
-        updateDevOutput(isGame2);
+        let context = 'game1';
+        if (!document.getElementById('game2-screen').classList.contains('hidden')) context = 'game2';
+        else if (!document.getElementById('start-screen').classList.contains('hidden')) context = 'start1';
+        else if (!document.getElementById('game2-start-screen').classList.contains('hidden')) context = 'start2';
+        updateDevOutput(context);
     }
 
     function endDrag() {
@@ -1146,8 +1167,11 @@ document.addEventListener('DOMContentLoaded', () => {
     devScaleInput.addEventListener('input', (e) => {
         if (selectedSticker) {
             selectedSticker.style.width = `${e.target.value}%`;
-            const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
-            updateDevOutput(isGame2);
+            let context = 'game1';
+            if (!document.getElementById('game2-screen').classList.contains('hidden')) context = 'game2';
+            else if (!document.getElementById('start-screen').classList.contains('hidden')) context = 'start1';
+            else if (!document.getElementById('game2-start-screen').classList.contains('hidden')) context = 'start2';
+            updateDevOutput(context);
         }
     });
 
@@ -1155,8 +1179,11 @@ document.addEventListener('DOMContentLoaded', () => {
         devHeightInput.addEventListener('input', (e) => {
             if (selectedSticker) {
                 selectedSticker.style.height = `${e.target.value}%`;
-                const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
-                updateDevOutput(isGame2);
+                let context = 'game1';
+                if (!document.getElementById('game2-screen').classList.contains('hidden')) context = 'game2';
+                else if (!document.getElementById('start-screen').classList.contains('hidden')) context = 'start1';
+                else if (!document.getElementById('game2-start-screen').classList.contains('hidden')) context = 'start2';
+                updateDevOutput(context);
             }
         });
     }
@@ -1164,8 +1191,11 @@ document.addEventListener('DOMContentLoaded', () => {
     devZIndexInput.addEventListener('input', (e) => {
         if (selectedSticker) {
             selectedSticker.style.zIndex = e.target.value;
-            const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
-            updateDevOutput(isGame2);
+            let context = 'game1';
+            if (!document.getElementById('game2-screen').classList.contains('hidden')) context = 'game2';
+            else if (!document.getElementById('start-screen').classList.contains('hidden')) context = 'start1';
+            else if (!document.getElementById('game2-start-screen').classList.contains('hidden')) context = 'start2';
+            updateDevOutput(context);
         }
     });
 
@@ -1181,16 +1211,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const flipTransform = isFlipped ? 'scaleX(-1)' : '';
 
         el.style.transform = `translate(-50%, -50%) ${flipTransform}`.trim();
-        const isGame2 = !document.getElementById('game2-screen').classList.contains('hidden');
-        updateDevOutput(isGame2);
+        let context = 'game1';
+        if (!document.getElementById('game2-screen').classList.contains('hidden')) context = 'game2';
+        else if (!document.getElementById('start-screen').classList.contains('hidden')) context = 'start1';
+        else if (!document.getElementById('game2-start-screen').classList.contains('hidden')) context = 'start2';
+        updateDevOutput(context);
     }
 
-    function updateDevOutput(isGame2 = false) {
+    function updateDevOutput(context = 'game1') {
         if (!devModeActive) return;
 
         let outputHTML = '<strong>CSS for standard placements:</strong><br><textarea style="width:100%; height:150px; font-size:10px;">';
 
-        const currentBackgroundContainer = isGame2 ? document.getElementById('game2-background-container') : document.getElementById('background-container');
+        let currentBackgroundContainer;
+        if (context === 'game1') {
+            currentBackgroundContainer = document.getElementById('background-container');
+        } else if (context === 'game2') {
+            currentBackgroundContainer = document.getElementById('game2-background-container');
+        } else if (context === 'start1') {
+            currentBackgroundContainer = document.getElementById('start-background-container');
+        } else if (context === 'start2') {
+            currentBackgroundContainer = document.getElementById('game2-start-background-container');
+        }
+
         if (!currentBackgroundContainer) return;
 
         // Helper to convert pixel width to percent of container

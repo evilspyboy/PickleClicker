@@ -39,12 +39,45 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0px;
-    /* Shift the entire flex group upwards */
-    padding-bottom: 25%;
     background-color: transparent;
     z-index: 100;
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+#start-background-container, #game2-start-background-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Base placements for start screen elements */
+#start-title, #game2-start-title {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+#start-cat, #game2-start-cat {
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    width: 45%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+#start-btn, #game2-start-btn {
+    position: absolute;
+    left: 50%;
+    top: 85%;
+    width: 45%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    margin: 0;
 }
 
 #start-screen.slide-up, #game2-start-screen.slide-up {
@@ -55,6 +88,13 @@ body, html {
 
 #start-screen.hidden, #game2-start-screen.hidden {
     display: none;
+}
+
+#dev-mode-start1-btn, #dev-mode-start2-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    z-index: 1000;
 }
 
 /* UI Transitions */
@@ -68,33 +108,8 @@ body, html {
     opacity: 0;
 }
 
-#start-title, #game2-start-title {
-    width: 60%;
-    max-width: 300px;
-    margin: 0;
-}
-
-#start-cat {
-    width: 45%;
-    max-width: 220px;
-    margin: -15px 0;
-}
-
-#game2-start-cat {
-    width: 70%;
-    max-width: 350px;
-    margin: -15px 0;
-}
-
-#start-btn, #game2-start-btn {
-    width: 45%;
-    max-width: 220px;
-    cursor: pointer;
-    margin: 0;
-}
-
 #start-btn:active, #game2-start-btn:active {
-    transform: scale(0.95);
+    transform: translate(-50%, -50%) scale(0.95);
 }
 
 .corner-toggle {
@@ -351,21 +366,22 @@ body, html {
 /* Game 2 Specific Placements */
 #stonk-column-1 {
     left: 24%;
-    top: 32.3316%;
+    top: 32.9983%;
     width: 10%;
-    height: 33%;
+    height: 32%;
     transform: translate(-50%, -50%);
     z-index: 15;
     container-type: inline-size;
 }
 
 #stonk-column-2 {
-    left: 77.1667%;
-    top: 32.6667%;
+    left: 76.6667%;
+    top: 33.1615%;
     width: 10%;
-    height: 33%;
+    height: 32%;
     transform: translate(-50%, -50%);
     z-index: 15;
+    container-type: inline-size;
 }
 
 .stonk-column {
