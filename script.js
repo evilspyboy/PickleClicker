@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!game2Screen.classList.contains('hidden')) {
             saveGame2();
             updateGame2UI();
+            updateStonksMonitorUI();
         }
     }, 1000); // UI updates more frequently than saves in a real game, but doing both here for simplicity and responsiveness to external biscuit generation
 
@@ -168,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderGame2StoreItems();
         updateGame2UI();
+        updateStonksMonitorUI();
 
         // Prepare to show game 2 UI
         setTimeout(() => {
@@ -582,6 +584,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveGame2();
             }
         }
+    }
+
+    function updateStonksMonitorUI() {
+        if (!stonksChartInstance) return;
+
+        const column1 = document.getElementById('stonk-column-1');
+        const column2 = document.getElementById('stonk-column-2');
+        if (!column1 || !column2) return;
+
+        column1.innerHTML = '';
+        column2.innerHTML = '';
+
+        const datasets = stonksChartInstance.data.datasets;
+        datasets.forEach((dataset, index) => {
+            const currentPrice = dataset.data[dataset.data.length - 1];
+
+            // Extract the icon src from the pointStyle function
+            // We know the structure: dataset.label maps to our known icons
+            // The simplest way without breaking encapsulation of the chart config
+            // is to map them based on index or label.
+            const iconMap = [
+                'assets/tuna_can.png',
+                'assets/yarn_ball.png',
+                'assets/robot_salmon.png',
+                'assets/laser_pointer.png',
+                'assets/carboard_box.png',
+                'assets/catnip_leaf.png',
+                'assets/solar_panel.png',
+                'assets/spring_toy.png'
+            ];
+
+            const iconSrc = iconMap[index];
+
+            const itemHTML = `
+                <div class="stonk-monitor-item">
+                    <img src="${iconSrc}" alt="${dataset.label}">
+                    <span>$${currentPrice}</span>
+                </div>
+            `;
+
+            if (index < 4) {
+                column1.innerHTML += itemHTML;
+            } else {
+                column2.innerHTML += itemHTML;
+            }
+        });
     }
 
     function updateGame2UI() {

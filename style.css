@@ -346,11 +346,52 @@ body, html {
 }
 
 /* Game 2 Specific Placements */
+#stonk-column-1 {
+    left: 35%;
+    top: 33%;
+    width: 10%;
+    height: 33%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+}
+
+#stonk-column-2 {
+    left: 65%;
+    top: 33%;
+    width: 10%;
+    height: 33%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+}
+
+.stonk-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stonk-monitor-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+}
+
+.stonk-monitor-item img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin-bottom: 2px;
+}
+
 #game2-graph-container {
-    left: 49.9931%;
-    top: 33.3194%;
+    left: 49.4931%;
+    top: 33.3177%;
     width: 41%;
-    height: 36%;
+    height: 33%;
     transform: translate(-50%, -50%);
     background: transparent;
     border: none;
