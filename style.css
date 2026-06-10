@@ -163,27 +163,38 @@ body, html {
 }
 
 #billion-progress-container {
-    left: 56.4965%;
-    top: 16.5%;
+    left: 50.4948%;
+    top: 12.8333%;
     width: 56%;
-    height: 36px;
+    height: 4%;
     background-color: #ddd;
     position: absolute;
     transform: translate(-50%, -50%);
     border: 2px solid #555;
     border-radius: 6px;
     z-index: 20;
-    overflow: hidden;
+    overflow: visible;
 }
 
-.billion-label {
+#billion-progress-container::before {
+    content: '0';
     position: absolute;
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
     font-weight: bold;
     color: #333;
-    line-height: 36px;
+    z-index: 2;
+}
+
+#billion-progress-container::after {
+    content: '1B';
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    color: #333;
     z-index: 2;
 }
 
@@ -196,6 +207,7 @@ body, html {
     top: 0;
     left: 0;
     z-index: 1;
+    border-radius: 4px;
 }
 
 #reset-icon, #game2-reset-icon {
@@ -335,14 +347,13 @@ body, html {
 
 /* Game 2 Specific Placements */
 #game2-graph-container {
-    left: 57.8281%;
-    top: 41.6528%;
-    width: 62%;
-    height: 40%;
+    left: 49.9931%;
+    top: 33.3194%;
+    width: 41%;
+    height: 36%;
     transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.5); /* More see-through */
-    border: 2px solid #555;
-    border-radius: 8px;
+    background: transparent;
+    border: none;
     z-index: 10;
     display: flex;
     justify-content: center;
@@ -381,10 +392,10 @@ body, html {
 }
 
 #catnip-meter-container {
-    left: 17.3299%;
-    top: 35.8316%;
-    width: 10%;
-    height: 44%;
+    left: 12.9965%;
+    top: 33.3316%;
+    width: 8%;
+    height: 37%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
@@ -453,8 +464,8 @@ body, html {
 
 /* Stonks Grid */
 #stonks-grid {
-    left: 62.8333%;
-    top: 76.3333%;
+    left: 61.8316%;
+    top: 73.1649%;
     width: 52%;
     height: 27%;
     position: absolute;
