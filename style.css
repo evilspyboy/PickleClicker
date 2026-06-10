@@ -875,7 +875,7 @@ body, html {
 }
 
 #dev-mode-btn, #game2-dev-mode-btn {
-    display: block; /* Make it visible so user can position items easily */
+    display: none; /* Hidden for normal gameplay, remove to use dev mode */
 }
 
 /* General Modals */
