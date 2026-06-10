@@ -504,62 +504,63 @@ body, html {
 }
 
 /* Stonks Grid */
-#stonks-grid {
-    left: 61.8316%;
-    top: 73.1649%;
-    width: 52%;
-    height: 27%;
+#game2-selected-stonk {
+    left: 81%; /* Placeholder position */
+    top: 80%; /* Placeholder position */
+    width: 25%; /* Placeholder size */
+    height: auto;
     position: absolute;
     transform: translate(-50%, -50%);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 5px;
-    background-color: transparent;
-    z-index: 59; /* Above the chart */
-}
-
-.stonk-item {
-    border: 1px solid #555;
-    border-radius: 6px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5px;
-    text-align: center;
-    color: #fff; /* Default text color for dark backgrounds */
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.5); /* Improve readability on colored backgrounds */
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #555;
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    z-index: 60;
 }
 
-.stonk-icon {
-    width: 30px;
-    height: 30px;
+.selected-stonk-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#selected-stonk-icon {
+    width: 40px;
+    height: 40px;
     object-fit: contain;
-    margin-bottom: 2px;
+    margin-right: 10px;
 }
 
-.stonk-info {
+.selected-stonk-details {
     display: flex;
     flex-direction: column;
-    font-size: 10px;
-    line-height: 1.2;
 }
 
-.stonk-name { font-weight: bold; }
-.stonk-price { font-weight: bold; }
-.stonk-shares { opacity: 0.9; }
+#selected-stonk-name {
+    font-weight: bold;
+    font-size: 14px;
+}
 
-.stonk-controls {
+#selected-stonk-amount {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.selected-stonk-controls {
     display: flex;
-    gap: 5px;
-    margin-top: 5px;
+    gap: 10px;
     width: 100%;
     justify-content: center;
 }
 
-.stonk-btn {
-    width: 25px;
-    height: 25px;
+.selected-stonk-btn {
+    flex: 1;
+    height: 30px;
     border: none;
     border-radius: 4px;
     font-weight: bold;
@@ -567,11 +568,12 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
 }
 
-.stonk-btn.buy { background-color: #4CAF50; color: white; }
-.stonk-btn.sell { background-color: #f44336; color: white; }
-.stonk-btn:active { transform: scale(0.9); }
+.selected-stonk-btn.buy { background-color: #4CAF50; color: white; }
+.selected-stonk-btn.sell { background-color: #f44336; color: white; }
+.selected-stonk-btn:active { transform: scale(0.9); }
 
 /* Upgrade List & Store List */
 #upgrade-list {
