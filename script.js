@@ -859,11 +859,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 scales: {
                     x: {
                         display: false, // Hide x axis labels and grid
-                        grid: { display: false, drawBorder: false }
+                        grid: { display: false, drawBorder: false, drawOnChartArea: false, drawTicks: false },
+                        border: { display: false },
+                        ticks: { display: false }
                     },
                     y: {
                         display: false,  // Hide y axis per request
-                        grid: { display: false, drawBorder: false }
+                        grid: { display: false, drawBorder: false, drawOnChartArea: false, drawTicks: false },
+                        border: { display: false },
+                        ticks: { display: false }
                     }
                 },
                 layout: {
