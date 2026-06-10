@@ -163,8 +163,8 @@ body, html {
 }
 
 #billion-progress-container {
-    left: 49.8281%;
-    top: 54.1649%;
+    left: 50.1597%;
+    top: 54.6632%;
     width: 56%;
     height: 4%;
     background-color: #ddd;
@@ -174,28 +174,31 @@ body, html {
     border-radius: 6px;
     z-index: 20;
     overflow: visible;
+    container-type: inline-size;
 }
 
 #billion-progress-container::before {
     content: '0';
     position: absolute;
-    left: -20px;
+    left: -6cqw;
     top: 50%;
     transform: translateY(-50%);
     font-weight: bold;
     color: #333;
     z-index: 2;
+    font-size: 5cqw;
 }
 
 #billion-progress-container::after {
     content: '1B';
     position: absolute;
-    right: -25px;
+    right: -7.5cqw;
     top: 50%;
     transform: translateY(-50%);
     font-weight: bold;
     color: #333;
     z-index: 2;
+    font-size: 5cqw;
 }
 
 #billion-progress-bar {
@@ -353,10 +356,11 @@ body, html {
     height: 33%;
     transform: translate(-50%, -50%);
     z-index: 15;
+    container-type: inline-size;
 }
 
 #stonk-column-2 {
-    left: 76.1667%;
+    left: 77.1667%;
     top: 32.6667%;
     width: 10%;
     height: 33%;
@@ -369,26 +373,28 @@ body, html {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    container-type: inline-size;
 }
 
 .stonk-monitor-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 20cqw;
     color: #fff;
     text-shadow: 1px 1px 2px #000;
+    width: 100%;
 }
 
 .stonk-monitor-item img {
-    width: 30px;
-    height: 30px;
+    width: 50cqw;
+    height: auto;
     object-fit: contain;
-    margin-bottom: 2px;
+    margin-bottom: 2cqw;
 }
 
 #game2-graph-container {
-    left: 49.1597%;
+    left: 49.3247%;
     top: 33.316%;
     width: 47%;
     height: 39%;
@@ -433,8 +439,8 @@ body, html {
 }
 
 #catnip-meter-container {
-    left: 12.9948%;
-    top: 33.3316%;
+    left: 13.3281%;
+    top: 33.4983%;
     width: 8%;
     height: 37%;
     transform: translate(-50%, -50%);
@@ -442,6 +448,11 @@ body, html {
     flex-direction: column;
     align-items: center;
     z-index: 60;
+    container-type: inline-size;
+}
+
+#game2-selected-stonk * {
+    max-width: 100%;
 }
 
 #catnip-btn {
@@ -456,12 +467,12 @@ body, html {
 }
 
 .catnip-bar-bg {
-    width: 20px;
+    width: 45cqw;
     flex: 1;
     background-color: #ddd;
     border: 2px solid #888;
     border-radius: 10px;
-    margin-top: 10px;
+    margin-top: 20cqw;
     position: relative;
     overflow: hidden;
 }
@@ -505,7 +516,7 @@ body, html {
 
 /* Stonks Grid */
 #game2-selected-stonk {
-    left: 76.5%;
+    left: 77%;
     top: 72.1667%;
     width: 22%;
     height: 15%;
