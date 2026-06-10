@@ -645,16 +645,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const iconEl = document.getElementById('selected-stonk-icon');
         const nameEl = document.getElementById('selected-stonk-name');
         const amountEl = document.getElementById('selected-stonk-amount');
+        const controlsEl = document.querySelector('.selected-stonk-controls');
 
         if (!selectedStonkLabel) {
-            iconEl.src = 'assets/biscuit.png'; // Fallback icon
+            iconEl.style.display = 'none';
+            amountEl.style.display = 'none';
+            if(controlsEl) controlsEl.style.visibility = 'hidden';
             nameEl.textContent = 'Select a Stonk';
-            amountEl.textContent = '0 Held';
             return;
         }
 
         const config = STONKS_CONFIG.find(c => c.label === selectedStonkLabel);
         if (config) {
+            iconEl.style.display = 'block';
+            amountEl.style.display = 'block';
+            if(controlsEl) controlsEl.style.visibility = 'visible';
             iconEl.src = config.icon;
             nameEl.textContent = config.label;
             const owned = game2StonkOwnership[config.label] || 0;
