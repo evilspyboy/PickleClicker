@@ -347,8 +347,8 @@ body, html {
 
 /* Game 2 Specific Placements */
 #stonk-column-1 {
-    left: 35%;
-    top: 33%;
+    left: 24%;
+    top: 32.3316%;
     width: 10%;
     height: 33%;
     transform: translate(-50%, -50%);
@@ -356,8 +356,8 @@ body, html {
 }
 
 #stonk-column-2 {
-    left: 65%;
-    top: 33%;
+    left: 76.1667%;
+    top: 32.6667%;
     width: 10%;
     height: 33%;
     transform: translate(-50%, -50%);
@@ -389,9 +389,9 @@ body, html {
 
 #game2-graph-container {
     left: 49.4931%;
-    top: 33.3177%;
-    width: 41%;
-    height: 33%;
+    top: 33.316%;
+    width: 47%;
+    height: 39%;
     transform: translate(-50%, -50%);
     background: transparent;
     border: none;
