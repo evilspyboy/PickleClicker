@@ -52,32 +52,66 @@ body, html {
 }
 
 /* Base placements for start screen elements */
-#start-title, #game2-start-title {
+#start-title {
     position: absolute;
-    left: 50%;
-    top: 30%;
+    left: 49.3333%;
+    top: -12.6753%;
     width: 60%;
     transform: translate(-50%, -50%);
     margin: 0;
+    z-index: 1;
 }
 
-#start-cat, #game2-start-cat {
+#game2-start-title {
     position: absolute;
-    left: 50%;
-    top: 60%;
+    left: 49%;
+    top: -13.6753%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+}
+
+#start-cat {
+    position: absolute;
+    left: 49.1667%;
+    top: 24.3281%;
     width: 45%;
     transform: translate(-50%, -50%);
     margin: 0;
+    z-index: 1;
 }
 
-#start-btn, #game2-start-btn {
+#game2-start-cat {
     position: absolute;
-    left: 50%;
-    top: 85%;
+    left: 50.5%;
+    top: 26.4896%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+}
+
+#start-btn {
+    position: absolute;
+    left: 49%;
+    top: 58.6615%;
+    width: 43%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+}
+
+#game2-start-btn {
+    position: absolute;
+    left: 49.8333%;
+    top: 60.1562%;
     width: 45%;
     cursor: pointer;
     transform: translate(-50%, -50%);
     margin: 0;
+    z-index: 1;
 }
 
 #start-screen.slide-up, #game2-start-screen.slide-up {
