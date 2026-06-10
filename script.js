@@ -531,19 +531,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         game2StoreItemsData.forEach(item => {
             const el = document.createElement('div');
-            el.className = 'store-item';
-            el.id = `store-item-${item.id}`;
+            el.className = 'store-item-wrapper';
+            el.id = `store-item-wrapper-${item.id}`;
 
             // We calculate width to only cover the middle and buy button (calc(100% - 40px))
             el.innerHTML = `
-                <div class="store-item-progress" id="progress-${item.id}" style="width: 0%; left: 40px; right: auto;"></div>
-                <div class="store-item-content">
-                    <button class="store-btn sell ${item.count > 0 ? 'active' : ''}" data-id="${item.id}">-</button>
-                    <div class="store-item-middle">
-                        <img src="${item.icon}" class="store-item-icon" alt="${item.name}">
-                        <span class="store-item-count" id="count-${item.id}">x${item.count}</span>
+                <img src="${item.icon}" class="store-item-icon-large" alt="${item.name}">
+                <div class="store-item" id="store-item-${item.id}">
+                    <div class="store-item-progress" id="progress-${item.id}" style="width: 0%; left: 40px; right: auto;"></div>
+                    <div class="store-item-content">
+                        <button class="store-btn sell ${item.count > 0 ? 'active' : ''}" data-id="${item.id}">-</button>
+                        <div class="store-item-middle">
+                            <span class="store-item-count" id="count-${item.id}">x${item.count}</span>
+                        </div>
+                        <button class="store-btn buy" data-id="${item.id}">+</button>
                     </div>
-                    <button class="store-btn buy" data-id="${item.id}">+</button>
                 </div>
             `;
 
