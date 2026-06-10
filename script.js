@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let game2StonkOwnership = JSON.parse(JSON.stringify(defaultGame2StonkOwnership));
 
+    // Catnip State
+    let catnipLevel = 0;
+    let isCrashedOut = false;
+
     // Game 2 Default Store Items Data
     const defaultGame2StoreItemsData = [
         // Tangible Assets
@@ -109,6 +113,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return false;
     }
+
+    // Catnip Decay Logic
+    setInterval(() => {
+        if (isCrashedOut) {
+            // Decay down to -2 for the 6-second cooldown penalty
+            catnipLevel--;
+            if (catnipLevel <= -2) {
+                isCrashedOut = false;
+                catnipLevel = 0;
+            }
+            updateCatnipUI();
+        } else if (catnipLevel > 0) {
+            catnipLevel--;
+            updateCatnipUI();
+        }
+    }, 3000);
 
     // Auto-save and Update Game 2 UI periodically
     setInterval(() => {
@@ -510,6 +530,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const devModePanel = document.getElementById('dev-mode-panel');
     const devBgToggleBtn = document.getElementById('dev-bg-toggle');
     const devCatCycleBtn = document.getElementById('dev-cat-cycle-btn');
+
+    const catnipBtn = document.getElementById('catnip-btn');
     const devSelectedStickerText = document.getElementById('dev-selected-sticker');
     const devScaleInput = document.getElementById('dev-scale');
     const devHeightInput = document.getElementById('dev-height');
@@ -535,6 +557,26 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     let catAnimIndex = 0;
     let idleTimeout = null;
+
+    // Catnip Mechanic
+    if (catnipBtn) {
+        catnipBtn.addEventListener('click', () => {
+            if (devModeActive || gameEnded || isCrashedOut || catnipLevel >= 10) return;
+
+            // Trigger shake animation
+            catnipBtn.classList.remove('shake-anim');
+            void catnipBtn.offsetWidth; // trigger reflow
+            catnipBtn.classList.add('shake-anim');
+
+            catnipLevel++;
+
+            if (catnipLevel >= 10) {
+                isCrashedOut = true;
+            }
+
+            updateCatnipUI();
+        });
+    }
 
     // Core Tap Mechanic
     catImage.addEventListener('click', () => {
@@ -736,6 +778,43 @@ document.addEventListener('DOMContentLoaded', () => {
         // Left Column gets bottom 4 (index 4, 5, 6, 7 in sorted array)
         for (let i = 4; i < 8; i++) {
             if(stonkData[i]) column1.innerHTML += renderItemHTML(stonkData[i]);
+        }
+    }
+
+    function updateCatnipUI() {
+        const fillEl = document.getElementById('catnip-bar-fill');
+        const game2CatImg = document.getElementById('game2-cat-image');
+        const game2CatCont = document.getElementById('game2-cat-container');
+        const game2CrashedCont = document.getElementById('game2-crashedcat-container');
+
+        if (!fillEl || !game2CatImg || !game2CatCont || !game2CrashedCont) return;
+
+        // Calculate visual level (min 0)
+        const visualLevel = Math.max(0, catnipLevel);
+        fillEl.style.height = `${visualLevel * 10}%`;
+
+        // Determine color
+        if (visualLevel < 5) {
+            fillEl.style.backgroundColor = '#81c784'; // Green
+        } else if (visualLevel < 8) {
+            fillEl.style.backgroundColor = '#ffd54f'; // Yellow
+        } else {
+            fillEl.style.backgroundColor = '#e57373'; // Red
+        }
+
+        // Update Cat Sticker
+        if (isCrashedOut) {
+            game2CatCont.classList.add('hidden');
+            game2CrashedCont.classList.remove('hidden');
+        } else {
+            game2CrashedCont.classList.add('hidden');
+            game2CatCont.classList.remove('hidden');
+
+            if (catnipLevel >= 5) {
+                game2CatImg.src = 'assets/business_cat_catnip.png';
+            } else {
+                game2CatImg.src = 'assets/business_cat_rest.png';
+            }
         }
     }
 
