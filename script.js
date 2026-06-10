@@ -26,6 +26,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const game2SettingsAreaEl = document.getElementById('game2-settings-area');
     const game2BiscuitCountEl = document.getElementById('game2-biscuit-count');
 
+    // Global Game 2 Variables
+    let game2Biscuits = 0;
+
+    // Game 2 Default Store Items Data
+    const defaultGame2StoreItemsData = [
+        // Tangible Assets
+        { id: 'asset-sportscar', name: 'Cardboard Sports Car', type: 'asset', icon: 'assets/cardboard_sportscar.png', baseCost: 1000, count: 0 },
+        { id: 'asset-yacht', name: 'Cardboard Yacht', type: 'asset', icon: 'assets/cardboard_yacht.png', baseCost: 1000, count: 0 },
+        { id: 'asset-goldstatue', name: 'Gold Statue', type: 'asset', icon: 'assets/gold_statue.png', baseCost: 1000, count: 0 },
+        { id: 'asset-diamondlitter', name: 'Diamond Litter', type: 'asset', icon: 'assets/diamond_litter.png', baseCost: 1000, count: 0 },
+        { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 1000, count: 0 },
+
+        // Shell Companies
+        { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 1000, count: 0 },
+        { id: 'shell-3dogs', name: '3 Dogs in a Trenchcoat Inc.', type: 'shell', icon: 'assets/shell_3dogstrenchcoat.png', baseCost: 1000, count: 0 },
+        { id: 'shell-laundry', name: 'Money Laundromat', type: 'shell', icon: 'assets/shell_cashlaundry.png', baseCost: 1000, count: 0 },
+        { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0 },
+
+        // Legit Businesses
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0 },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0 },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0 },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0 }
+    ];
+
+    // Game 2 Store Items Data
+    let game2StoreItemsData = JSON.parse(JSON.stringify(defaultGame2StoreItemsData));
+
+    function saveGame2() {
+        const game2State = {
+            game2Biscuits,
+            game2StoreItemsData
+        };
+        localStorage.setItem('pickleClickerGame2Save', JSON.stringify(game2State));
+    }
+
+    function loadGame2() {
+        const savedData = localStorage.getItem('pickleClickerGame2Save');
+        if (savedData) {
+            try {
+                const game2State = JSON.parse(savedData);
+                game2Biscuits = game2State.game2Biscuits || 0;
+                if (game2State.game2StoreItemsData) {
+                    game2StoreItemsData = game2State.game2StoreItemsData;
+                }
+                return true;
+            } catch (e) {
+                console.error("Failed to parse Game 2 save data", e);
+            }
+        }
+        return false;
+    }
+
+    // Auto-save and Update Game 2 UI periodically
+    setInterval(() => {
+        if (!game2Screen.classList.contains('hidden')) {
+            saveGame2();
+            updateGame2UI();
+        }
+    }, 1000); // UI updates more frequently than saves in a real game, but doing both here for simplicity and responsiveness to external biscuit generation
+
     // Initialize Game Screen state
     gameScreen.classList.remove('hidden');
 
@@ -78,19 +139,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     game2StartBtn.addEventListener('click', () => {
-        let game2Biscuits = 0;
-        const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
-        if (savedLeaderboardStr) {
-            try {
-                const leaderboard = JSON.parse(savedLeaderboardStr);
-                // Find the best score (lowest) that has biscuitsLeft. Since it's sorted ascending by score,
-                // the first one we find that is an object with biscuitsLeft is the correct one.
-                const bestValidEntry = leaderboard.find(entry => typeof entry === 'object' && entry !== null && 'biscuitsLeft' in entry);
-                if (bestValidEntry) {
-                    game2Biscuits = bestValidEntry.biscuitsLeft;
+        const hasSave = loadGame2();
+        if (!hasSave) {
+            const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
+            if (savedLeaderboardStr) {
+                try {
+                    const leaderboard = JSON.parse(savedLeaderboardStr);
+                    // Find the best score (lowest) that has biscuitsLeft. Since it's sorted ascending by score,
+                    // the first one we find that is an object with biscuitsLeft is the correct one.
+                    const bestValidEntry = leaderboard.find(entry => typeof entry === 'object' && entry !== null && 'biscuitsLeft' in entry);
+                    if (bestValidEntry) {
+                        game2Biscuits = bestValidEntry.biscuitsLeft;
+                        saveGame2(); // Initial save
+                    }
+                } catch (e) {
+                    console.error("Failed to parse leaderboard for starting balance");
                 }
-            } catch (e) {
-                console.error("Failed to parse leaderboard for starting balance");
             }
         }
 
@@ -101,6 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Init biscuits visual
         if(game2BiscuitCountEl) game2BiscuitCountEl.textContent = Number(game2Biscuits).toLocaleString();
+
+        renderGame2StoreItems();
+        updateGame2UI();
 
         // Prepare to show game 2 UI
         setTimeout(() => {
@@ -449,6 +516,104 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateBiscuitDisplay() {
         biscuitCountEl.textContent = `${Math.floor(biscuits).toLocaleString()} (x${tapMultiplier})`;
         updateUpgradesUI();
+    }
+
+    function renderGame2StoreItems() {
+        const assetCol = document.getElementById('store-items-asset');
+        const shellCol = document.getElementById('store-items-shell');
+        const businessCol = document.getElementById('store-items-business');
+
+        if (!assetCol || !shellCol || !businessCol) return;
+
+        assetCol.innerHTML = '';
+        shellCol.innerHTML = '';
+        businessCol.innerHTML = '';
+
+        game2StoreItemsData.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'store-item';
+            el.id = `store-item-${item.id}`;
+
+            // We calculate width to only cover the middle and buy button (calc(100% - 40px))
+            el.innerHTML = `
+                <div class="store-item-progress" id="progress-${item.id}" style="width: 0%; left: 40px; right: auto;"></div>
+                <div class="store-item-content">
+                    <button class="store-btn sell ${item.count > 0 ? 'active' : ''}" data-id="${item.id}">-</button>
+                    <div class="store-item-middle">
+                        <img src="${item.icon}" class="store-item-icon" alt="${item.name}">
+                        <span class="store-item-count" id="count-${item.id}">x${item.count}</span>
+                    </div>
+                    <button class="store-btn buy" data-id="${item.id}">+</button>
+                </div>
+            `;
+
+            if (item.type === 'asset') assetCol.appendChild(el);
+            else if (item.type === 'shell') shellCol.appendChild(el);
+            else if (item.type === 'business') businessCol.appendChild(el);
+        });
+
+        // Add event listeners for buy/sell
+        document.querySelectorAll('.store-btn.buy').forEach(btn => {
+            btn.addEventListener('click', (e) => handleStoreAction(e.target.dataset.id, 'buy'));
+        });
+        document.querySelectorAll('.store-btn.sell').forEach(btn => {
+            btn.addEventListener('click', (e) => handleStoreAction(e.target.dataset.id, 'sell'));
+        });
+    }
+
+    function handleStoreAction(itemId, action) {
+        const item = game2StoreItemsData.find(i => i.id === itemId);
+        if (!item) return;
+
+        if (action === 'buy') {
+            if (game2Biscuits >= item.baseCost) {
+                game2Biscuits -= item.baseCost;
+                item.count++;
+                updateGame2UI();
+                saveGame2();
+            }
+        } else if (action === 'sell') {
+            if (item.count > 0) {
+                game2Biscuits += item.baseCost;
+                item.count--;
+                updateGame2UI();
+                saveGame2();
+            }
+        }
+    }
+
+    function updateGame2UI() {
+        if(game2BiscuitCountEl) game2BiscuitCountEl.textContent = Number(game2Biscuits).toLocaleString();
+
+        game2StoreItemsData.forEach(item => {
+            const countEl = document.getElementById(`count-${item.id}`);
+            if (countEl) countEl.textContent = `x${item.count}`;
+
+            const sellBtn = document.querySelector(`.store-btn.sell[data-id="${item.id}"]`);
+            if (sellBtn) {
+                if (item.count > 0) {
+                    sellBtn.classList.add('active');
+                } else {
+                    sellBtn.classList.remove('active');
+                }
+            }
+
+            const progressBar = document.getElementById(`progress-${item.id}`);
+            if (progressBar) {
+                // Calculate percentage based on 1000 cost
+                let percentage = (game2Biscuits / item.baseCost) * 100;
+                if (percentage > 100) percentage = 100;
+                // Max width should cover the middle and plus button area, so max is calc(100% - 40px)
+                // We'll just apply percentage of the available space
+                progressBar.style.width = `calc((100% - 40px) * ${percentage / 100})`;
+
+                if (percentage >= 100) {
+                    progressBar.style.backgroundColor = 'rgba(144, 238, 144, 0.4)';
+                } else {
+                    progressBar.style.backgroundColor = 'rgba(144, 238, 144, 0.2)';
+                }
+            }
+        });
     }
 
     // Call loadGame after UI is set up
