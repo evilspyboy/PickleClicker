@@ -435,6 +435,17 @@ body, html {
     color: #fff;
     text-shadow: 1px 1px 2px #000;
     width: 100%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 2px;
+    box-sizing: border-box;
+    transition: background-color 0.1s, border-color 0.1s;
+}
+
+.stonk-monitor-item.selected {
+    border-color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .stonk-monitor-item img {

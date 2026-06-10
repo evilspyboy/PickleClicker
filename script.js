@@ -29,6 +29,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global Game 2 Variables
     let game2Biscuits = 0;
 
+    let selectedStonkLabel = null; // Tracks currently selected stonk
+
+    const STONKS_CONFIG = [
+        { label: 'Tuna Inc', icon: 'assets/tuna_can.png' },
+        { label: 'Yarn Corp', icon: 'assets/yarn_ball.png' },
+        { label: 'Salmon Tech', icon: 'assets/robot_salmon.png' },
+        { label: 'Laser Dynamics', icon: 'assets/laser_pointer.png' },
+        { label: 'Cardboard Box LLC', icon: 'assets/carboard_box.png' },
+        { label: 'Catnip Futures', icon: 'assets/catnip_leaf.png' },
+        { label: 'Solar Energy Co', icon: 'assets/solar_panel.png' },
+        { label: 'Spring Toy Co', icon: 'assets/spring_toy.png' }
+    ];
+
+    // Game 2 Default Stonk Ownership Data
+    const defaultGame2StonkOwnership = {
+        'Tuna Inc': 0,
+        'Yarn Corp': 0,
+        'Salmon Tech': 0,
+        'Laser Dynamics': 0,
+        'Cardboard Box LLC': 0,
+        'Catnip Futures': 0,
+        'Solar Energy Co': 0,
+        'Spring Toy Co': 0
+    };
+
+    let game2StonkOwnership = JSON.parse(JSON.stringify(defaultGame2StonkOwnership));
+
     // Game 2 Default Store Items Data
     const defaultGame2StoreItemsData = [
         // Tangible Assets
@@ -57,7 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveGame2() {
         const game2State = {
             game2Biscuits,
-            game2StoreItemsData
+            game2StoreItemsData,
+            game2StonkOwnership
         };
         localStorage.setItem('pickleClickerGame2Save', JSON.stringify(game2State));
     }
@@ -70,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 game2Biscuits = game2State.game2Biscuits || 0;
                 if (game2State.game2StoreItemsData) {
                     game2StoreItemsData = game2State.game2StoreItemsData;
+                }
+                if (game2State.game2StonkOwnership) {
+                    game2StonkOwnership = game2State.game2StonkOwnership;
                 }
                 return true;
             } catch (e) {
@@ -85,8 +116,30 @@ document.addEventListener('DOMContentLoaded', () => {
             saveGame2();
             updateGame2UI();
             updateStonksMonitorUI();
+            updateSelectedStonkUI();
         }
     }, 1000); // UI updates more frequently than saves in a real game, but doing both here for simplicity and responsiveness to external biscuit generation
+
+    // Event delegation for Stonk Monitor clicks
+    document.getElementById('stonk-column-1').addEventListener('click', handleStonkClick);
+    document.getElementById('stonk-column-2').addEventListener('click', handleStonkClick);
+
+    function handleStonkClick(e) {
+        const item = e.target.closest('.stonk-monitor-item');
+        if (!item) return;
+
+        const label = item.getAttribute('data-label');
+        if (selectedStonkLabel === label) {
+            // Deselect if already selected
+            selectedStonkLabel = null;
+        } else {
+            // Select new stonk
+            selectedStonkLabel = label;
+        }
+
+        updateStonksMonitorUI();
+        updateSelectedStonkUI();
+    }
 
     // Initialize Game Screen state
     gameScreen.classList.remove('hidden');
@@ -588,6 +641,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateSelectedStonkUI() {
+        const iconEl = document.getElementById('selected-stonk-icon');
+        const nameEl = document.getElementById('selected-stonk-name');
+        const amountEl = document.getElementById('selected-stonk-amount');
+
+        if (!selectedStonkLabel) {
+            iconEl.src = 'assets/biscuit.png'; // Fallback icon
+            nameEl.textContent = 'Select a Stonk';
+            amountEl.textContent = '0 Held';
+            return;
+        }
+
+        const config = STONKS_CONFIG.find(c => c.label === selectedStonkLabel);
+        if (config) {
+            iconEl.src = config.icon;
+            nameEl.textContent = config.label;
+            const owned = game2StonkOwnership[config.label] || 0;
+            amountEl.textContent = `${owned} Held`;
+        }
+    }
+
     function updateStonksMonitorUI() {
         if (!stonksChartInstance) return;
 
@@ -599,39 +673,45 @@ document.addEventListener('DOMContentLoaded', () => {
         column2.innerHTML = '';
 
         const datasets = stonksChartInstance.data.datasets;
-        datasets.forEach((dataset, index) => {
+
+        // 1. Gather all current prices and labels
+        let stonkData = datasets.map(dataset => {
             const currentPrice = dataset.data[dataset.data.length - 1];
+            const config = STONKS_CONFIG.find(c => c.label === dataset.label) || { icon: '' };
+            return {
+                label: dataset.label,
+                price: currentPrice,
+                iconSrc: config.icon
+            };
+        });
 
-            // Extract the icon src from the pointStyle function
-            // We know the structure: dataset.label maps to our known icons
-            // The simplest way without breaking encapsulation of the chart config
-            // is to map them based on index or label.
-            const iconMap = [
-                'assets/tuna_can.png',
-                'assets/yarn_ball.png',
-                'assets/robot_salmon.png',
-                'assets/laser_pointer.png',
-                'assets/carboard_box.png',
-                'assets/catnip_leaf.png',
-                'assets/solar_panel.png',
-                'assets/spring_toy.png'
-            ];
+        // 2. Sort stonks by descending price (highest first)
+        stonkData.sort((a, b) => b.price - a.price);
 
-            const iconSrc = iconMap[index];
-
-            const itemHTML = `
-                <div class="stonk-monitor-item">
-                    <img src="${iconSrc}" alt="${dataset.label}">
-                    <span>$${currentPrice}</span>
+        // 3. Render into columns based on requested order
+        // Order: Highest price (1st) is right-top. Lowest price (8th) is left-bottom.
+        // Specifically:
+        // Left Column (top to bottom): 5th, 6th, 7th, 8th
+        // Right Column (top to bottom): 1st, 2nd, 3rd, 4th
+        const renderItemHTML = (item) => {
+            const isSelectedClass = selectedStonkLabel === item.label ? ' selected' : '';
+            return `
+                <div class="stonk-monitor-item${isSelectedClass}" data-label="${item.label}">
+                    <img src="${item.iconSrc}" alt="${item.label}">
+                    <span>${item.price} b</span>
                 </div>
             `;
+        };
 
-            if (index < 4) {
-                column1.innerHTML += itemHTML;
-            } else {
-                column2.innerHTML += itemHTML;
-            }
-        });
+        // Right Column gets top 4 (index 0, 1, 2, 3 in sorted array)
+        for (let i = 0; i < 4; i++) {
+            if(stonkData[i]) column2.innerHTML += renderItemHTML(stonkData[i]);
+        }
+
+        // Left Column gets bottom 4 (index 4, 5, 6, 7 in sorted array)
+        for (let i = 4; i < 8; i++) {
+            if(stonkData[i]) column1.innerHTML += renderItemHTML(stonkData[i]);
+        }
     }
 
     function updateGame2UI() {
