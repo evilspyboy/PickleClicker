@@ -129,6 +129,7 @@ body, html {
     bottom: 5px;
     right: 5px;
     z-index: 2000;
+    display: none;
 }
 
 /* UI Transitions */
