@@ -137,6 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 3000);
 
+    // Stonk Market Config and Timer
+    let stonkMarketSpeed = 1000;
+    setInterval(() => {
+        if (!game2Screen.classList.contains('hidden')) {
+            updateStonksMarket();
+        }
+    }, stonkMarketSpeed);
+
     // Auto-save and Update Game 2 UI periodically
     setInterval(() => {
         if (!game2Screen.classList.contains('hidden')) {
@@ -768,6 +776,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateStonksMarket() {
+        if (!stonksChartInstance) return;
+
+        stonksChartInstance.data.datasets.forEach(dataset => {
+            let currentPrice = dataset.data[dataset.data.length - 1];
+            // Random modifier between -5% to +5%
+            const modifier = (Math.random() * 0.1) - 0.05;
+            let newPrice = Math.max(1, Math.round(currentPrice * (1 + modifier)));
+
+            dataset.data.shift(); // Remove oldest
+            dataset.data.push(newPrice); // Add newest
+        });
+
+        stonksChartInstance.update();
+    }
+
     function updateStonksMonitorUI() {
         if (!stonksChartInstance) return;
 
@@ -1104,19 +1128,31 @@ document.addEventListener('DOMContentLoaded', () => {
             return context.dataIndex === context.dataset.data.length - 1 ? icon : false;
         };
 
+        const generateInitialStonkData = () => {
+            const startPrice = Math.floor(Math.random() * 90) + 10;
+            let data = [startPrice];
+            let currentPrice = startPrice;
+            for (let i = 0; i < 9; i++) {
+                const modifier = (Math.random() * 0.1) - 0.05; // -5% to +5%
+                currentPrice = Math.max(1, Math.round(currentPrice * (1 + modifier)));
+                data.push(currentPrice);
+            }
+            return data;
+        };
+
         stonksChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
                 datasets: [
-                    { label: 'Tuna Inc', data: [10, 15, 12, 18, 20, 22, 25, 24, 28, 30], borderColor: '#f06292', _defaultBorderColor: '#f06292', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.tuna, 'Tuna Inc'), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Yarn Corp', data: [20, 18, 22, 24, 26, 25, 23, 21, 19, 18], borderColor: '#ba68c8', _defaultBorderColor: '#ba68c8', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.yarn, 'Yarn Corp'), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Salmon Tech', data: [5, 8, 15, 25, 40, 50, 45, 60, 80, 100], borderColor: '#64b5f6', _defaultBorderColor: '#64b5f6', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.salmon, 'Salmon Tech'), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Laser Dynamics', data: [50, 40, 60, 30, 80, 20, 90, 10, 100, 5], borderColor: '#4fc3f7', _defaultBorderColor: '#4fc3f7', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.laser, 'Laser Dynamics'), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Cardboard Box LLC', data: [30, 30, 31, 30, 29, 30, 30, 31, 30, 30], borderColor: '#81c784', _defaultBorderColor: '#81c784', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.box, 'Cardboard Box LLC'), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Catnip Futures', data: [10, 12, 11, 15, 30, 60, 90, 120, 80, 40], borderColor: '#dce775', _defaultBorderColor: '#dce775', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.catnip, 'Catnip Futures'), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Solar Energy Co', data: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24], borderColor: '#ffd54f', _defaultBorderColor: '#ffd54f', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.solar, 'Solar Energy Co'), pointRadius: 10, pointHoverRadius: 12 },
-                    { label: 'Spring Toy Co', data: [25, 35, 20, 40, 15, 45, 10, 50, 5, 55], borderColor: '#ff8a65', _defaultBorderColor: '#ff8a65', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.spring, 'Spring Toy Co'), pointRadius: 10, pointHoverRadius: 12 }
+                    { label: 'Tuna Inc', data: generateInitialStonkData(), borderColor: '#f06292', _defaultBorderColor: '#f06292', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.tuna, 'Tuna Inc'), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Yarn Corp', data: generateInitialStonkData(), borderColor: '#ba68c8', _defaultBorderColor: '#ba68c8', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.yarn, 'Yarn Corp'), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Salmon Tech', data: generateInitialStonkData(), borderColor: '#64b5f6', _defaultBorderColor: '#64b5f6', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.salmon, 'Salmon Tech'), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Laser Dynamics', data: generateInitialStonkData(), borderColor: '#4fc3f7', _defaultBorderColor: '#4fc3f7', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.laser, 'Laser Dynamics'), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Cardboard Box LLC', data: generateInitialStonkData(), borderColor: '#81c784', _defaultBorderColor: '#81c784', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.box, 'Cardboard Box LLC'), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Catnip Futures', data: generateInitialStonkData(), borderColor: '#dce775', _defaultBorderColor: '#dce775', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.catnip, 'Catnip Futures'), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Solar Energy Co', data: generateInitialStonkData(), borderColor: '#ffd54f', _defaultBorderColor: '#ffd54f', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.solar, 'Solar Energy Co'), pointRadius: 10, pointHoverRadius: 12 },
+                    { label: 'Spring Toy Co', data: generateInitialStonkData(), borderColor: '#ff8a65', _defaultBorderColor: '#ff8a65', borderWidth: 3, tension: 0.1, fill: false, pointStyle: getPointStyle(icons.spring, 'Spring Toy Co'), pointRadius: 10, pointHoverRadius: 12 }
                 ]
             },
             options: {
