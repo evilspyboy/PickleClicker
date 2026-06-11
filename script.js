@@ -76,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.05 },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.06 },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.07 },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.08 }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.015 },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.016 },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.017 },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.018 }
     ];
 
     // Game 2 Store Items Data
@@ -799,7 +799,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentPrice = dataset.data[dataset.data.length - 1];
 
             // Random modifier between -5% to +5%
-            let baseModifier = (Math.random() * 0.1) - 0.05;
+            let baseModifier = (Math.random() * 0.1) - 0.045;
             let businessModifier = 0;
 
             // Find associated legit business
@@ -811,8 +811,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const maxMod = business.maxModifier;
 
                 if (count <= threshold * 0.5) {
-                    // Maximum positive modifier
-                    businessModifier = maxMod;
+                    // Scale linearly from 0 up to maxMod based on count
+                    businessModifier = maxMod * (count / (threshold * 0.5));
                 } else if (count <= threshold) {
                     // Diminishing positive modifier scaling from maxMod down to 0
                     const overflow = count - (threshold * 0.5);
