@@ -62,12 +62,25 @@ The application will launch into a **Hub Screen** where the player can choose wh
     - *Clean Audit:* If the investigation fails, the player only pays the liquid penalty, and the popup reads *"The Tax Office audited your liquid accounts but found no hidden assets."*
 - **Businesses & Assets:** Players use liquid biscuits to buy Tangible Assets (e.g., Cat Yacht, Solid Gold Litterbox) and Businesses. Both can be bought and sold.
   - **Tangible Assets (Hiding Wealth):** Act as safe havens to hide biscuits from standard liquid biscuit audits, but carry the risk of seizure if the player's profile looks too suspicious. They have no direct effect on the market. Their buy/sell price remains fixed, providing a stable (but risky) vault for wealth. The game will feature scaling assets with massive price tags (e.g., Solid Gold Litterbox vs. Private Island Litterbox).
+    - *Cardboard Sports Car:* A fast-looking box for a fast-moving cat. (Hides wealth from liquid tax audits.)
+    - *Cardboard Yacht:* A very large box that floats, maybe. (Hides wealth from liquid tax audits.)
+    - *Gold Statue:* A shiny statue of a magnificent feline. (Hides wealth from liquid tax audits.)
+    - *Diamond Litter:* The most expensive place to do business. (Hides wealth from liquid tax audits.)
+    - *Private Island Litterbox:* An entire island dedicated to burying things. (Hides wealth from liquid tax audits.)
   - **Shell Companies:** Like Tangible Assets, these act as fixed-price vaults to hide money from standard audits. However, they are highly illegal and provide zero "legitimate cover." If an aggressive audit happens, they are almost guaranteed to be seized. They have no effect on the stonk market, but they now provide unique strategic benefits:
+    - *Shell Company:* A company that literally sells sea shells. (Hides wealth & generates off-the-books income.)
+    - *3 Dogs in a Trenchcoat Inc.:* Definitely a real human businessman. (Hides wealth & generates off-the-books income.)
+    - *Money Laundromat:* Washes your cash so it looks sparkling clean. (Lowers your base Audit Exposure.)
+    - *Shadow Board:* A mysterious group of executives. (Provides a chance to completely cancel an audit.)
     - *A Literal Shell Company:* Parks money and generates a passive "off the books" income stream (extra biscuits outside the stonks market).
     - *Three Dogs in a Trenchcoat Inc.:* Parks money and generates a passive "off the books" income stream.
     - *Money Laundromat (Cash Laundry):* Lowers the player's base Audit Exposure percentage.
     - *Shadow Board:* Does not earn passive income but acts as a "get out of jail free" card, providing a chance to make an audit go away completely if one triggers.
   - **Legit Businesses (Market Manipulators):** Active market players that align with the 8 Stonks. Owning them adds a **+X velocity modifier** to the associated Stonk's baseline growth rate over time. They also provide "legitimate" cover for your wealth against the Tax Office.
+    - *Storage Company:* A company that stores endless cardboard boxes. (Boosts the Cardboard Box LLC stonk.)
+    - *Pet Store:* Sells active toys to energetic kittens. (Boosts the Laser Dynamics stonk.)
+    - *Catnip Dispensary:* Provides high-quality premium nip. (Boosts the Catnip Futures stonk.)
+    - *Solar Farm:* Harnesses the power of ultimate sunbeams. (Boosts the Solar Energy Co stonk.)
     - *Volatility & Cost:* Businesses are tiered. A cheap business (e.g., Cardboard Recycling Plant) adds a small velocity modifier and has a highly stable market—it takes many purchases to flood and crash it. A high-end business (e.g., Solar Farm) adds a massive velocity modifier but operates in a highly volatile market—buying just a few too many will rapidly flood and crash the market.
     - *Business Value Fluctuations:* Unlike Tangible Assets, the buy/sell price of a Legit Business is tied directly to the current price of its associated Stonk. Players can trade businesses for profit or loss.
   - **Market Flooding Risk (The Bubble):** If a player buys *too many* of a specific Legit Business (e.g., too many Fish Markets), they saturate the market. This drives down demand and crashes the associated stonk. To recover the market, the player is forced to sell off those businesses, potentially at a massive loss due to the crashed stonk price. This crash creates ripple effects across the complex web of other stonks.
