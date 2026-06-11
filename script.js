@@ -1016,6 +1016,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     progressBar.style.backgroundColor = 'rgba(144, 238, 144, 0.2)';
                 }
             }
+
+            const buyBtn = document.querySelector(`.store-btn.buy[data-id="${item.id}"]`);
+            if (buyBtn) {
+                if (game2Biscuits >= item.baseCost) {
+                    buyBtn.classList.add('active');
+                } else {
+                    buyBtn.classList.remove('active');
+                }
+            }
         });
     }
 
