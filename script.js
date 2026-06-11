@@ -70,16 +70,16 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 1000, count: 0, desc: 'The ultimate in offshore accounts, by having your own shore.', effect: 'Send a friendly hello to the tax office from your haven.' },
 
         // Shell Companies
-        { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 1000, count: 0, desc: 'A literal shell company.', effect: 'Hide your wealth and maybe earn some biscuits.' },
-        { id: 'shell-3dogs', name: '3 Dogs in a Trenchcoat Inc.', type: 'shell', icon: 'assets/shell_3dogstrenchcoat.png', baseCost: 1000, count: 0, desc: 'Trust us to manage your biscuits for some returns.', effect: 'Totally legit and definitely not 3 dogs in a trenchcoat.' },
-        { id: 'shell-laundry', name: 'Money Laundromat', type: 'shell', icon: 'assets/shell_cashlaundry.png', baseCost: 1000, count: 0, desc: 'Take your dirty traceable biscuits...', effect: '...and turn them into nice clean tax free ones.' },
-        { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
+        { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 10000, count: 0, bps: 100, desc: 'A literal shell company.', effect: 'Hide your wealth and earn +100 biscuits/sec off the books.' },
+        { id: 'shell-3dogs', name: '3 Dogs in a Trenchcoat Inc.', type: 'shell', icon: 'assets/shell_3dogstrenchcoat.png', baseCost: 100000, count: 0, bps: 1000, desc: 'Trust us to manage your biscuits for some returns.', effect: 'Totally legit and earns +1000 biscuits/sec.' },
+        { id: 'shell-laundry', name: 'Money Laundromat', type: 'shell', icon: 'assets/shell_cashlaundry.png', baseCost: 500000, count: 0, bps: 5000, desc: 'Take your dirty traceable biscuits...', effect: '...and turn them into nice clean tax free ones. Earns +5000 biscuits/sec.' },
+        { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 500000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.015 },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.016 },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.017 },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.018 }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 10000, count: 0, bps: 100, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box? Earns +100 biscuits/sec.', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.015 },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 100000, count: 0, bps: 1000, desc: 'From magic red dots to toys for all.', effect: 'A good investment for stonks, earns +1000 biscuits/sec.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.016 },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 500000, count: 0, bps: 5000, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green, earns +5000 biscuits/sec.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.017 },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000000, count: 0, bps: 10000, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential, earns +10000 biscuits/sec.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.018 }
     ];
 
     // Game 2 Store Items Data
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     game2StoreItemsData = defaultGame2StoreItemsData.map(defaultItem => {
                         const savedItem = game2State.game2StoreItemsData.find(s => s.id === defaultItem.id);
                         if (savedItem) {
-                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier, baseCost: defaultItem.baseCost };
+                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier, baseCost: defaultItem.baseCost, bps: defaultItem.bps };
                         }
                         return { ...defaultItem };
                     });
@@ -144,6 +144,21 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStonksMarket();
         }
     }, stonkMarketSpeed);
+
+    // Game 2 Passive Income Loop
+    setInterval(() => {
+        if (!game2Screen.classList.contains('hidden')) {
+            let passiveIncome = 0;
+            game2StoreItemsData.forEach(item => {
+                if (item.bps && item.count > 0) {
+                    passiveIncome += (item.bps * item.count);
+                }
+            });
+            if (passiveIncome > 0) {
+                game2Biscuits += passiveIncome;
+            }
+        }
+    }, 1000);
 
     // Auto-save and Update Game 2 UI periodically
     setInterval(() => {
@@ -990,7 +1005,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const progressBar = document.getElementById(`progress-${item.id}`);
             if (progressBar) {
-                // Calculate percentage based on 1000 cost
+                // Calculate percentage based on baseCost
                 let percentage = (game2Biscuits / item.baseCost) * 100;
                 if (percentage > 100) percentage = 100;
                 progressBar.style.height = `${percentage}%`;
