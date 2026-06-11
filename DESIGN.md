@@ -81,10 +81,6 @@ The application will launch into a **Hub Screen** where the player can choose wh
     - *Pet Store:* Sells active toys to energetic kittens. (Boosts the Laser Dynamics stonk.)
     - *Catnip Dispensary:* Provides high-quality premium nip. (Boosts the Catnip Futures stonk.)
     - *Solar Farm:* Harnesses the power of ultimate sunbeams. (Boosts the Solar Energy Co stonk.)
-    - *Tuna Cannery:* Endlessly canning premium fish. (Boosts the Tuna Inc stonk.)
-    - *Yarn Factory:* Weaving dreams and tangles. (Boosts the Yarn Corp stonk.)
-    - *Salmon Fishery:* Sourcing fresh streams of data. (Boosts the Salmon Tech stonk.)
-    - *Spring Factory:* Bouncing profits all day. (Boosts the Spring Toy Co stonk.)
     - *Volatility & Cost:* Businesses are tiered by cost (e.g., 500k to 50m later in game progression). A cheap business (e.g., Storage Company) adds a velocity modifier but has a specific threshold—it takes many purchases to flood and crash it.
     - *Business Value Fluctuations:* Unlike Tangible Assets, the buy/sell price of a Legit Business is currently set to be static, but could later become tied directly to the current price of its associated Stonk for dynamic value. Note: "Off the books" biscuit income from businesses will be implemented in future phases.
   - **Market Flooding Risk (The Bubble):** If a player buys *too many* of a specific Legit Business they saturate the market based on a 'threshold'.
@@ -167,10 +163,6 @@ The following assets are used or required for Game 2. All assets should be trans
 - `business_petstore.png` (Pet toy store - boosts Laser Dynamics/Active Toys)
 - `business_dispensary.png` (Catnip dispensary - boosts Catnip Futures)
 - `business_solarfarm.png` (Solar farm - boosts Solar Energy Co)
-- `business_tunacannery.png` (Tuna cannery - boosts Tuna Inc)
-- `business_yarnfactory.png` (Yarn factory - boosts Yarn Corp)
-- `business_salmonfishery.png` (Salmon fishery - boosts Salmon Tech)
-- `business_springfactory.png` (Spring factory - boosts Spring Toy Co)
 
 **Shell Companies (Meme Stickers):**
 - `shell_shellcompany.png` (A shell company that sells shells)
