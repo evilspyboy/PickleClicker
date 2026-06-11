@@ -76,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 500000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.05 },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.06 },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 10000000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.07 },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 50000000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.08 }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.05 },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.06 },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.07 },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.08 }
     ];
 
     // Game 2 Store Items Data
@@ -783,12 +783,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const stonkLinks = {
             'Tuna Inc': { boosts: 'Cardboard Box LLC', depresses: 'Yarn Corp' },
             'Salmon Tech': { boosts: 'Laser Dynamics', depresses: 'Spring Toy Co' },
-            'Yarn Corp': { boosts: 'Tuna Inc', depresses: 'Cardboard Box LLC' },
+            'Yarn Corp': { boosts: 'Tuna Inc', depresses: 'Catnip Futures' },
             'Laser Dynamics': { boosts: 'Spring Toy Co', depresses: 'Solar Energy Co' },
             'Cardboard Box LLC': { boosts: 'Solar Energy Co', depresses: 'Laser Dynamics' },
-            'Solar Energy Co': { boosts: 'Cardboard Box LLC', depresses: 'Tuna Inc' },
-            'Catnip Futures': { boosts: 'Salmon Tech', depresses: 'Yarn Corp' },
-            'Spring Toy Co': { boosts: 'Catnip Futures', depresses: 'Salmon Tech' }
+            'Solar Energy Co': { boosts: 'Catnip Futures', depresses: 'Tuna Inc' },
+            'Catnip Futures': { boosts: 'Salmon Tech', depresses: 'Cardboard Box LLC' },
+            'Spring Toy Co': { boosts: 'Yarn Corp', depresses: 'Salmon Tech' }
         };
 
         let stonkModifiers = {};
@@ -829,12 +829,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let primary = baseModifier + businessModifier;
 
-            // If the stonk is dead (price 1) and its primary modifier is negative,
-            // clamp it to 0 so it doesn't endlessly radiate negative energy
-            if (currentPrice <= 1 && primary < 0) {
-                primary = 0;
-            }
-
             stonkModifiers[label] = {
                 primary: primary,
                 final: 0
@@ -852,13 +846,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 let sourceMod = stonkModifiers[sourceLabel].primary;
 
                 if (links.boosts === label) {
-                    finalMod += (sourceMod * 0.3);
+                    if (sourceMod > 0) {
+                        finalMod += (sourceMod * 0.3);
+                    }
                 }
                 if (links.depresses === label) {
-                    // If source is crashing (negative mod), subtracting a negative would
-                    // mathematically CREATE a massive boost (The Infinite Pump Bug).
-                    // We only want a stonk doing WELL to depress its linked stonk.
-                    // If the source is doing poorly, it shouldn't magically boost this one.
                     if (sourceMod > 0) {
                         finalMod -= (sourceMod * 0.3);
                     }
@@ -874,7 +866,15 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentPrice = dataset.data[dataset.data.length - 1];
             let finalModifier = stonkModifiers[label].final;
 
-            let newPrice = Math.max(1, Math.round(currentPrice * (1 + finalModifier)));
+            let exactChange = currentPrice * finalModifier;
+            // Probabilistic rounding to prevent low-price lock-in (trapping)
+            let integerChange = Math.floor(Math.abs(exactChange));
+            let fractionalChange = Math.abs(exactChange) - integerChange;
+            if (Math.random() < fractionalChange) {
+                integerChange += 1;
+            }
+            let change = exactChange >= 0 ? integerChange : -integerChange;
+            let newPrice = Math.max(1, currentPrice + change);
 
             dataset.data.shift(); // Remove oldest
             dataset.data.push(newPrice); // Add newest
