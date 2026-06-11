@@ -738,12 +738,12 @@ body, html {
 
 .store-item-progress {
     position: absolute;
-    top: 0;
     bottom: 0;
     right: 0;
-    width: 0%; /* Default width is 0 */
+    width: 40px; /* Assuming 40px is width of the plus button */
+    height: 0%; /* Default height is 0 */
     background-color: rgba(144, 238, 144, 0.4);
-    transition: width 0.3s ease;
+    transition: height 0.3s ease;
     z-index: 1;
     pointer-events: none;
 }
@@ -1031,4 +1031,33 @@ body, html {
 
 #dev-mode-panel button, #dev-mode-panel input {
     margin: 5px 0;
+}
+@media (max-width: 600px) {
+    #game2-store-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        padding: 5px;
+    }
+
+    .store-column-title {
+        font-size: 0.8em;
+    }
+
+    .store-item-icon-large {
+        width: 30px;
+        height: 30px;
+        left: -15px;
+    }
+
+    .store-item {
+        margin-left: 15px;
+    }
+
+    .store-btn {
+        width: 25px;
+    }
+
+    .store-item-progress {
+        width: 25px;
+    }
 }

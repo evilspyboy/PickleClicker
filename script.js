@@ -63,23 +63,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Game 2 Default Store Items Data
     const defaultGame2StoreItemsData = [
         // Tangible Assets
-        { id: 'asset-sportscar', name: 'Cardboard Sports Car', type: 'asset', icon: 'assets/cardboard_sportscar.png', baseCost: 1000, count: 0 },
-        { id: 'asset-yacht', name: 'Cardboard Yacht', type: 'asset', icon: 'assets/cardboard_yacht.png', baseCost: 1000, count: 0 },
-        { id: 'asset-goldstatue', name: 'Gold Statue', type: 'asset', icon: 'assets/gold_statue.png', baseCost: 1000, count: 0 },
-        { id: 'asset-diamondlitter', name: 'Diamond Litter', type: 'asset', icon: 'assets/diamond_litter.png', baseCost: 1000, count: 0 },
-        { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 1000, count: 0 },
+        { id: 'asset-sportscar', name: 'Cardboard Sports Car', type: 'asset', icon: 'assets/cardboard_sportscar.png', baseCost: 1000, count: 0, desc: 'A fast-looking box for a fast-moving cat.', effect: 'Hides wealth from liquid tax audits.' },
+        { id: 'asset-yacht', name: 'Cardboard Yacht', type: 'asset', icon: 'assets/cardboard_yacht.png', baseCost: 1000, count: 0, desc: 'A very large box that floats, maybe.', effect: 'Hides wealth from liquid tax audits.' },
+        { id: 'asset-goldstatue', name: 'Gold Statue', type: 'asset', icon: 'assets/gold_statue.png', baseCost: 1000, count: 0, desc: 'A shiny statue of a magnificent feline.', effect: 'Hides wealth from liquid tax audits.' },
+        { id: 'asset-diamondlitter', name: 'Diamond Litter', type: 'asset', icon: 'assets/diamond_litter.png', baseCost: 1000, count: 0, desc: 'The most expensive place to do business.', effect: 'Hides wealth from liquid tax audits.' },
+        { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 1000, count: 0, desc: 'An entire island dedicated to burying things.', effect: 'Hides wealth from liquid tax audits.' },
 
         // Shell Companies
-        { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 1000, count: 0 },
-        { id: 'shell-3dogs', name: '3 Dogs in a Trenchcoat Inc.', type: 'shell', icon: 'assets/shell_3dogstrenchcoat.png', baseCost: 1000, count: 0 },
-        { id: 'shell-laundry', name: 'Money Laundromat', type: 'shell', icon: 'assets/shell_cashlaundry.png', baseCost: 1000, count: 0 },
-        { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0 },
+        { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 1000, count: 0, desc: 'A company that literally sells sea shells.', effect: 'Hides wealth & generates off-the-books income.' },
+        { id: 'shell-3dogs', name: '3 Dogs in a Trenchcoat Inc.', type: 'shell', icon: 'assets/shell_3dogstrenchcoat.png', baseCost: 1000, count: 0, desc: 'Definitely a real human businessman.', effect: 'Hides wealth & generates off-the-books income.' },
+        { id: 'shell-laundry', name: 'Money Laundromat', type: 'shell', icon: 'assets/shell_cashlaundry.png', baseCost: 1000, count: 0, desc: 'Washes your cash so it looks sparkling clean.', effect: 'Lowers your base Audit Exposure.' },
+        { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'A mysterious group of executives.', effect: 'Provides a chance to completely cancel an audit.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0 },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0 },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0 },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0 }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'A company that stores endless cardboard boxes.', effect: 'Boosts the Cardboard Box LLC stonk.' },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'Sells active toys to energetic kittens.', effect: 'Boosts the Laser Dynamics stonk.' },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Provides high-quality premium nip.', effect: 'Boosts the Catnip Futures stonk.' },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Harnesses the power of ultimate sunbeams.', effect: 'Boosts the Solar Energy Co stonk.' }
     ];
 
     // Game 2 Store Items Data
@@ -324,6 +324,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Instructions OK button
+
+    // Store Item Modal
+    const storeItemModal = document.getElementById('store-item-modal');
+    const storeItemModalIcon = document.getElementById('store-item-modal-icon');
+    const storeItemModalTitle = document.getElementById('store-item-modal-title');
+    const storeItemModalDesc = document.getElementById('store-item-modal-desc');
+    const storeItemModalEffect = document.getElementById('store-item-modal-effect');
+    const storeItemModalOk = document.getElementById('store-item-modal-ok');
+
+    if (storeItemModalOk) {
+        storeItemModalOk.addEventListener('click', () => {
+            storeItemModal.classList.add('hidden');
+        });
+    }
+
+    function showStoreItemModal(item) {
+        if (!storeItemModal) return;
+        storeItemModalIcon.src = item.icon;
+        storeItemModalTitle.textContent = item.name;
+        storeItemModalDesc.textContent = item.desc || "A valuable asset.";
+        storeItemModalEffect.textContent = item.effect || "Affects the stonk market.";
+        storeItemModal.classList.remove('hidden');
+    }
+
     const instrOkBtn = document.getElementById('instructions-ok');
     if (instrOkBtn) {
         instrOkBtn.addEventListener('click', () => {
@@ -671,6 +695,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.type === 'asset') assetCol.appendChild(el);
             else if (item.type === 'shell') shellCol.appendChild(el);
             else if (item.type === 'business') businessCol.appendChild(el);
+
+            const iconEl = el.querySelector('.store-item-icon-large');
+            if (iconEl) {
+                iconEl.style.cursor = 'pointer';
+                iconEl.addEventListener('click', () => {
+                    showStoreItemModal(item);
+                });
+            }
         });
 
         // Add event listeners for buy/sell
@@ -839,9 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Calculate percentage based on 1000 cost
                 let percentage = (game2Biscuits / item.baseCost) * 100;
                 if (percentage > 100) percentage = 100;
-                // Max width should cover the middle and plus button area, so max is calc(100% - 40px)
-                // We'll just apply percentage of the available space
-                progressBar.style.width = `calc((100% - 40px) * ${percentage / 100})`;
+                progressBar.style.height = `${percentage}%`;
 
                 if (percentage >= 100) {
                     progressBar.style.backgroundColor = 'rgba(144, 238, 144, 0.4)';
