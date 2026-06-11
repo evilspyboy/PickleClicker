@@ -785,8 +785,16 @@ body, html {
     border-left: 2px solid #eee;
 }
 
+.store-btn.buy.active {
+    background-color: #90ee90; /* Green when affordable */
+}
+
 .store-btn.buy:hover {
     background-color: rgba(0, 0, 0, 0.05);
+}
+
+.store-btn.buy.active:hover {
+    background-color: #7ccd7c;
 }
 
 .store-item-middle {
