@@ -76,10 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?' },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.' },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.' },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.' }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.05 },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.06 },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.07 },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.08 },
+        { id: 'business-tunacannery', name: 'Tuna Cannery', type: 'business', icon: 'assets/business_tunacannery.png', baseCost: 1000, count: 0, desc: 'Endlessly canning premium fish.', effect: 'A very smelly business.', stonkLink: 'Tuna Inc', threshold: 45, maxModifier: 0.05 },
+        { id: 'business-yarnfactory', name: 'Yarn Factory', type: 'business', icon: 'assets/business_yarnfactory.png', baseCost: 1000, count: 0, desc: 'Weaving dreams and tangles.', effect: 'A very tangled business.', stonkLink: 'Yarn Corp', threshold: 45, maxModifier: 0.05 },
+        { id: 'business-salmonfishery', name: 'Salmon Fishery', type: 'business', icon: 'assets/business_salmonfishery.png', baseCost: 1000, count: 0, desc: 'Sourcing fresh streams of data.', effect: 'A very wet business.', stonkLink: 'Salmon Tech', threshold: 45, maxModifier: 0.05 },
+        { id: 'business-springfactory', name: 'Spring Factory', type: 'business', icon: 'assets/business_springfactory.png', baseCost: 1000, count: 0, desc: 'Bouncing profits all day.', effect: 'A very bouncy business.', stonkLink: 'Spring Toy Co', threshold: 45, maxModifier: 0.05 }
     ];
 
     // Game 2 Store Items Data
@@ -101,13 +105,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const game2State = JSON.parse(savedData);
                 game2Biscuits = game2State.game2Biscuits || 0;
                 if (game2State.game2StoreItemsData) {
-                    // Load saved data, but update with any new desc/effect from defaults
-                    game2StoreItemsData = game2State.game2StoreItemsData.map(savedItem => {
-                        const defaultItem = defaultGame2StoreItemsData.find(d => d.id === savedItem.id);
-                        if (defaultItem) {
-                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name };
+                    // Load saved data, but update with any new desc/effect/properties from defaults
+                    game2StoreItemsData = defaultGame2StoreItemsData.map(defaultItem => {
+                        const savedItem = game2State.game2StoreItemsData.find(s => s.id === defaultItem.id);
+                        if (savedItem) {
+                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier };
                         }
-                        return savedItem;
+                        return { ...defaultItem };
                     });
                 }
                 if (game2State.game2StonkOwnership) {
@@ -779,11 +783,88 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateStonksMarket() {
         if (!stonksChartInstance) return;
 
+        // The Complex Stonk Web Links (boosts, depresses)
+        const stonkLinks = {
+            'Tuna Inc': { boosts: 'Cardboard Box LLC', depresses: 'Yarn Corp' },
+            'Salmon Tech': { boosts: 'Laser Dynamics', depresses: 'Spring Toy Co' },
+            'Yarn Corp': { boosts: 'Tuna Inc', depresses: 'Cardboard Box LLC' },
+            'Laser Dynamics': { boosts: 'Spring Toy Co', depresses: 'Solar Energy Co' },
+            'Cardboard Box LLC': { boosts: 'Solar Energy Co', depresses: 'Laser Dynamics' },
+            'Solar Energy Co': { boosts: 'Cardboard Box LLC', depresses: 'Tuna Inc' },
+            'Catnip Futures': { boosts: 'Salmon Tech', depresses: 'Yarn Corp' },
+            'Spring Toy Co': { boosts: 'Catnip Futures', depresses: 'Salmon Tech' }
+        };
+
+        let stonkModifiers = {};
+
+        // Pass 1: Calculate base modifiers and business modifiers
         stonksChartInstance.data.datasets.forEach(dataset => {
-            let currentPrice = dataset.data[dataset.data.length - 1];
+            let label = dataset.label;
+
             // Random modifier between -5% to +5%
-            const modifier = (Math.random() * 0.1) - 0.05;
-            let newPrice = Math.max(1, Math.round(currentPrice * (1 + modifier)));
+            let baseModifier = (Math.random() * 0.1) - 0.05;
+            let businessModifier = 0;
+
+            // Find associated legit business
+            const business = game2StoreItemsData.find(item => item.type === 'business' && item.stonkLink === label);
+
+            if (business && business.count > 0) {
+                const count = business.count;
+                const threshold = business.threshold;
+                const maxMod = business.maxModifier;
+
+                if (count <= threshold * 0.5) {
+                    // Maximum positive modifier
+                    businessModifier = maxMod;
+                } else if (count <= threshold) {
+                    // Diminishing positive modifier scaling from maxMod down to 0
+                    const overflow = count - (threshold * 0.5);
+                    const scale = 1 - (overflow / (threshold * 0.5));
+                    businessModifier = maxMod * scale;
+                } else {
+                    // Flooding the market - negative modifier scaling down indefinitely
+                    const excess = count - threshold;
+                    // Negative scaling, arbitrary but punishing (-1x maxMod for every 50% over threshold)
+                    const penaltyScale = excess / (threshold * 0.5);
+                    businessModifier = -(maxMod * penaltyScale);
+                }
+            }
+
+            stonkModifiers[label] = {
+                primary: baseModifier + businessModifier,
+                final: 0
+            };
+        });
+
+        // Pass 2: Calculate Complex Web Impacts
+        stonksChartInstance.data.datasets.forEach(dataset => {
+            let label = dataset.label;
+            let primaryMod = stonkModifiers[label].primary;
+            let finalMod = primaryMod;
+
+            // Check if any other stonk impacts this one
+            for (const [sourceLabel, links] of Object.entries(stonkLinks)) {
+                const sourceMod = stonkModifiers[sourceLabel].primary;
+                // Determine if source had a "surge" (> +3%) or "crash" (< -3%) to apply significant ripple effects
+                // or just apply a continuous fractional link. Let's apply a continuous 30% ripple effect for smoothness
+                if (links.boosts === label) {
+                    finalMod += (sourceMod * 0.3);
+                }
+                if (links.depresses === label) {
+                    finalMod -= (sourceMod * 0.3);
+                }
+            }
+
+            stonkModifiers[label].final = finalMod;
+        });
+
+        // Apply final prices
+        stonksChartInstance.data.datasets.forEach(dataset => {
+            let label = dataset.label;
+            let currentPrice = dataset.data[dataset.data.length - 1];
+            let finalModifier = stonkModifiers[label].final;
+
+            let newPrice = Math.max(1, Math.round(currentPrice * (1 + finalModifier)));
 
             dataset.data.shift(); // Remove oldest
             dataset.data.push(newPrice); // Add newest

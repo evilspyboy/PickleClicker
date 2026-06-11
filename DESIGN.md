@@ -81,12 +81,21 @@ The application will launch into a **Hub Screen** where the player can choose wh
     - *Pet Store:* Sells active toys to energetic kittens. (Boosts the Laser Dynamics stonk.)
     - *Catnip Dispensary:* Provides high-quality premium nip. (Boosts the Catnip Futures stonk.)
     - *Solar Farm:* Harnesses the power of ultimate sunbeams. (Boosts the Solar Energy Co stonk.)
-    - *Volatility & Cost:* Businesses are tiered. A cheap business (e.g., Cardboard Recycling Plant) adds a small velocity modifier and has a highly stable market—it takes many purchases to flood and crash it. A high-end business (e.g., Solar Farm) adds a massive velocity modifier but operates in a highly volatile market—buying just a few too many will rapidly flood and crash the market.
-    - *Business Value Fluctuations:* Unlike Tangible Assets, the buy/sell price of a Legit Business is tied directly to the current price of its associated Stonk. Players can trade businesses for profit or loss.
-  - **Market Flooding Risk (The Bubble):** If a player buys *too many* of a specific Legit Business (e.g., too many Fish Markets), they saturate the market. This drives down demand and crashes the associated stonk. To recover the market, the player is forced to sell off those businesses, potentially at a massive loss due to the crashed stonk price. This crash creates ripple effects across the complex web of other stonks.
+    - *Tuna Cannery:* Endlessly canning premium fish. (Boosts the Tuna Inc stonk.)
+    - *Yarn Factory:* Weaving dreams and tangles. (Boosts the Yarn Corp stonk.)
+    - *Salmon Fishery:* Sourcing fresh streams of data. (Boosts the Salmon Tech stonk.)
+    - *Spring Factory:* Bouncing profits all day. (Boosts the Spring Toy Co stonk.)
+    - *Volatility & Cost:* Businesses are tiered by cost (e.g., 500k to 50m later in game progression). A cheap business (e.g., Storage Company) adds a velocity modifier but has a specific threshold—it takes many purchases to flood and crash it.
+    - *Business Value Fluctuations:* Unlike Tangible Assets, the buy/sell price of a Legit Business is currently set to be static, but could later become tied directly to the current price of its associated Stonk for dynamic value. Note: "Off the books" biscuit income from businesses will be implemented in future phases.
+  - **Market Flooding Risk (The Bubble):** If a player buys *too many* of a specific Legit Business they saturate the market based on a 'threshold'.
+    - Owning none = 0 modifier.
+    - Owning up to 50% of the threshold = maximum positive modifier.
+    - Owning 50% to 100% of the threshold = diminishing positive modifier.
+    - Owning over 100% of the threshold = negative modifier (crashing the stonk).
+  - This crash creates ripple effects across the complex web of other stonks.
   - Buying assets and businesses adds new stickers to the background.
 - **Catnip (Risk vs. Reward):**
-  - Players can use "Catnip" for a universal market boost.
+  - Players can use "Catnip" for a universal market boost. *(Note: Catnip market modifier logic is not yet implemented and will be added in a future phase).*
   - Using it fills a visible **Catnip Meter**.
   - The meter degrades (cools down) slowly over time back to zero.
   - **The Crash:** If the player uses too much catnip and maxes out the meter, the market crashes! All stonks take a massive tumble due to "panic selling in a catnip infused state".
@@ -158,6 +167,10 @@ The following assets are used or required for Game 2. All assets should be trans
 - `business_petstore.png` (Pet toy store - boosts Laser Dynamics/Active Toys)
 - `business_dispensary.png` (Catnip dispensary - boosts Catnip Futures)
 - `business_solarfarm.png` (Solar farm - boosts Solar Energy Co)
+- `business_tunacannery.png` (Tuna cannery - boosts Tuna Inc)
+- `business_yarnfactory.png` (Yarn factory - boosts Yarn Corp)
+- `business_salmonfishery.png` (Salmon fishery - boosts Salmon Tech)
+- `business_springfactory.png` (Spring factory - boosts Spring Toy Co)
 
 **Shell Companies (Meme Stickers):**
 - `shell_shellcompany.png` (A shell company that sells shells)
