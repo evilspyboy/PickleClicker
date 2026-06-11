@@ -76,14 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.05 },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.06 },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.07 },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.08 },
-        { id: 'business-tunacannery', name: 'Tuna Cannery', type: 'business', icon: 'assets/business_tunacannery.png', baseCost: 1000, count: 0, desc: 'Endlessly canning premium fish.', effect: 'A very smelly business.', stonkLink: 'Tuna Inc', threshold: 45, maxModifier: 0.05 },
-        { id: 'business-yarnfactory', name: 'Yarn Factory', type: 'business', icon: 'assets/business_yarnfactory.png', baseCost: 1000, count: 0, desc: 'Weaving dreams and tangles.', effect: 'A very tangled business.', stonkLink: 'Yarn Corp', threshold: 45, maxModifier: 0.05 },
-        { id: 'business-salmonfishery', name: 'Salmon Fishery', type: 'business', icon: 'assets/business_salmonfishery.png', baseCost: 1000, count: 0, desc: 'Sourcing fresh streams of data.', effect: 'A very wet business.', stonkLink: 'Salmon Tech', threshold: 45, maxModifier: 0.05 },
-        { id: 'business-springfactory', name: 'Spring Factory', type: 'business', icon: 'assets/business_springfactory.png', baseCost: 1000, count: 0, desc: 'Bouncing profits all day.', effect: 'A very bouncy business.', stonkLink: 'Spring Toy Co', threshold: 45, maxModifier: 0.05 }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 500000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.05 },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.06 },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 10000000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.07 },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 50000000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.08 },
+        { id: 'business-tunacannery', name: 'Tuna Cannery', type: 'business', icon: 'assets/business_tunacannery.png', baseCost: 500000, count: 0, desc: 'Endlessly canning premium fish.', effect: 'A very smelly business.', stonkLink: 'Tuna Inc', threshold: 45, maxModifier: 0.05 },
+        { id: 'business-yarnfactory', name: 'Yarn Factory', type: 'business', icon: 'assets/business_yarnfactory.png', baseCost: 750000, count: 0, desc: 'Weaving dreams and tangles.', effect: 'A very tangled business.', stonkLink: 'Yarn Corp', threshold: 45, maxModifier: 0.05 },
+        { id: 'business-salmonfishery', name: 'Salmon Fishery', type: 'business', icon: 'assets/business_salmonfishery.png', baseCost: 2500000, count: 0, desc: 'Sourcing fresh streams of data.', effect: 'A very wet business.', stonkLink: 'Salmon Tech', threshold: 45, maxModifier: 0.05 },
+        { id: 'business-springfactory', name: 'Spring Factory', type: 'business', icon: 'assets/business_springfactory.png', baseCost: 5000000, count: 0, desc: 'Bouncing profits all day.', effect: 'A very bouncy business.', stonkLink: 'Spring Toy Co', threshold: 45, maxModifier: 0.05 }
     ];
 
     // Game 2 Store Items Data
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     game2StoreItemsData = defaultGame2StoreItemsData.map(defaultItem => {
                         const savedItem = game2State.game2StoreItemsData.find(s => s.id === defaultItem.id);
                         if (savedItem) {
-                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier };
+                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier, baseCost: defaultItem.baseCost };
                         }
                         return { ...defaultItem };
                     });
@@ -800,6 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Pass 1: Calculate base modifiers and business modifiers
         stonksChartInstance.data.datasets.forEach(dataset => {
             let label = dataset.label;
+            let currentPrice = dataset.data[dataset.data.length - 1];
 
             // Random modifier between -5% to +5%
             let baseModifier = (Math.random() * 0.1) - 0.05;
@@ -830,8 +831,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            let primary = baseModifier + businessModifier;
+
+            // If the stonk is dead (price 1) and its primary modifier is negative,
+            // clamp it to 0 so it doesn't endlessly radiate negative energy
+            if (currentPrice <= 1 && primary < 0) {
+                primary = 0;
+            }
+
             stonkModifiers[label] = {
-                primary: baseModifier + businessModifier,
+                primary: primary,
                 final: 0
             };
         });
@@ -844,14 +853,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Check if any other stonk impacts this one
             for (const [sourceLabel, links] of Object.entries(stonkLinks)) {
-                const sourceMod = stonkModifiers[sourceLabel].primary;
-                // Determine if source had a "surge" (> +3%) or "crash" (< -3%) to apply significant ripple effects
-                // or just apply a continuous fractional link. Let's apply a continuous 30% ripple effect for smoothness
+                let sourceMod = stonkModifiers[sourceLabel].primary;
+
                 if (links.boosts === label) {
                     finalMod += (sourceMod * 0.3);
                 }
                 if (links.depresses === label) {
-                    finalMod -= (sourceMod * 0.3);
+                    // If source is crashing (negative mod), subtracting a negative would
+                    // mathematically CREATE a massive boost (The Infinite Pump Bug).
+                    // We only want a stonk doing WELL to depress its linked stonk.
+                    // If the source is doing poorly, it shouldn't magically boost this one.
+                    if (sourceMod > 0) {
+                        finalMod -= (sourceMod * 0.3);
+                    }
                 }
             }
 
