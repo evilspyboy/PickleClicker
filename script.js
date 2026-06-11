@@ -101,7 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const game2State = JSON.parse(savedData);
                 game2Biscuits = game2State.game2Biscuits || 0;
                 if (game2State.game2StoreItemsData) {
-                    game2StoreItemsData = game2State.game2StoreItemsData;
+                    // Load saved data, but update with any new desc/effect from defaults
+                    game2StoreItemsData = game2State.game2StoreItemsData.map(savedItem => {
+                        const defaultItem = defaultGame2StoreItemsData.find(d => d.id === savedItem.id);
+                        if (defaultItem) {
+                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name };
+                        }
+                        return savedItem;
+                    });
                 }
                 if (game2State.game2StonkOwnership) {
                     game2StonkOwnership = game2State.game2StonkOwnership;
