@@ -63,23 +63,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Game 2 Default Store Items Data
     const defaultGame2StoreItemsData = [
         // Tangible Assets
-        { id: 'asset-sportscar', name: 'Cardboard Sports Car', type: 'asset', icon: 'assets/cardboard_sportscar.png', baseCost: 1000, count: 0, desc: 'A fast-looking box for a fast-moving cat.', effect: 'Hides wealth from liquid tax audits.' },
-        { id: 'asset-yacht', name: 'Cardboard Yacht', type: 'asset', icon: 'assets/cardboard_yacht.png', baseCost: 1000, count: 0, desc: 'A very large box that floats, maybe.', effect: 'Hides wealth from liquid tax audits.' },
-        { id: 'asset-goldstatue', name: 'Gold Statue', type: 'asset', icon: 'assets/gold_statue.png', baseCost: 1000, count: 0, desc: 'A shiny statue of a magnificent feline.', effect: 'Hides wealth from liquid tax audits.' },
-        { id: 'asset-diamondlitter', name: 'Diamond Litter', type: 'asset', icon: 'assets/diamond_litter.png', baseCost: 1000, count: 0, desc: 'The most expensive place to do business.', effect: 'Hides wealth from liquid tax audits.' },
-        { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 1000, count: 0, desc: 'An entire island dedicated to burying things.', effect: 'Hides wealth from liquid tax audits.' },
+        { id: 'asset-sportscar', name: 'Cardboard Sports Car', type: 'asset', icon: 'assets/cardboard_sportscar.png', baseCost: 1000, count: 0, desc: 'Got some zoomies? You can park this tax free asset.', effect: 'Hides wealth from liquid tax audits.' },
+        { id: 'asset-yacht', name: 'Cardboard Yacht', type: 'asset', icon: 'assets/cardboard_yacht.png', baseCost: 1000, count: 0, desc: 'Look at me, look. I am the CAT-tain now.', effect: 'Offshore assets are always in a tax free harbour.' },
+        { id: 'asset-goldstatue', name: 'Gold Statue', type: 'asset', icon: 'assets/gold_statue.png', baseCost: 1000, count: 0, desc: 'A monument to the most important being in the universe.', effect: 'Solid gold of course, scratch free and tax free.' },
+        { id: 'asset-diamondlitter', name: 'Diamond Litter', type: 'asset', icon: 'assets/diamond_litter.png', baseCost: 1000, count: 0, desc: 'Just the place for my own diamonds in the rough.', effect: 'Turn taxable biscuits into sparkly, unauditable waste.' },
+        { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 1000, count: 0, desc: 'The ultimate in offshore accounts, by having your own shore.', effect: 'Send a friendly hello to the tax office from your haven.' },
 
         // Shell Companies
-        { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 1000, count: 0, desc: 'A company that literally sells sea shells.', effect: 'Hides wealth & generates off-the-books income.' },
-        { id: 'shell-3dogs', name: '3 Dogs in a Trenchcoat Inc.', type: 'shell', icon: 'assets/shell_3dogstrenchcoat.png', baseCost: 1000, count: 0, desc: 'Definitely a real human businessman.', effect: 'Hides wealth & generates off-the-books income.' },
-        { id: 'shell-laundry', name: 'Money Laundromat', type: 'shell', icon: 'assets/shell_cashlaundry.png', baseCost: 1000, count: 0, desc: 'Washes your cash so it looks sparkling clean.', effect: 'Lowers your base Audit Exposure.' },
-        { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'A mysterious group of executives.', effect: 'Provides a chance to completely cancel an audit.' },
+        { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 1000, count: 0, desc: 'A literal shell company.', effect: 'Hide your wealth and maybe earn some biscuits.' },
+        { id: 'shell-3dogs', name: '3 Dogs in a Trenchcoat Inc.', type: 'shell', icon: 'assets/shell_3dogstrenchcoat.png', baseCost: 1000, count: 0, desc: 'Trust us to manage your biscuits for some returns.', effect: 'Totally legit and definitely not 3 dogs in a trenchcoat.' },
+        { id: 'shell-laundry', name: 'Money Laundromat', type: 'shell', icon: 'assets/shell_cashlaundry.png', baseCost: 1000, count: 0, desc: 'Take your dirty traceable biscuits...', effect: '...and turn them into nice clean tax free ones.' },
+        { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 1000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'A company that stores endless cardboard boxes.', effect: 'Boosts the Cardboard Box LLC stonk.' },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'Sells active toys to energetic kittens.', effect: 'Boosts the Laser Dynamics stonk.' },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Provides high-quality premium nip.', effect: 'Boosts the Catnip Futures stonk.' },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Harnesses the power of ultimate sunbeams.', effect: 'Boosts the Solar Energy Co stonk.' }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 1000, count: 0, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box?' },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 1000, count: 0, desc: 'From magic red dots to toys for all.', effect: 'This is a good investment that can align with the right stonks.' },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 1000, count: 0, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green.' },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000, count: 0, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential as long as you don\'t over do it.' }
     ];
 
     // Game 2 Store Items Data
