@@ -823,6 +823,10 @@ document.addEventListener('DOMContentLoaded', () => {
         catnipBtn.addEventListener('click', () => {
             if (devModeActive || gameEnded || isCrashedOut || catnipLevel >= 10) return;
 
+            if (game2Biscuits < 1000) return;
+
+            game2Biscuits -= 1000;
+
             // Trigger shake animation
             catnipBtn.classList.remove('shake-anim');
             void catnipBtn.offsetWidth; // trigger reflow
@@ -835,6 +839,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             updateCatnipUI();
+            updateGame2UI();
         });
     }
 
@@ -1599,6 +1604,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const endgameModal = document.getElementById('game2-endgame-modal');
             if (endgameModal) endgameModal.classList.add('hidden');
             resetGame2();
+        });
+    }
+
+    const game2EndgameJumpGame3Btn = document.getElementById('game2-endgame-jump-game3');
+    if (game2EndgameJumpGame3Btn) {
+        game2EndgameJumpGame3Btn.addEventListener('click', () => {
+            showAlertModal("Game 3 (Mr. Pickles Colonises Mars) is currently in development! Check back later.", "assets/business_cat_rest.png", "Coming Soon");
         });
     }
 
