@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle Buttons
     const game2UnlockBtn = document.getElementById('game2-unlock-btn');
     const game1SwitchBtn = document.getElementById('game1-switch-btn');
+    const globalBgImage = document.getElementById('bg-image');
 
     // UI Elements for Transition
     const headerEl = document.getElementById('header');
@@ -391,13 +392,13 @@ document.addEventListener('DOMContentLoaded', () => {
         game2StartScreen.classList.remove('hidden');
         // Pre-load the Game 2 background so it shows behind the start screen if it ever becomes transparent,
         // or just to have it ready
-        bgImage.src = 'assets/bg_game_stonks.png';
+        if (globalBgImage) globalBgImage.src = 'assets/bg_game_stonks.png';
     });
 
     game1SwitchBtn.addEventListener('click', () => {
         game2StartScreen.classList.add('hidden');
         startScreen.classList.remove('hidden');
-        bgImage.src = 'assets/bg_game.png';
+        if (globalBgImage) globalBgImage.src = 'assets/bg_game.png';
     });
 
     game2StartBtn.addEventListener('click', () => {
@@ -591,6 +592,21 @@ document.addEventListener('DOMContentLoaded', () => {
         endgameResetBtn.addEventListener('click', () => {
             localStorage.removeItem('pickleClickerSave');
             location.reload();
+        });
+    }
+
+    const endgameJumpGame2Btn = document.getElementById('endgame-jump-game2');
+    if (endgameJumpGame2Btn) {
+        endgameJumpGame2Btn.addEventListener('click', () => {
+            document.getElementById('endgame-modal').classList.add('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+            startScreen.classList.add('hidden');
+            game2StartScreen.classList.remove('hidden');
+            // Make sure background is ready for game 2
+            const bgImageEl = document.getElementById('bg-image');
+            if (bgImageEl) {
+                bgImageEl.src = 'assets/bg_game_stonks.png';
+            }
         });
     }
 
