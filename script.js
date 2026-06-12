@@ -149,7 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     game2StonkOwnership = game2State.game2StonkOwnership;
                 }
                 if (game2State.investigatedStonks) {
-                    investigatedStonks = game2State.investigatedStonks;
+                    investigatedStonks = Array.isArray(game2State.investigatedStonks)
+                        ? game2State.investigatedStonks
+                        : Array.from(game2State.investigatedStonks || []);
                 }
                 return true;
             } catch (e) {
@@ -1736,15 +1738,20 @@ document.addEventListener('DOMContentLoaded', () => {
         game2TotalClicks = 0;
         game2Ended = false;
         game2StoreItemsData = JSON.parse(JSON.stringify(defaultGame2StoreItemsData));
-        game2StonkOwnership = {};
-        investigatedStonks = new Set();
+        game2StonkOwnership = JSON.parse(JSON.stringify(defaultGame2StonkOwnership));
+        investigatedStonks = [];
+        catnipLevel = 0;
+        isCrashedOut = false;
+        selectedStonkLabel = null;
+        previousOwnedStonkValue = 0;
+        isCatLooking = false;
+
+        updateCatnipUI();
 
         // Reset chart
         if (stonksChartInstance) {
-            stonksChartInstance.data.datasets.forEach(dataset => {
-                dataset.data = [dataset.data[dataset.data.length - 1]];
-            });
-            stonksChartInstance.update();
+            stonksChartInstance.destroy();
+            stonksChartInstance = null;
         }
 
         // Hide Game 2 elements
