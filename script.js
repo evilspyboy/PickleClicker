@@ -406,9 +406,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateStonksChartHighlight() {
-        if (!stonksChartInstance) return;
+        if (!window.stonksChartInstance) return;
 
-        stonksChartInstance.data.datasets.forEach(dataset => {
+        window.stonksChartInstance.data.datasets.forEach(dataset => {
             if (selectedStonkLabel) {
                 if (dataset.label === selectedStonkLabel) {
                     dataset.borderColor = dataset._defaultBorderColor;
@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        stonksChartInstance.update();
+        window.stonksChartInstance.update();
     }
 
     // Initialize Game Screen state
@@ -506,7 +506,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderGame2StoreItems();
         updateGame2UI();
-        updateStonksMonitorUI();
 
         // Prepare to show game 2 UI
         setTimeout(() => {
@@ -526,6 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (typeof initStonksChart === 'function') initStonksChart();
+            updateStonksMonitorUI(); // Call this AFTER chart is initialized
         }, 100);
 
         setTimeout(() => {
@@ -1064,8 +1064,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function getCurrentStonkPrice(label) {
-        if (!stonksChartInstance) return 0;
-        const dataset = stonksChartInstance.data.datasets.find(d => d.label === label);
+        if (!window.stonksChartInstance) return 0;
+        const dataset = window.stonksChartInstance.data.datasets.find(d => d.label === label);
         if (dataset && dataset.data.length > 0) {
             return dataset.data[dataset.data.length - 1];
         }
@@ -1125,7 +1125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateStonksMarket() {
-        if (!stonksChartInstance) return;
+        if (!window.stonksChartInstance) return;
 
         // The Complex Stonk Web Links (boosts, depresses)
         const stonkLinks = {
@@ -1143,7 +1143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // Handle investigations logic
-        stonksChartInstance.data.datasets.forEach(dataset => {
+        window.stonksChartInstance.data.datasets.forEach(dataset => {
             let label = dataset.label;
             let currentPrice = dataset.data[dataset.data.length - 1];
 
@@ -1156,7 +1156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Pass 1: Calculate base modifiers and business modifiers
-        stonksChartInstance.data.datasets.forEach(dataset => {
+        window.stonksChartInstance.data.datasets.forEach(dataset => {
             let label = dataset.label;
             let currentPrice = dataset.data[dataset.data.length - 1];
 
@@ -1210,7 +1210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Pass 2: Calculate Complex Web Impacts
-        stonksChartInstance.data.datasets.forEach(dataset => {
+        window.stonksChartInstance.data.datasets.forEach(dataset => {
             let label = dataset.label;
             let primaryMod = stonkModifiers[label].primary;
             let finalMod = primaryMod;
@@ -1235,7 +1235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Apply final prices
-        stonksChartInstance.data.datasets.forEach(dataset => {
+        window.stonksChartInstance.data.datasets.forEach(dataset => {
             let label = dataset.label;
             let currentPrice = dataset.data[dataset.data.length - 1];
             let finalModifier = stonkModifiers[label].final;
@@ -1254,12 +1254,12 @@ document.addEventListener('DOMContentLoaded', () => {
             dataset.data.push(newPrice); // Add newest
         });
 
-        stonksChartInstance.update();
+        window.stonksChartInstance.update();
         updateNetWorthProgressBar();
 
         // Calculate current owned stonk value to see if there's a surge/drop
         let currentOwnedStonkValue = 0;
-        stonksChartInstance.data.datasets.forEach(dataset => {
+        window.stonksChartInstance.data.datasets.forEach(dataset => {
             let currentPrice = dataset.data[dataset.data.length - 1];
             let owned = game2StonkOwnership[dataset.label] || 0;
             currentOwnedStonkValue += (currentPrice * owned);
@@ -1287,7 +1287,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateStonksMonitorUI() {
-        if (!stonksChartInstance) return;
+        if (!window.stonksChartInstance) return;
 
         const column1 = document.getElementById('stonk-column-1');
         const column2 = document.getElementById('stonk-column-2');
@@ -1296,7 +1296,7 @@ document.addEventListener('DOMContentLoaded', () => {
         column1.innerHTML = '';
         column2.innerHTML = '';
 
-        const datasets = stonksChartInstance.data.datasets;
+        const datasets = window.stonksChartInstance.data.datasets;
 
         // 1. Gather all current prices and labels
         let stonkData = datasets.map(dataset => {
@@ -1396,8 +1396,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let netWorth = game2Biscuits;
 
         // Add Stonk Holdings Value
-        if (stonksChartInstance && stonksChartInstance.data && stonksChartInstance.data.datasets) {
-            stonksChartInstance.data.datasets.forEach(dataset => {
+        if (window.stonksChartInstance && window.stonksChartInstance.data && window.stonksChartInstance.data.datasets) {
+            window.stonksChartInstance.data.datasets.forEach(dataset => {
                 let currentPrice = dataset.data[dataset.data.length - 1];
                 let owned = game2StonkOwnership[dataset.label] || 0;
                 netWorth += (currentPrice * owned);
@@ -1719,61 +1719,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetGame2() {
         localStorage.removeItem('pickleClickerGame2Save');
-        game2Biscuits = 0;
-        const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
-        if (savedLeaderboardStr) {
-            try {
-                const leaderboard = JSON.parse(savedLeaderboardStr);
-                const bestValidEntry = leaderboard.find(entry => typeof entry === 'object' && entry !== null && 'biscuitsLeft' in entry);
-                if (bestValidEntry) {
-                    game2Biscuits = bestValidEntry.biscuitsLeft;
-                }
-            } catch (e) {
-                console.error("Failed to parse leaderboard for starting balance on reset");
-            }
-        }
-
-        game2TotalClicks = 0;
-        game2Ended = false;
-        game2StoreItemsData = JSON.parse(JSON.stringify(defaultGame2StoreItemsData));
-        game2StonkOwnership = {};
-        investigatedStonks = new Set();
-
-        // Reset chart
-        if (stonksChartInstance) {
-            stonksChartInstance.data.datasets.forEach(dataset => {
-                dataset.data = [dataset.data[dataset.data.length - 1]];
-            });
-            stonksChartInstance.update();
-        }
-
-        // Hide Game 2 elements
-        game2Screen.classList.add('hidden');
-        if(game2HeaderEl) game2HeaderEl.classList.add('ui-offscreen-top');
-        if(game2StoreListContEl) {
-            game2StoreListContEl.style.visibility = 'hidden';
-            game2StoreListContEl.style.opacity = '0';
-            game2StoreListContEl.style.pointerEvents = 'none';
-        }
-        if(game2SettingsAreaEl) {
-            game2SettingsAreaEl.style.visibility = 'hidden';
-            game2SettingsAreaEl.style.opacity = '0';
-            game2SettingsAreaEl.style.pointerEvents = 'none';
-        }
-        if(game2BackgroundContEl) {
-            game2BackgroundContEl.classList.remove('game-bg-active');
-            game2BackgroundContEl.classList.add('game-bg-inactive');
-        }
-
-        // Show Game 2 Start Screen
-        game2StartScreen.classList.remove('hidden');
-        game2StartScreen.classList.remove('slide-up');
-        const titleEl = document.getElementById('game2-start-title');
-        const catStartEl = document.getElementById('game2-start-cat');
-        if(titleEl) titleEl.classList.remove('ui-offscreen-top');
-        if(catStartEl) catStartEl.classList.remove('ui-offscreen-bottom');
-        if(game2StartBtn) game2StartBtn.classList.remove('ui-offscreen-bottom');
-        if(game1SwitchBtn) game1SwitchBtn.classList.remove('hidden');
+        location.reload();
     }
 
     function endSunbeam() {
@@ -1814,14 +1760,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- GAME 2 SPECIFIC LOGIC ---
-    let stonksChartInstance = null;
+    window.stonksChartInstance = null;
 
     window.initStonksChart = function() {
         const ctx = document.getElementById('stonks-chart');
         if (!ctx) return;
 
         // Prevent re-initialization
-        if (stonksChartInstance) return;
+        if (window.stonksChartInstance) return;
 
         // Preload icons for the chart
         const createStonkIcon = (src) => {
@@ -1861,7 +1807,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return data;
         };
 
-        stonksChartInstance = new Chart(ctx, {
+        window.stonksChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
