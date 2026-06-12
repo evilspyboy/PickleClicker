@@ -657,10 +657,11 @@ body, html {
     align-items: center;
     justify-content: center;
     font-size: 10cqw;
+    background-color: #ddd;
+    color: #fff;
 }
-
-.selected-stonk-btn.buy { background-color: #4CAF50; color: white; }
-.selected-stonk-btn.sell { background-color: #f44336; color: white; }
+.selected-stonk-btn.buy.active { background-color: #4CAF50; }
+.selected-stonk-btn.sell.active { background-color: #f44336; }
 .selected-stonk-btn:active { transform: scale(0.9); }
 
 /* Upgrade List & Store List */
