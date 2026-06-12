@@ -220,6 +220,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.type === 'shell') shellCompanyCount += item.count;
         });
 
+        // Check if player has anything to be audited on
+        if (hiddenAssetsCount === 0 && legitBusinessCount === 0 && shellCompanyCount === 0 && (totalNetWorth - game2Biscuits) === 0) {
+            auditActive = false;
+            return;
+        }
+
         // Base exposure from wealth: 1% per 10k net worth, max 50%
         let wealthExposure = Math.min(50, Math.floor(totalNetWorth / 10000));
 
@@ -330,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             auditActive = false;
         }
-    }, 10000); // Check every 10 seconds
+    }, 180000); // Check every 3 minutes
 
     // Auto-save and Update Game 2 UI periodically
     setInterval(() => {
@@ -532,8 +538,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             game2StartScreen.classList.add('hidden');
+
+            if (!hasSave) {
+                const game2InstrModal = document.getElementById('game2-instructions-modal');
+                if (game2InstrModal) {
+                    game2InstrModal.classList.remove('hidden');
+                }
+            }
         }, 1000);
     });
+
+    // Game 2 Instructions OK button
+    const game2InstrOkBtn = document.getElementById('game2-instructions-ok');
+    if (game2InstrOkBtn) {
+        game2InstrOkBtn.addEventListener('click', () => {
+            document.getElementById('game2-instructions-modal').classList.add('hidden');
+        });
+    }
 
     startBtn.addEventListener('click', () => {
         // Slide out start screen components
