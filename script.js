@@ -192,6 +192,69 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 1000);
 
+    // Tax Audit Loop
+    let auditActive = false;
+    setInterval(async () => {
+        if (game2Ended || game2Screen.classList.contains('hidden') || auditActive) {
+            return;
+        }
+
+        // 25% chance of an audit triggering
+        if (Math.random() < 0.25) {
+            auditActive = true;
+
+            const shadowBoard = game2StoreItemsData.find(item => item.id === 'shell-shadowboard');
+            if (shadowBoard && shadowBoard.count > 0) {
+                shadowBoard.count -= 1;
+                // totalPurchased is tracked in handleStoreAction on buy now
+
+                await showAlertModal(
+                    "The Tax Office attempted an audit, but your Shadow Board used its influence to make them look the other way.",
+                    "assets/tax_dog.png",
+                    "Audit Averted!"
+                );
+                updateGame2UI();
+            } else {
+                // Determine if they "find something"
+                const moneyLaundromat = game2StoreItemsData.find(item => item.id === 'shell-laundry');
+                let findChance = 0.5; // 50% base chance
+                if (moneyLaundromat && moneyLaundromat.count > 0) {
+                    // Reduce chance by 5% per Laundromat
+                    findChance = Math.max(0, findChance - (moneyLaundromat.count * 0.05));
+                }
+
+                if (game2Biscuits <= 0) {
+                    await showAlertModal(
+                        "The Tax Office audited you but as you are bankrupt they could not fine you.",
+                        "assets/tax_dog.png",
+                        "Audit Complete"
+                    );
+                } else if (Math.random() < findChance) {
+                    // Found something
+                    const penaltyPercent = (Math.random() * 0.2) + 0.1; // 10% to 30%
+                    const fine = Math.floor(game2Biscuits * penaltyPercent);
+                    game2Biscuits -= fine;
+
+                    await showAlertModal(
+                        `The Tax Office audited you and found discrepancies. You were fined ${formatNumber(fine)} liquid biscuits.`,
+                        "assets/tax_dog.png",
+                        "Fined!"
+                    );
+                    updateGame2UI();
+                } else {
+                    // Found nothing
+                    await showAlertModal(
+                        "The Tax Office audited your accounts but found nothing suspicious. You are safe... for now.",
+                        "assets/tax_dog.png",
+                        "Safe... For Now"
+                    );
+                }
+            }
+
+            auditActive = false;
+        }
+    }, 60000);
+
     // Auto-save and Update Game 2 UI periodically
     setInterval(() => {
         if (!game2Screen.classList.contains('hidden')) {
@@ -580,6 +643,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- ALERT MODAL ---
+    let alertModalActive = false;
+    function showAlertModal(message, iconSrc, titleText) {
+        if (alertModalActive) return Promise.resolve(true);
+        alertModalActive = true;
+        return new Promise((resolve) => {
+            alertModalMessage.textContent = message;
+            alertModalIcon.src = iconSrc;
+            alertModalTitle.textContent = titleText;
+            alertModal.classList.remove('hidden');
+
+            const handleOk = () => {
+                alertModal.classList.add('hidden');
+                alertModalOk.removeEventListener('click', handleOk);
+                alertModalActive = false;
+                resolve(true);
+            };
+
+            alertModalOk.addEventListener('click', handleOk);
+        });
+    }
+
     // Game Variables
     let biscuits = 0;
     let tapMultiplier = 1;
@@ -696,6 +781,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const customModalMessage = document.getElementById('custom-modal-message');
     const customModalYes = document.getElementById('custom-modal-yes');
     const customModalNo = document.getElementById('custom-modal-no');
+
+    const alertModal = document.getElementById('alert-modal');
+    const alertModalIcon = document.getElementById('alert-modal-icon');
+    const alertModalTitle = document.getElementById('alert-modal-title');
+    const alertModalMessage = document.getElementById('alert-modal-message');
+    const alertModalOk = document.getElementById('alert-modal-ok');
+
     const devCloseBtn = document.getElementById('dev-close-btn');
     const stickersContainer = document.getElementById('stickers-container');
     const bgImage = document.getElementById('bg-image');
@@ -805,13 +897,16 @@ document.addEventListener('DOMContentLoaded', () => {
             el.className = 'store-item-wrapper';
             el.id = `store-item-wrapper-${item.id}`;
 
+            const disableSell = item.id === 'shell-shadowboard' ? 'disabled style="opacity: 0.5; pointer-events: none;"' : '';
+            const sellActive = item.count > 0 && item.id !== 'shell-shadowboard' ? 'active' : '';
+
             // We calculate width to only cover the middle and buy button (calc(100% - 40px))
             el.innerHTML = `
                 <img src="${item.icon}" class="store-item-icon-large" alt="${item.name}">
                 <div class="store-item" id="store-item-${item.id}">
                     <div class="store-item-progress" id="progress-${item.id}" style="width: 0%; left: 40px; right: auto;"></div>
                     <div class="store-item-content">
-                        <button class="store-btn sell ${item.count > 0 ? 'active' : ''}" data-id="${item.id}">-</button>
+                        <button class="store-btn sell ${sellActive}" data-id="${item.id}" ${disableSell}>-</button>
                         <div class="store-item-middle">
                             <span class="store-item-count" id="count-${item.id}">x${item.count}</span><span class="store-item-cost" id="store-cost-${item.id}" style="font-size: 10px; color: #666; display: block;"></span>
                         </div>
@@ -851,11 +946,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (game2Biscuits >= cost) {
                 game2Biscuits -= cost;
                 item.count++;
+                if (item.id === 'shell-shadowboard') {
+                    if (item.totalPurchased === undefined) {
+                        item.totalPurchased = item.count;
+                    } else {
+                        item.totalPurchased++;
+                    }
+                }
                 updateGame2UI();
                 saveGame2();
             }
         } else if (action === 'sell') {
-            if (item.count > 0) {
+            if (item.count > 0 && item.id !== 'shell-shadowboard') {
                 const sellValue = getItemSellValue(item);
                 game2Biscuits += sellValue;
                 item.count--;
@@ -1152,14 +1254,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function getItemBuyCost(item) {
-        return Math.floor(item.baseCost * Math.pow(1.15, item.count));
+        const exponent = item.id === 'shell-shadowboard' && item.totalPurchased !== undefined ? item.totalPurchased : item.count;
+        return Math.floor(item.baseCost * Math.pow(1.15, exponent));
     }
 
     function getItemSellValue(item) {
         if (item.id === 'shell-shadowboard') return 0;
         // The value of the last item bought is the cost at (count - 1)
         if (item.count <= 0) return 0;
-        const lastCost = Math.floor(item.baseCost * Math.pow(1.15, item.count - 1));
+        const exponent = item.count - 1;
+        const lastCost = Math.floor(item.baseCost * Math.pow(1.15, exponent));
         return Math.floor(lastCost * 0.75);
     }
 
@@ -1288,7 +1392,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const sellBtn = document.querySelector(`.store-btn.sell[data-id="${item.id}"]`);
             if (sellBtn) {
-                if (item.count > 0) {
+                if (item.count > 0 && item.id !== 'shell-shadowboard') {
                     sellBtn.classList.add('active');
                 } else {
                     sellBtn.classList.remove('active');
