@@ -42,6 +42,7 @@ The application will launch into a **Hub Screen** where the player can choose wh
 
 ### Mechanics
 - **The Stonks Market & Economy:** Players invest liquid biscuits into 8 volatile "Stonks". Prices tick up and down mapped to the visual line chart. Stonks are bought/sold in lots of 100 per click.
+    - **Number Formatting:** To ensure large numbers fit cleanly within the UI, values should use standard letter abbreviations (e.g., 1,500 becomes `1.5k`, 1,200,000 becomes `1.2m`, 1,000,000,000 becomes `1.0b`).
   - **Complex Relationships:** The economy is a complex system based on thematic cat behaviors. Rather than simple pairs, stonks impact multiple other stonks in different ways, making the market harder to perfectly predict.
   - *The Complete Stonk Web:*
     1. **Tuna Inc (Food):** A surge *boosts* Cardboard Box LLC (food coma) but *depresses* Yarn Corp (too full to play).
@@ -52,6 +53,11 @@ The application will launch into a **Hub Screen** where the player can choose wh
     6. **Solar Energy Co (Rest/Sunbeam):** A surge *boosts* Cardboard Box LLC (seeking a box in the sun) but *depresses* Tuna Inc (photosynthesis/too hot to eat).
     7. **Catnip Futures (Vice):** A surge *boosts* Salmon Tech (the munchies) but *depresses* Yarn Corp (distracted from natural toys).
     8. **Spring Toy Co (Active Toy):** A surge *boosts* Catnip Futures (gateway to more stimulation) but *depresses* Salmon Tech (motion sickness).
+    - **Insider Trading Investigation (The Limit):** To prevent stonk prices from growing infinitely out of control, a hard limit is set at **1,000,000 biscuits per share**.
+      - When any stonk hits this trigger limit, an "Insider Trading Investigation" popup appears, featuring the dog tax officer (`tax_dog.png`).
+      - During the investigation, a strong, continuous negative "lean" (e.g., a forced -5% per tick) is applied specifically to that stonk, overriding its normal business modifiers to drag the price down.
+      - Because of the Stonk Web's complex relationships, this massive downward pressure naturally ripples across to other linked stonks, affecting the wider market.
+      - *Resolution:* The investigation and its negative lean remain active until the investigated stonk's price drops to 10% of the trigger limit (**100,000 biscuits**). At that point, the lean is silently lifted, and normal market modifiers resume.
 - **Tax Audits (The Popup Event):** The Tax Office constantly watches the player's wealth. Audits are not strictly on a set timer; they occur based on an **Audit Exposure** percentage.
   - **Exposure Calculation:** Exposure is a percentage (0-100%) that increases based on total net worth, the ratio of hidden assets to legit businesses, and the use of Catnip.
   - **Audit Trigger:** Every few seconds, the game rolls a random number (1-100). If the roll is *below* the player's current Exposure percentage, an audit triggers! (e.g., 60% exposure means rolling 1-60 triggers an audit).
@@ -91,10 +97,11 @@ The application will launch into a **Hub Screen** where the player can choose wh
   - This crash creates ripple effects across the complex web of other stonks.
   - Buying assets and businesses adds new stickers to the background.
 - **Catnip (Risk vs. Reward):**
-  - Players can use "Catnip" for a universal market boost. *(Note: Catnip market modifier logic is not yet implemented and will be added in a future phase).*
+  - Players can use "Catnip" to apply a temporary, universal global positive modifier to the market (making all stonks go "brr"). *(Note: Catnip market modifier logic is not yet implemented and will be added in a future phase).*
   - Using it fills a visible **Catnip Meter**.
   - The meter degrades (cools down) slowly over time back to zero.
-  - **The Crash:** If the player uses too much catnip and maxes out the meter, the market crashes! All stonks take a massive tumble due to "panic selling in a catnip infused state".
+  - **The Crash:** If the player uses too much catnip and maxes out the meter, the market crashes! A universal negative modifier is applied across the board to all stonks due to "panic selling in a catnip infused state".
+  - **The Absolute Floor:** Regardless of the Catnip Crash modifiers or the Insider Trading negative leans, **no stonk share price should ever drop below 1 biscuit**.
   - **Catnip Audit Risk:** If a Tax Audit happens while the player is crashed out from too much catnip, it guarantees an aggressive audit where the Tax Office is highly likely to seize assets.
 
 ---
