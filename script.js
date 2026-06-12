@@ -82,6 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Catnip State
     let catnipLevel = 0;
     let isCrashedOut = false;
+
+    // Track cat looking mechanic
+    let isCatLooking = false;
+    let catLookingTimeout = null;
+    let previousOwnedStonkValue = 0;
     let investigatedStonks = []; // Tracks stonks under insider trading investigation
 
 
@@ -200,15 +205,59 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 25% chance of an audit triggering
-        if (Math.random() < 0.25) {
+        // Calculate Audit Exposure
+        const totalNetWorth = calculateTotalNetWorth();
+
+        let hiddenAssetsCount = 0;
+        let legitBusinessCount = 0;
+        let shellCompanyCount = 0;
+
+        game2StoreItemsData.forEach(item => {
+            if (item.type === 'asset') hiddenAssetsCount += item.count;
+            if (item.type === 'business') legitBusinessCount += item.count;
+            if (item.type === 'shell') shellCompanyCount += item.count;
+        });
+
+        // Base exposure from wealth: 1% per 10k net worth, max 50%
+        let wealthExposure = Math.min(50, Math.floor(totalNetWorth / 10000));
+
+        // Ratio exposure
+        let ratioExposure = 0;
+        if (legitBusinessCount === 0 && hiddenAssetsCount > 0) {
+            ratioExposure = 20; // Suspicious: hidden assets but no legit businesses
+        } else if (legitBusinessCount > 0) {
+            const ratio = hiddenAssetsCount / legitBusinessCount;
+            if (ratio > 2) ratioExposure = 15;
+            else if (ratio > 1) ratioExposure = 5;
+        }
+
+        let catnipExposure = (catnipLevel > 0) ? (catnipLevel * 2) : 0; // Up to 20%
+
+        let exposurePercent = wealthExposure + ratioExposure + catnipExposure;
+
+        // Money Laundromat reduces exposure (5% per count)
+        const moneyLaundromat = game2StoreItemsData.find(item => item.id === 'shell-laundry');
+        if (moneyLaundromat && moneyLaundromat.count > 0) {
+            exposurePercent -= (moneyLaundromat.count * 5);
+        }
+
+        exposurePercent = Math.max(0, Math.min(100, exposurePercent));
+
+        let triggerAudit = (Math.random() * 100) < exposurePercent;
+
+        // Guarantee audit if crashed out
+        let aggressiveAudit = false;
+        if (isCrashedOut) {
+            triggerAudit = true;
+            aggressiveAudit = true;
+        }
+
+        if (triggerAudit) {
             auditActive = true;
 
             const shadowBoard = game2StoreItemsData.find(item => item.id === 'shell-shadowboard');
-            if (shadowBoard && shadowBoard.count > 0) {
+            if (shadowBoard && shadowBoard.count > 0 && !aggressiveAudit) {
                 shadowBoard.count -= 1;
-                // totalPurchased is tracked in handleStoreAction on buy now
-
                 await showAlertModal(
                     "The Tax Office attempted an audit, but your Shadow Board used its influence to make them look the other way.",
                     "assets/tax_dog.png",
@@ -216,45 +265,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
                 updateGame2UI();
             } else {
-                // Determine if they "find something"
-                const moneyLaundromat = game2StoreItemsData.find(item => item.id === 'shell-laundry');
-                let findChance = 0.5; // 50% base chance
-                if (moneyLaundromat && moneyLaundromat.count > 0) {
-                    // Reduce chance by 5% per Laundromat
-                    findChance = Math.max(0, findChance - (moneyLaundromat.count * 0.05));
-                }
+                let modalMessage = "";
+                let fine = 0;
 
-                if (game2Biscuits <= 0) {
-                    await showAlertModal(
-                        "The Tax Office audited you but as you are bankrupt they could not fine you.",
-                        "assets/tax_dog.png",
-                        "Audit Complete"
-                    );
-                } else if (Math.random() < findChance) {
-                    // Found something
+                // 1. Liquid Penalty
+                if (game2Biscuits > 0) {
                     const penaltyPercent = (Math.random() * 0.2) + 0.1; // 10% to 30%
-                    const fine = Math.floor(game2Biscuits * penaltyPercent);
+                    fine = Math.floor(game2Biscuits * penaltyPercent);
                     game2Biscuits -= fine;
-
-                    await showAlertModal(
-                        `The Tax Office audited you and found discrepancies. You were fined ${formatNumber(fine)} liquid biscuits.`,
-                        "assets/tax_dog.png",
-                        "Fined!"
-                    );
-                    updateGame2UI();
+                    modalMessage += `The Tax Office audited you and seized ${formatNumber(fine)} liquid biscuits.\n\n`;
                 } else {
-                    // Found nothing
-                    await showAlertModal(
-                        "The Tax Office audited your accounts but found nothing suspicious. You are safe... for now.",
-                        "assets/tax_dog.png",
-                        "Safe... For Now"
-                    );
+                    modalMessage += "The Tax Office audited you but as you are bankrupt they could not fine your liquid accounts.\n\n";
                 }
+
+                // 2. Investigation Roll
+                let findChance = 0.3; // 30% base chance to find hidden money
+                if (shellCompanyCount > 0) {
+                    findChance += 0.2; // Higher chance if you have shell companies
+                }
+                if (aggressiveAudit) {
+                    findChance += 0.4; // Highly likely if crashed out
+                }
+
+                if (Math.random() < findChance) {
+                    // Investigation Succeeds: Seize something
+                    modalMessage += "Their deep investigation found irregularities!\n";
+
+                    let seizedItem = null;
+                    let possibleSeizures = game2StoreItemsData.filter(item => (item.type === 'asset' || item.type === 'shell') && item.count > 0);
+
+                    if (possibleSeizures.length > 0) {
+                        seizedItem = possibleSeizures[Math.floor(Math.random() * possibleSeizures.length)];
+                    } else {
+                        let legitSeizures = game2StoreItemsData.filter(item => item.type === 'business' && item.count > 0);
+                        if (legitSeizures.length > 0) {
+                            seizedItem = legitSeizures[Math.floor(Math.random() * legitSeizures.length)];
+                        }
+                    }
+
+                    if (seizedItem) {
+                        seizedItem.count -= 1;
+                        modalMessage += `They seized one of your ${seizedItem.name}!`;
+                    } else {
+                        modalMessage += "However, they couldn't find any physical assets to seize.";
+                    }
+                } else {
+                    // Investigation Fails
+                    if (fine > 0) {
+                        modalMessage += "They investigated further but found no hidden assets.";
+                    } else {
+                        modalMessage = "The Tax Office audited your accounts but found nothing suspicious. You are safe... for now.";
+                    }
+                }
+
+                await showAlertModal(
+                    modalMessage.trim(),
+                    "assets/tax_dog.png",
+                    fine > 0 || modalMessage.includes("seized") ? "Audited!" : "Safe... For Now"
+                );
+                updateGame2UI();
             }
 
             auditActive = false;
         }
-    }, 60000);
+    }, 120000); // Check every 2 minutes
 
     // Auto-save and Update Game 2 UI periodically
     setInterval(() => {
@@ -1182,6 +1256,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         stonksChartInstance.update();
         updateNetWorthProgressBar();
+
+        // Calculate current owned stonk value to see if there's a surge/drop
+        let currentOwnedStonkValue = 0;
+        stonksChartInstance.data.datasets.forEach(dataset => {
+            let currentPrice = dataset.data[dataset.data.length - 1];
+            let owned = game2StonkOwnership[dataset.label] || 0;
+            currentOwnedStonkValue += (currentPrice * owned);
+        });
+
+        // Trigger looking cat if there's a significant change (>2% or >5k change) and not currently looking or in catnip/crashed state
+        if (previousOwnedStonkValue > 0) {
+            let diff = Math.abs(currentOwnedStonkValue - previousOwnedStonkValue);
+            let threshold = Math.max(previousOwnedStonkValue * 0.02, 5000); // 2% change or 5000 biscuits
+
+            if (diff >= threshold) {
+                if (!isCrashedOut && catnipLevel < 5 && !isCatLooking) {
+                    isCatLooking = true;
+                    updateCatnipUI(); // Will apply looking image
+
+                    if (catLookingTimeout) clearTimeout(catLookingTimeout);
+                    catLookingTimeout = setTimeout(() => {
+                        isCatLooking = false;
+                        updateCatnipUI(); // Will revert to resting image
+                    }, 10000); // 10 seconds
+                }
+            }
+        }
+        previousOwnedStonkValue = currentOwnedStonkValue;
     }
 
     function updateStonksMonitorUI() {
@@ -1264,9 +1366,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             game2CrashedCont.classList.add('hidden');
             game2CatCont.classList.remove('hidden');
-
             if (catnipLevel >= 5) {
                 game2CatImg.src = 'assets/business_cat_catnip.png';
+            } else if (isCatLooking) {
+                game2CatImg.src = 'assets/business_cat_looking.png';
             } else {
                 game2CatImg.src = 'assets/business_cat_rest.png';
             }
@@ -1639,7 +1742,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset chart
         if (stonksChartInstance) {
             stonksChartInstance.data.datasets.forEach(dataset => {
-                dataset.data = [dataset.data[dataset.data.length - 1]];
+                dataset.data = Array(10).fill(100);
             });
             stonksChartInstance.update();
         }
@@ -2130,10 +2233,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const catLeft = catImage.style.left || '63.9983%';
             const catTop = catImage.style.top || '69.7604%';
             const catWidth = catImage.style.width || `${getWidthPercent(catImage)}%`;
-            const catHeight = catImage.style.height ? `\n  height: ${catImage.style.height};` : '';
+            const catHeight = catImage.style.height ? `
+  height: ${catImage.style.height};` : '';
             const catFlip = catImage.dataset.flip === 'true' ? ' scaleX(-1)' : '';
             const catZIndex = catImage.style.zIndex || window.getComputedStyle(catImage).zIndex;
-            outputHTML += `#cat-image {\n  left: ${catLeft};\n  top: ${catTop};\n  width: ${catWidth};${catHeight}\n  transform: translate(-50%, -50%)${catFlip};\n  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};\n}\n\n`;
+            outputHTML += `#cat-image {
+  left: ${catLeft};
+  top: ${catTop};
+  width: ${catWidth};${catHeight}
+  transform: translate(-50%, -50%)${catFlip};
+  z-index: ${catZIndex === 'auto' ? '50' : catZIndex};
+}
+
+`;
         }
 
         // Output for Stickers in current container
@@ -2160,11 +2272,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const width = sticker.style.width || `${getWidthPercent(sticker)}%`;
-            const height = sticker.style.height ? `\n  height: ${sticker.style.height};` : '';
+            const height = sticker.style.height ? `
+  height: ${sticker.style.height};` : '';
             const flip = sticker.dataset.flip === 'true' ? ' scaleX(-1)' : '';
             const zIndex = sticker.style.zIndex || window.getComputedStyle(sticker).zIndex;
 
-            outputHTML += `#${id} {\n  left: ${left};\n  top: ${top};\n  width: ${width};${height}\n  transform: translate(-50%, -50%)${flip};\n  z-index: ${zIndex === 'auto' ? '1' : zIndex};\n}\n\n`;
+            outputHTML += `#${id} {
+  left: ${left};
+  top: ${top};
+  width: ${width};${height}
+  transform: translate(-50%, -50%)${flip};
+  z-index: ${zIndex === 'auto' ? '1' : zIndex};
+}
+
+`;
         });
         outputHTML += '</textarea>';
         devOutput.innerHTML = outputHTML;

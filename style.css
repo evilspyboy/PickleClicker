@@ -39,7 +39,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: transparent;
+    background-color: #e0f7fa; /* Hide the game UI below to prevent double background overlap */
     z-index: 100;
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
