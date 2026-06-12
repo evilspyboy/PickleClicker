@@ -174,6 +174,47 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('stonk-column-1').addEventListener('click', handleStonkClick);
     document.getElementById('stonk-column-2').addEventListener('click', handleStonkClick);
 
+
+    // Stonk Buy/Sell Action Logic
+    const selectedStonkBuyBtn = document.getElementById('selected-stonk-buy');
+    const selectedStonkSellBtn = document.getElementById('selected-stonk-sell');
+
+    if (selectedStonkBuyBtn) {
+        selectedStonkBuyBtn.addEventListener('click', () => {
+            if (!selectedStonkLabel) return;
+            const currentPrice = getCurrentStonkPrice(selectedStonkLabel);
+            const costFor1k = currentPrice * 1000;
+
+            if (game2Biscuits >= costFor1k) {
+                game2Biscuits -= costFor1k;
+                game2StonkOwnership[selectedStonkLabel] = (game2StonkOwnership[selectedStonkLabel] || 0) + 1000;
+
+                updateGame2UI();
+                updateSelectedStonkUI();
+                saveGame2();
+            }
+        });
+    }
+
+    if (selectedStonkSellBtn) {
+        selectedStonkSellBtn.addEventListener('click', () => {
+            if (!selectedStonkLabel) return;
+            const currentOwned = game2StonkOwnership[selectedStonkLabel] || 0;
+
+            if (currentOwned >= 1000) {
+                const currentPrice = getCurrentStonkPrice(selectedStonkLabel);
+                const revenueFor1k = currentPrice * 1000;
+
+                game2StonkOwnership[selectedStonkLabel] -= 1000;
+                game2Biscuits += revenueFor1k;
+
+                updateGame2UI();
+                updateSelectedStonkUI();
+                saveGame2();
+            }
+        });
+    }
+
     function handleStonkClick(e) {
         const item = e.target.closest('.stonk-monitor-item');
         if (!item) return;
@@ -768,17 +809,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    function getCurrentStonkPrice(label) {
+        if (!stonksChartInstance) return 0;
+        const dataset = stonksChartInstance.data.datasets.find(d => d.label === label);
+        if (dataset && dataset.data.length > 0) {
+            return dataset.data[dataset.data.length - 1];
+        }
+        return 0;
+    }
+
     function updateSelectedStonkUI() {
         const iconEl = document.getElementById('selected-stonk-icon');
         const nameEl = document.getElementById('selected-stonk-name');
         const amountEl = document.getElementById('selected-stonk-amount');
         const controlsEl = document.querySelector('.selected-stonk-controls');
+        const buyBtn = document.getElementById('selected-stonk-buy');
+        const sellBtn = document.getElementById('selected-stonk-sell');
 
         if (!selectedStonkLabel) {
             iconEl.style.display = 'none';
             amountEl.style.display = 'none';
             if(controlsEl) controlsEl.style.visibility = 'hidden';
             nameEl.textContent = 'Select a Stonk';
+            if(buyBtn) buyBtn.classList.remove('active');
+            if(sellBtn) sellBtn.classList.remove('active');
             return;
         }
 
@@ -789,8 +844,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if(controlsEl) controlsEl.style.visibility = 'visible';
             iconEl.src = config.icon;
             nameEl.textContent = config.label;
+
             const owned = game2StonkOwnership[config.label] || 0;
-            amountEl.textContent = `${owned} Held`;
+            let displayOwned = `${owned} Held`;
+            if (owned >= 1000000) {
+                displayOwned = `${(owned / 1000000).toFixed(3)}m Held`;
+            } else if (owned >= 1000) {
+                displayOwned = `${Math.floor(owned / 1000)}k Held`;
+            }
+            amountEl.textContent = displayOwned;
+
+            if (buyBtn && sellBtn) {
+                const currentPrice = getCurrentStonkPrice(config.label);
+                const costFor1k = currentPrice * 1000;
+
+                if (game2Biscuits >= costFor1k) {
+                    buyBtn.classList.add('active');
+                } else {
+                    buyBtn.classList.remove('active');
+                }
+
+                if (owned >= 1000) {
+                    sellBtn.classList.add('active');
+                } else {
+                    sellBtn.classList.remove('active');
+                }
+            }
         }
     }
 
