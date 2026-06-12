@@ -29,6 +29,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global Game 2 Variables
     let game2Biscuits = 0;
 
+    function formatNumber(num) {
+        if (num >= 1000000000) {
+            return (num / 1000000000).toFixed(1) + 'b';
+        } else if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'm';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'k';
+        }
+        return num.toString();
+    }
+
+
     let selectedStonkLabel = null; // Tracks currently selected stonk
 
     const STONKS_CONFIG = [
@@ -59,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Catnip State
     let catnipLevel = 0;
     let isCrashedOut = false;
+    let investigatedStonks = []; // Tracks stonks under insider trading investigation
+
 
     // Game 2 Default Store Items Data
     const defaultGame2StoreItemsData = [
@@ -89,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const game2State = {
             game2Biscuits,
             game2StoreItemsData,
-            game2StonkOwnership
+            game2StonkOwnership,
+            investigatedStonks
         };
         localStorage.setItem('pickleClickerGame2Save', JSON.stringify(game2State));
     }
@@ -112,6 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (game2State.game2StonkOwnership) {
                     game2StonkOwnership = game2State.game2StonkOwnership;
+                }
+                if (game2State.investigatedStonks) {
+                    investigatedStonks = game2State.investigatedStonks;
                 }
                 return true;
             } catch (e) {
@@ -497,6 +515,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // --- INVESTIGATION MODAL ---
+    const investigationModal = document.getElementById('investigation-modal');
+    const investigationModalMessage = document.getElementById('investigation-modal-message');
+    const investigationModalOk = document.getElementById('investigation-modal-ok');
+
+    let investigationModalActive = false;
+
+    function showInvestigationModal(stonkLabel) {
+        if (!investigationModal || investigationModalActive) return;
+        investigationModalActive = true;
+        investigationModalMessage.textContent = `The Tax Office has noticed suspiciously high trading volume and prices for ${stonkLabel}. An investigation has been launched! A continuous negative lean will apply until the price cools down.`;
+        investigationModal.classList.remove('hidden');
+
+        const handleOk = () => {
+            investigationModal.classList.add('hidden');
+            investigationModalOk.removeEventListener('click', handleOk);
+            investigationModalActive = false;
+        };
+        investigationModalOk.addEventListener('click', handleOk);
+    }
+
     // --- CUSTOM MODAL ---
     function showConfirmModal(message) {
         return new Promise((resolve) => {
@@ -847,10 +887,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const owned = game2StonkOwnership[config.label] || 0;
             let displayOwned = `${owned} Held`;
-            if (owned >= 1000000) {
-                displayOwned = `${(owned / 1000000).toFixed(3)}m Held`;
-            } else if (owned >= 1000) {
-                displayOwned = `${Math.floor(owned / 1000)}k Held`;
+            if (owned >= 1000) {
+                displayOwned = `${formatNumber(owned)} Held`;
             }
             amountEl.textContent = displayOwned;
 
@@ -890,6 +928,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let stonkModifiers = {};
 
+
+        // Handle investigations logic
+        stonksChartInstance.data.datasets.forEach(dataset => {
+            let label = dataset.label;
+            let currentPrice = dataset.data[dataset.data.length - 1];
+
+            if (currentPrice >= 1000000 && !investigatedStonks.includes(label)) {
+                investigatedStonks.push(label);
+                showInvestigationModal(label);
+            } else if (currentPrice <= 100000 && investigatedStonks.includes(label)) {
+                investigatedStonks = investigatedStonks.filter(s => s !== label);
+            }
+        });
+
         // Pass 1: Calculate base modifiers and business modifiers
         stonksChartInstance.data.datasets.forEach(dataset => {
             let label = dataset.label;
@@ -925,6 +977,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             let primary = baseModifier + businessModifier;
+
+            // Apply Insider Trading penalty lean
+            if (investigatedStonks.includes(label)) {
+                primary = -0.05; // Complete override
+            }
+
+            // Apply Catnip Modifiers on top of base/investigation primary
+            if (isCrashedOut) {
+                primary -= 0.10; // Strong universal negative crash modifier
+            } else if (catnipLevel > 0) {
+                primary += (catnipLevel * 0.15); // Large bonus to quickly trigger insider trading limits
+            }
 
             stonkModifiers[label] = {
                 primary: primary,
@@ -1017,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `
                 <div class="stonk-monitor-item${isSelectedClass}" data-label="${item.label}">
                     <img src="${item.iconSrc}" alt="${item.label}">
-                    <span>${item.price} b</span>
+                    <span>${formatNumber(item.price)} b</span>
                 </div>
             `;
         };
