@@ -51,6 +51,16 @@ body, html {
     overflow: visible;
 }
 
+#start-background-container {
+    background-image: url('assets/bg_game.png');
+    background-size: cover;
+}
+
+#game2-start-background-container {
+    background-image: url('assets/bg_game_stonks.png');
+    background-size: cover;
+}
+
 /* Base placements for start screen elements */
 #start-title {
     position: absolute;
