@@ -289,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Init biscuits visual
         if(game2BiscuitCountEl) game2BiscuitCountEl.textContent = Number(game2Biscuits).toLocaleString();
+        updateNetWorthProgressBar();
 
         renderGame2StoreItems();
         updateGame2UI();
@@ -715,7 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="store-item-content">
                         <button class="store-btn sell ${item.count > 0 ? 'active' : ''}" data-id="${item.id}">-</button>
                         <div class="store-item-middle">
-                            <span class="store-item-count" id="count-${item.id}">x${item.count}</span>
+                            <span class="store-item-count" id="count-${item.id}">x${item.count}</span><span class="store-item-cost" id="store-cost-${item.id}" style="font-size: 10px; color: #666; display: block;"></span>
                         </div>
                         <button class="store-btn buy" data-id="${item.id}">+</button>
                     </div>
@@ -749,15 +750,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!item) return;
 
         if (action === 'buy') {
-            if (game2Biscuits >= item.baseCost) {
-                game2Biscuits -= item.baseCost;
+            const cost = getItemBuyCost(item);
+            if (game2Biscuits >= cost) {
+                game2Biscuits -= cost;
                 item.count++;
                 updateGame2UI();
                 saveGame2();
             }
         } else if (action === 'sell') {
             if (item.count > 0) {
-                game2Biscuits += item.baseCost;
+                const sellValue = getItemSellValue(item);
+                game2Biscuits += sellValue;
                 item.count--;
                 updateGame2UI();
                 saveGame2();
@@ -896,6 +899,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         stonksChartInstance.update();
+        updateNetWorthProgressBar();
     }
 
     function updateStonksMonitorUI() {
@@ -987,12 +991,73 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    function getItemBuyCost(item) {
+        return Math.floor(item.baseCost * Math.pow(1.15, item.count));
+    }
+
+    function getItemSellValue(item) {
+        if (item.id === 'shell-shadowboard') return 0;
+        // The value of the last item bought is the cost at (count - 1)
+        if (item.count <= 0) return 0;
+        const lastCost = Math.floor(item.baseCost * Math.pow(1.15, item.count - 1));
+        return Math.floor(lastCost * 0.75);
+    }
+
+
+    function calculateTotalNetWorth() {
+        let netWorth = game2Biscuits;
+
+        // Add Stonk Holdings Value
+        if (stonksChartInstance && stonksChartInstance.data && stonksChartInstance.data.datasets) {
+            stonksChartInstance.data.datasets.forEach(dataset => {
+                let currentPrice = dataset.data[dataset.data.length - 1];
+                let owned = game2StonkOwnership[dataset.label] || 0;
+                netWorth += (currentPrice * owned);
+            });
+        }
+
+        // Add Item Assets Value
+        game2StoreItemsData.forEach(item => {
+            if (item.count > 0) {
+                // Sum of all past purchase costs
+                let itemValue = 0;
+                for (let i = 0; i < item.count; i++) {
+                    itemValue += Math.floor(item.baseCost * Math.pow(1.15, i));
+                }
+                netWorth += itemValue;
+            }
+        });
+
+        return netWorth;
+    }
+
+    function updateNetWorthProgressBar() {
+        const billionGoal = 1000000000;
+        const totalNetWorth = calculateTotalNetWorth();
+        const billionProgressBar = document.getElementById('billion-progress-bar');
+        const billionProgressContainer = document.getElementById('billion-progress-container');
+        if (billionProgressBar && billionProgressContainer) {
+            let nwPercent = (totalNetWorth / billionGoal) * 100;
+            if (nwPercent > 100) nwPercent = 100;
+            billionProgressBar.style.width = `${nwPercent}%`;
+            billionProgressContainer.title = `Net Worth: ${Math.floor(totalNetWorth).toLocaleString()} / 1,000,000,000`;
+        }
+    }
+
     function updateGame2UI() {
+        updateNetWorthProgressBar();
         if(game2BiscuitCountEl) game2BiscuitCountEl.textContent = Number(game2Biscuits).toLocaleString();
 
         game2StoreItemsData.forEach(item => {
             const countEl = document.getElementById(`count-${item.id}`);
             if (countEl) countEl.textContent = `x${item.count}`;
+
+            const storeCostEl = document.getElementById(`store-cost-${item.id}`);
+            if (storeCostEl) {
+                let currentCost = getItemBuyCost(item);
+                storeCostEl.textContent = currentCost.toLocaleString() + ' b';
+            }
 
             const sellBtn = document.querySelector(`.store-btn.sell[data-id="${item.id}"]`);
             if (sellBtn) {
@@ -1006,7 +1071,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const progressBar = document.getElementById(`progress-${item.id}`);
             if (progressBar) {
                 // Calculate percentage based on baseCost
-                let percentage = (game2Biscuits / item.baseCost) * 100;
+                let currentCost = getItemBuyCost(item);
+                let percentage = (game2Biscuits / currentCost) * 100;
                 if (percentage > 100) percentage = 100;
                 progressBar.style.height = `${percentage}%`;
 
@@ -1019,7 +1085,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const buyBtn = document.querySelector(`.store-btn.buy[data-id="${item.id}"]`);
             if (buyBtn) {
-                if (game2Biscuits >= item.baseCost) {
+                if (game2Biscuits >= getItemBuyCost(item)) {
                     buyBtn.classList.add('active');
                 } else {
                     buyBtn.classList.remove('active');
