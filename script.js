@@ -20,6 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game 2 UI Elements
     const game2Screen = document.getElementById('game2-screen');
+
+    // Track total clicks in Game 2
+    game2Screen.addEventListener('click', () => {
+        if (!game2Ended && !game2Screen.classList.contains('hidden')) {
+            game2TotalClicks++;
+        }
+    });
+
     const game2HeaderEl = document.getElementById('game2-header');
     const game2BackgroundContEl = document.getElementById('game2-background-container');
     const game2StoreListContEl = document.getElementById('game2-store-list');
@@ -28,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global Game 2 Variables
     let game2Biscuits = 0;
+    let game2TotalClicks = 0;
+    let game2Ended = false;
 
     function formatNumber(num) {
         if (num >= 1000000000) {
@@ -104,7 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
             game2Biscuits,
             game2StoreItemsData,
             game2StonkOwnership,
-            investigatedStonks
+            investigatedStonks,
+            game2TotalClicks,
+            game2Ended
         };
         localStorage.setItem('pickleClickerGame2Save', JSON.stringify(game2State));
     }
@@ -115,6 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const game2State = JSON.parse(savedData);
                 game2Biscuits = game2State.game2Biscuits || 0;
+                game2TotalClicks = game2State.game2TotalClicks || 0;
+                game2Ended = game2State.game2Ended || false;
                 if (game2State.game2StoreItemsData) {
                     // Load saved data, but update with any new desc/effect/properties from defaults
                     game2StoreItemsData = defaultGame2StoreItemsData.map(defaultItem => {
@@ -158,14 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Stonk Market Config and Timer
     let stonkMarketSpeed = 1000;
     setInterval(() => {
-        if (!game2Screen.classList.contains('hidden')) {
+        if (!game2Ended && !game2Screen.classList.contains('hidden')) {
             updateStonksMarket();
         }
     }, stonkMarketSpeed);
 
     // Game 2 Passive Income Loop
     setInterval(() => {
-        if (!game2Screen.classList.contains('hidden')) {
+        if (!game2Ended && !game2Screen.classList.contains('hidden')) {
             let passiveIncome = 0;
             game2StoreItemsData.forEach(item => {
                 if (item.bps && item.count > 0) {
@@ -182,9 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         if (!game2Screen.classList.contains('hidden')) {
             saveGame2();
-            updateGame2UI();
-            updateStonksMonitorUI();
-            updateSelectedStonkUI();
+            if (!game2Ended) {
+                updateGame2UI();
+                updateStonksMonitorUI();
+                updateSelectedStonkUI();
+            }
         }
     }, 1000); // UI updates more frequently than saves in a real game, but doing both here for simplicity and responsiveness to external biscuit generation
 
@@ -1186,6 +1202,74 @@ document.addEventListener('DOMContentLoaded', () => {
             billionProgressBar.style.width = `${nwPercent}%`;
             billionProgressContainer.title = `Net Worth: ${Math.floor(totalNetWorth).toLocaleString()} / 1,000,000,000`;
         }
+
+        if (totalNetWorth >= billionGoal && !game2Ended) {
+            triggerGame2Endgame();
+        }
+    }
+
+    function triggerGame2Endgame() {
+        const wasEnded = game2Ended;
+        game2Ended = true;
+
+        // Load leaderboard
+        let leaderboard = [];
+        const savedLeaderboard = localStorage.getItem('pickleClickerGame2Leaderboard');
+        if (savedLeaderboard) {
+            try {
+                leaderboard = JSON.parse(savedLeaderboard);
+            } catch (e) {
+                console.error("Failed to parse game 2 leaderboard");
+            }
+        }
+
+        // Add new score if it wasn't already ended
+        if (!wasEnded) {
+            leaderboard.push({ score: game2TotalClicks, biscuitsLeft: game2Biscuits });
+        }
+
+        // Sort ascending (lower is better)
+        leaderboard.sort((a, b) => {
+            const scoreA = typeof a === 'object' ? a.score : a;
+            const scoreB = typeof b === 'object' ? b.score : b;
+            return scoreA - scoreB;
+        });
+
+        // Keep top 5
+        if (leaderboard.length > 5) {
+            leaderboard = leaderboard.slice(0, 5);
+        }
+
+        // Save leaderboard
+        localStorage.setItem('pickleClickerGame2Leaderboard', JSON.stringify(leaderboard));
+
+        // Populate leaderboard UI
+        const listEl = document.getElementById('game2-leaderboard-list');
+        if (listEl) {
+            listEl.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const li = document.createElement('li');
+                if (i < leaderboard.length) {
+                    const entry = leaderboard[i];
+                    const scoreVal = typeof entry === 'object' ? entry.score : entry;
+                    li.textContent = `${i + 1}. Actions: ${scoreVal}`;
+                } else {
+                    li.textContent = `${i + 1}. ---`;
+                }
+                listEl.appendChild(li);
+            }
+        }
+
+        // Show End Game Modal
+        const endgameBalanceEl = document.getElementById('game2-endgame-balance');
+        if (endgameBalanceEl) {
+            endgameBalanceEl.textContent = `Final Balance: ${Math.floor(game2Biscuits).toLocaleString()} liquid biscuits`;
+        }
+
+        const endgameModal = document.getElementById('game2-endgame-modal');
+        if (endgameModal) {
+            endgameModal.classList.remove('hidden');
+        }
     }
 
     function updateGame2UI() {
@@ -1377,6 +1461,84 @@ document.addEventListener('DOMContentLoaded', () => {
                 location.reload();
             }
         });
+    }
+
+    const game2ResetBtn = document.getElementById('game2-reset-icon');
+    if (game2ResetBtn) {
+        game2ResetBtn.addEventListener('click', async () => {
+            const isConfirmed = await showConfirmModal("Are you sure you want to reset your Game 2 progress?");
+            if (isConfirmed) {
+                resetGame2();
+            }
+        });
+    }
+
+    const game2EndgameResetBtn = document.getElementById('game2-endgame-reset');
+    if (game2EndgameResetBtn) {
+        game2EndgameResetBtn.addEventListener('click', () => {
+            const endgameModal = document.getElementById('game2-endgame-modal');
+            if (endgameModal) endgameModal.classList.add('hidden');
+            resetGame2();
+        });
+    }
+
+    function resetGame2() {
+        localStorage.removeItem('pickleClickerGame2Save');
+        game2Biscuits = 0;
+        const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
+        if (savedLeaderboardStr) {
+            try {
+                const leaderboard = JSON.parse(savedLeaderboardStr);
+                const bestValidEntry = leaderboard.find(entry => typeof entry === 'object' && entry !== null && 'biscuitsLeft' in entry);
+                if (bestValidEntry) {
+                    game2Biscuits = bestValidEntry.biscuitsLeft;
+                }
+            } catch (e) {
+                console.error("Failed to parse leaderboard for starting balance on reset");
+            }
+        }
+
+        game2TotalClicks = 0;
+        game2Ended = false;
+        game2StoreItemsData = JSON.parse(JSON.stringify(defaultGame2StoreItemsData));
+        game2StonkOwnership = {};
+        investigatedStonks = new Set();
+
+        // Reset chart
+        if (stonksChartInstance) {
+            stonksChartInstance.data.datasets.forEach(dataset => {
+                dataset.data = [dataset.data[dataset.data.length - 1]];
+            });
+            stonksChartInstance.update();
+        }
+
+        // Hide Game 2 elements
+        game2Screen.classList.add('hidden');
+        if(game2HeaderEl) game2HeaderEl.classList.add('ui-offscreen-top');
+        if(game2StoreListContEl) {
+            game2StoreListContEl.style.visibility = 'hidden';
+            game2StoreListContEl.style.opacity = '0';
+            game2StoreListContEl.style.pointerEvents = 'none';
+        }
+        if(game2SettingsAreaEl) {
+            game2SettingsAreaEl.style.visibility = 'hidden';
+            game2SettingsAreaEl.style.opacity = '0';
+            game2SettingsAreaEl.style.pointerEvents = 'none';
+        }
+        if(game2BackgroundContEl) {
+            game2BackgroundContEl.classList.remove('game-bg-active');
+            game2BackgroundContEl.classList.add('game-bg-inactive');
+        }
+
+        // Show Game 2 Start Screen
+        game2StartScreen.classList.remove('hidden');
+        game2StartScreen.classList.remove('slide-up');
+        const titleEl = document.getElementById('game2-start-title');
+        const catStartEl = document.getElementById('game2-start-cat');
+        if(titleEl) titleEl.classList.remove('ui-offscreen-top');
+        if(catStartEl) catStartEl.classList.remove('ui-offscreen-bottom');
+        if(game2StartBtn) game2StartBtn.classList.remove('ui-offscreen-bottom');
+        if(game1SwitchBtn) game1SwitchBtn.classList.remove('hidden');
     }
 
     function endSunbeam() {
