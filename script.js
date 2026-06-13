@@ -1224,16 +1224,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!selectedStonkLabel) {
             iconEl.style.display = 'none';
-            amountEl.style.display = 'none';
             if(controlsEl) controlsEl.style.visibility = 'hidden';
             nameEl.textContent = 'Select a Stonk';
+            nameEl.style.fontSize = '8.5cqw';
+            nameEl.style.whiteSpace = 'nowrap';
             if(buyBtn) buyBtn.classList.remove('active');
             if(sellBtn) sellBtn.classList.remove('active');
+
+            let totalStonks = 0;
+            for (const key in game2StonkOwnership) {
+                totalStonks += game2StonkOwnership[key];
+            }
+            if (totalStonks > 0) {
+                amountEl.style.display = 'block';
+                let formatted = totalStonks >= 1000 ? formatNumber(totalStonks) : totalStonks;
+                amountEl.innerHTML = `<br><strong style="font-size: 10cqw;">${formatted}</strong><br>Stonks Owned`;
+            } else {
+                amountEl.style.display = 'none';
+            }
             return;
         }
 
         const config = STONKS_CONFIG.find(c => c.label === selectedStonkLabel);
         if (config) {
+            nameEl.style.fontSize = '';
+            nameEl.style.whiteSpace = '';
             iconEl.style.display = 'block';
             amountEl.style.display = 'block';
             if(controlsEl) controlsEl.style.visibility = 'visible';
