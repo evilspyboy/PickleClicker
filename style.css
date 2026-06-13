@@ -21,7 +21,7 @@ body, html {
     position: relative;
     max-width: 600px;
     margin: 0 auto;
-    background-color: #e0f7fa;
+    background-color: transparent;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
@@ -290,7 +290,7 @@ body, html {
     width: 100%;
     flex: 1 1 auto;
     overflow: hidden;
-    background-color: #e0f7fa;
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
