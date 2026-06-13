@@ -39,7 +39,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #e0f7fa; /* Hide the game UI below to prevent double background overlap */
+    background-color: transparent;
     z-index: 100;
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
@@ -308,7 +308,7 @@ body, html {
     flex-shrink: 0;
 }
 
-#bg-image, #game2-bg-image, #start-bg-image, #game2-start-bg-image {
+#bg-image, #game2-bg-image {
     position: absolute;
     top: 0;
     left: 0;
