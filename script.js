@@ -478,6 +478,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (globalBgImage) globalBgImage.src = 'assets/bg_game_stonks.png';
 
         if(game2HeaderEl) game2HeaderEl.classList.add('ui-offscreen-top');
+
+        // Hide game 2 inner stickers
+        const billionProgress = document.getElementById('billion-progress-container');
+        const game2Graph = document.getElementById('game2-graph-container');
+        const stonkCol1 = document.getElementById('stonk-column-1');
+        const stonkCol2 = document.getElementById('stonk-column-2');
+        const game2CatCont = document.getElementById('game2-cat-container');
+        const game2CrashedCatCont = document.getElementById('game2-crashedcat-container');
+        const catnipMeter = document.getElementById('catnip-meter-container');
+        const selectedStonk = document.getElementById('game2-selected-stonk');
+        const game2Stickers = document.getElementById('game2-stickers-container');
+
+        if(billionProgress) billionProgress.classList.add('ui-offscreen-bottom');
+        if(game2Graph) game2Graph.classList.add('ui-offscreen-bottom');
+        if(stonkCol1) stonkCol1.classList.add('ui-offscreen-bottom');
+        if(stonkCol2) stonkCol2.classList.add('ui-offscreen-bottom');
+        if(game2CatCont) game2CatCont.classList.add('ui-offscreen-bottom');
+        if(game2CrashedCatCont) game2CrashedCatCont.classList.add('ui-offscreen-bottom');
+        if(catnipMeter) catnipMeter.classList.add('ui-offscreen-bottom');
+        if(selectedStonk) selectedStonk.classList.add('ui-offscreen-bottom');
+        if(game2Stickers) game2Stickers.classList.add('ui-offscreen-bottom');
+
+
         if(game2StoreListContEl) {
             game2StoreListContEl.style.visibility = 'hidden';
             game2StoreListContEl.style.opacity = '0';
@@ -553,6 +576,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prepare to show game 2 UI
         setTimeout(() => {
             if(game2HeaderEl) game2HeaderEl.classList.remove('ui-offscreen-top');
+
+            // Show game 2 inner stickers
+            const billionProgress = document.getElementById('billion-progress-container');
+            const game2Graph = document.getElementById('game2-graph-container');
+            const stonkCol1 = document.getElementById('stonk-column-1');
+            const stonkCol2 = document.getElementById('stonk-column-2');
+            const game2CatCont = document.getElementById('game2-cat-container');
+            const game2CrashedCatCont = document.getElementById('game2-crashedcat-container');
+            const catnipMeter = document.getElementById('catnip-meter-container');
+            const selectedStonk = document.getElementById('game2-selected-stonk');
+            const game2Stickers = document.getElementById('game2-stickers-container');
+
+            if(billionProgress) billionProgress.classList.remove('ui-offscreen-bottom');
+            if(game2Graph) game2Graph.classList.remove('ui-offscreen-bottom');
+            if(stonkCol1) stonkCol1.classList.remove('ui-offscreen-bottom');
+            if(stonkCol2) stonkCol2.classList.remove('ui-offscreen-bottom');
+            if(game2CatCont) game2CatCont.classList.remove('ui-offscreen-bottom');
+            if(game2CrashedCatCont) game2CrashedCatCont.classList.remove('ui-offscreen-bottom');
+            if(catnipMeter) catnipMeter.classList.remove('ui-offscreen-bottom');
+            if(selectedStonk) selectedStonk.classList.remove('ui-offscreen-bottom');
+            if(game2Stickers) game2Stickers.classList.remove('ui-offscreen-bottom');
 
             // Re-apply visible state to layout elements
             if(game2StoreListContEl) {
@@ -732,11 +776,52 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('endgame-modal').classList.add('hidden');
             document.getElementById('game-screen').classList.add('hidden');
             startScreen.classList.add('hidden');
+
+            game2Screen.classList.remove('hidden'); // Ensure game2 screen is visible for background
             game2StartScreen.classList.remove('hidden');
             // Make sure background is ready for game 2
             const bgImageEl = document.getElementById('bg-image');
             if (bgImageEl) {
                 bgImageEl.src = 'assets/bg_game_stonks.png';
+            }
+            if (globalBgImage) globalBgImage.src = 'assets/bg_game_stonks.png';
+
+            if(game2HeaderEl) game2HeaderEl.classList.add('ui-offscreen-top');
+
+            // Hide game 2 inner stickers
+            const billionProgress = document.getElementById('billion-progress-container');
+            const game2Graph = document.getElementById('game2-graph-container');
+            const stonkCol1 = document.getElementById('stonk-column-1');
+            const stonkCol2 = document.getElementById('stonk-column-2');
+            const game2CatCont = document.getElementById('game2-cat-container');
+            const game2CrashedCatCont = document.getElementById('game2-crashedcat-container');
+            const catnipMeter = document.getElementById('catnip-meter-container');
+            const selectedStonk = document.getElementById('game2-selected-stonk');
+            const game2Stickers = document.getElementById('game2-stickers-container');
+
+            if(billionProgress) billionProgress.classList.add('ui-offscreen-bottom');
+            if(game2Graph) game2Graph.classList.add('ui-offscreen-bottom');
+            if(stonkCol1) stonkCol1.classList.add('ui-offscreen-bottom');
+            if(stonkCol2) stonkCol2.classList.add('ui-offscreen-bottom');
+            if(game2CatCont) game2CatCont.classList.add('ui-offscreen-bottom');
+            if(game2CrashedCatCont) game2CrashedCatCont.classList.add('ui-offscreen-bottom');
+            if(catnipMeter) catnipMeter.classList.add('ui-offscreen-bottom');
+            if(selectedStonk) selectedStonk.classList.add('ui-offscreen-bottom');
+            if(game2Stickers) game2Stickers.classList.add('ui-offscreen-bottom');
+
+            if(game2StoreListContEl) {
+                game2StoreListContEl.style.visibility = 'hidden';
+                game2StoreListContEl.style.opacity = '0';
+                game2StoreListContEl.style.pointerEvents = 'none';
+            }
+            if(game2SettingsAreaEl) {
+                game2SettingsAreaEl.style.visibility = 'hidden';
+                game2SettingsAreaEl.style.opacity = '0';
+                game2SettingsAreaEl.style.pointerEvents = 'none';
+            }
+            if(game2BackgroundContEl) {
+                game2BackgroundContEl.classList.remove('game-bg-active');
+                game2BackgroundContEl.classList.add('game-bg-inactive');
             }
         });
     }
@@ -1836,6 +1921,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if(catStartEl) catStartEl.classList.remove('ui-offscreen-bottom');
         if(game2StartBtn) game2StartBtn.classList.remove('ui-offscreen-bottom');
         if(game1SwitchBtn) game1SwitchBtn.classList.remove('hidden');
+
+        // Hide game 2 inner stickers
+        const billionProgress = document.getElementById('billion-progress-container');
+        const game2Graph = document.getElementById('game2-graph-container');
+        const stonkCol1 = document.getElementById('stonk-column-1');
+        const stonkCol2 = document.getElementById('stonk-column-2');
+        const game2CatCont = document.getElementById('game2-cat-container');
+        const game2CrashedCatCont = document.getElementById('game2-crashedcat-container');
+        const catnipMeter = document.getElementById('catnip-meter-container');
+        const selectedStonk = document.getElementById('game2-selected-stonk');
+        const game2Stickers = document.getElementById('game2-stickers-container');
+
+        if(billionProgress) billionProgress.classList.add('ui-offscreen-bottom');
+        if(game2Graph) game2Graph.classList.add('ui-offscreen-bottom');
+        if(stonkCol1) stonkCol1.classList.add('ui-offscreen-bottom');
+        if(stonkCol2) stonkCol2.classList.add('ui-offscreen-bottom');
+        if(game2CatCont) game2CatCont.classList.add('ui-offscreen-bottom');
+        if(game2CrashedCatCont) game2CrashedCatCont.classList.add('ui-offscreen-bottom');
+        if(catnipMeter) catnipMeter.classList.add('ui-offscreen-bottom');
+        if(selectedStonk) selectedStonk.classList.add('ui-offscreen-bottom');
+        if(game2Stickers) game2Stickers.classList.add('ui-offscreen-bottom');
     }
 
     function endSunbeam() {
