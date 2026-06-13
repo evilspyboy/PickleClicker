@@ -471,15 +471,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     game2UnlockBtn.addEventListener('click', () => {
         startScreen.classList.add('hidden');
+        gameScreen.classList.add('hidden'); // Hide Game 1 background
+
+        game2Screen.classList.remove('hidden'); // Show Game 2 background
         game2StartScreen.classList.remove('hidden');
-        // Pre-load the Game 2 background so it shows behind the start screen if it ever becomes transparent,
-        // or just to have it ready
         if (globalBgImage) globalBgImage.src = 'assets/bg_game_stonks.png';
     });
 
     game1SwitchBtn.addEventListener('click', () => {
         game2StartScreen.classList.add('hidden');
+        game2Screen.classList.add('hidden'); // Hide Game 2 background
+
+        gameScreen.classList.remove('hidden'); // Show Game 1 background
+        // Make sure Game 1 UI is hidden and ready for start screen
+        headerEl.classList.add('ui-offscreen-top');
+        upgradeListContEl.style.visibility = 'hidden';
+        upgradeListContEl.style.opacity = '0';
+        upgradeListContEl.style.pointerEvents = 'none';
+        settingsAreaEl.style.visibility = 'hidden';
+        settingsAreaEl.style.opacity = '0';
+        settingsAreaEl.style.pointerEvents = 'none';
+        backgroundContEl.classList.remove('game-bg-active');
+        backgroundContEl.classList.add('game-bg-inactive');
         startScreen.classList.remove('hidden');
+        startScreen.classList.remove('slide-up');
+
         if (globalBgImage) globalBgImage.src = 'assets/bg_game.png';
     });
 
@@ -1775,8 +1791,8 @@ document.addEventListener('DOMContentLoaded', () => {
             stonksChartInstance = null;
         }
 
-        // Hide Game 2 elements
-        game2Screen.classList.add('hidden');
+        // Hide Game 2 elements but keep the screen visible for background
+        // game2Screen.classList.add('hidden'); // Removed to keep background visible
         if(game2HeaderEl) game2HeaderEl.classList.add('ui-offscreen-top');
         if(game2StoreListContEl) {
             game2StoreListContEl.style.visibility = 'hidden';
