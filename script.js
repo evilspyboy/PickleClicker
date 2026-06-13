@@ -106,10 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'shell-shadowboard', name: 'Shadow Board', type: 'shell', icon: 'assets/shell_shadowboard.png', baseCost: 500000, count: 0, desc: 'The Lizardmen of the Shadow Board will look after your best interests...', effect: '...with their influence as long as they get a slice.' },
 
         // Legit Businesses
-        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 10000, count: 0, bps: 100, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box? Earns +100 biscuits/sec.', stonkLink: 'Cardboard Box LLC', threshold: 50, maxModifier: 0.015 },
-        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 100000, count: 0, bps: 1000, desc: 'From magic red dots to toys for all.', effect: 'A good investment for stonks, earns +1000 biscuits/sec.', stonkLink: 'Laser Dynamics', threshold: 40, maxModifier: 0.016 },
-        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 500000, count: 0, bps: 5000, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green, earns +5000 biscuits/sec.', stonkLink: 'Catnip Futures', threshold: 30, maxModifier: 0.017 },
-        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000000, count: 0, bps: 10000, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential, earns +10000 biscuits/sec.', stonkLink: 'Solar Energy Co', threshold: 20, maxModifier: 0.018 }
+        { id: 'business-storage', name: 'Storage Company', type: 'business', icon: 'assets/business_storagecompany.png', baseCost: 10000, count: 0, bps: 100, desc: 'Do you have a box? Do you need a place to put that box?', effect: 'Do you want a box for your box? Earns +100 biscuits/sec.', stonkLink: ['Cardboard Box LLC'], stonkDepress: ['Laser Dynamics'], threshold: 50, maxModifier: 0.015 },
+        { id: 'business-petstore', name: 'Pet Store', type: 'business', icon: 'assets/business_petstore.png', baseCost: 100000, count: 0, bps: 1000, desc: 'From magic red dots to toys for all.', effect: 'A good investment for stonks, earns +1000 biscuits/sec.', stonkLink: ['Laser Dynamics', 'Yarn Corp', 'Spring Toy Co'], stonkDepress: ['Solar Energy Co', 'Cardboard Box LLC'], threshold: 40, maxModifier: 0.016 },
+        { id: 'business-dispensary', name: 'Catnip Dispensary', type: 'business', icon: 'assets/business_dispensary.png', baseCost: 500000, count: 0, bps: 5000, desc: 'Medical grade catnip. Locally source. totally legal.', effect: 'Very green, earns +5000 biscuits/sec.', stonkLink: ['Catnip Futures', 'Tuna Inc'], stonkDepress: ['Yarn Corp', 'Salmon Tech'], threshold: 30, maxModifier: 0.017 },
+        { id: 'business-solarfarm', name: 'Solar Farm', type: 'business', icon: 'assets/business_solarfarm.png', baseCost: 1000000, count: 0, bps: 10000, desc: 'Storing sunbeams for access 24x7.', effect: 'Limitless potential, earns +10000 biscuits/sec.', stonkLink: ['Solar Energy Co'], stonkDepress: ['Catnip Futures'], threshold: 20, maxModifier: 0.018 }
     ];
 
     // Game 2 Store Items Data
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     game2StoreItemsData = defaultGame2StoreItemsData.map(defaultItem => {
                         const savedItem = game2State.game2StoreItemsData.find(s => s.id === defaultItem.id);
                         if (savedItem) {
-                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier, baseCost: defaultItem.baseCost, bps: defaultItem.bps };
+                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, stonkDepress: defaultItem.stonkDepress, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier, baseCost: defaultItem.baseCost, bps: defaultItem.bps };
                         }
                         return { ...defaultItem };
                     });
@@ -1306,30 +1306,53 @@ document.addEventListener('DOMContentLoaded', () => {
             let baseModifier = (Math.random() * 0.1) - 0.045;
             let businessModifier = 0;
 
-            // Find associated legit business
-            const business = game2StoreItemsData.find(item => item.type === 'business' && item.stonkLink === label);
+            // Find associated legit businesses (can be multiple that boost or depress)
+            const boostingBusinesses = game2StoreItemsData.filter(item => item.type === 'business' && item.stonkLink && item.stonkLink.includes(label));
+            const depressingBusinesses = game2StoreItemsData.filter(item => item.type === 'business' && item.stonkDepress && item.stonkDepress.includes(label));
 
-            if (business && business.count > 0) {
-                const count = business.count;
-                const threshold = business.threshold;
-                const maxMod = business.maxModifier;
+            boostingBusinesses.forEach(business => {
+                if (business.count > 0) {
+                    const count = business.count;
+                    const threshold = business.threshold;
+                    const maxMod = business.maxModifier;
+                    let modToAdd = 0;
 
-                if (count <= threshold * 0.5) {
-                    // Scale linearly from 0 up to maxMod based on count
-                    businessModifier = maxMod * (count / (threshold * 0.5));
-                } else if (count <= threshold) {
-                    // Diminishing positive modifier scaling from maxMod down to 0
-                    const overflow = count - (threshold * 0.5);
-                    const scale = 1 - (overflow / (threshold * 0.5));
-                    businessModifier = maxMod * scale;
-                } else {
-                    // Flooding the market - negative modifier scaling down indefinitely
-                    const excess = count - threshold;
-                    // Negative scaling, arbitrary but punishing (-1x maxMod for every 50% over threshold)
-                    const penaltyScale = excess / (threshold * 0.5);
-                    businessModifier = -(maxMod * penaltyScale);
+                    if (count <= threshold * 0.5) {
+                        modToAdd = maxMod * (count / (threshold * 0.5));
+                    } else if (count <= threshold) {
+                        const overflow = count - (threshold * 0.5);
+                        const scale = 1 - (overflow / (threshold * 0.5));
+                        modToAdd = maxMod * scale;
+                    } else {
+                        const excess = count - threshold;
+                        const penaltyScale = excess / (threshold * 0.5);
+                        modToAdd = -(maxMod * penaltyScale);
+                    }
+                    businessModifier += modToAdd;
                 }
-            }
+            });
+
+            depressingBusinesses.forEach(business => {
+                if (business.count > 0) {
+                    const count = business.count;
+                    const threshold = business.threshold;
+                    const maxMod = business.maxModifier;
+                    let modToSubtract = 0;
+
+                    if (count <= threshold * 0.5) {
+                        modToSubtract = maxMod * (count / (threshold * 0.5));
+                    } else if (count <= threshold) {
+                        const overflow = count - (threshold * 0.5);
+                        const scale = 1 - (overflow / (threshold * 0.5));
+                        modToSubtract = maxMod * scale;
+                    } else {
+                        const excess = count - threshold;
+                        const penaltyScale = excess / (threshold * 0.5);
+                        modToSubtract = -(maxMod * penaltyScale);
+                    }
+                    businessModifier -= modToSubtract;
+                }
+            });
 
             let primary = baseModifier + businessModifier;
 

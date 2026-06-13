@@ -82,11 +82,11 @@ The application will launch into a **Hub Screen** where the player can choose wh
     - *Three Dogs in a Trenchcoat Inc.:* Parks money and generates a passive "off the books" income stream.
     - *Money Laundromat (Cash Laundry):* Lowers the player's base Audit Exposure percentage.
     - *Shadow Board:* Does not earn passive income but acts as a "get out of jail free" card, providing a chance to make an audit go away completely if one triggers.
-  - **Legit Businesses (Market Manipulators):** Active market players that align with the 8 Stonks. Owning them adds a **+X velocity modifier** to the associated Stonk's baseline growth rate over time. They also provide "legitimate" cover for your wealth against the Tax Office.
-    - *Storage Company:* A company that stores endless cardboard boxes. (Boosts the Cardboard Box LLC stonk.)
-    - *Pet Store:* Sells active toys to energetic kittens. (Boosts the Laser Dynamics stonk.)
-    - *Catnip Dispensary:* Provides high-quality premium nip. (Boosts the Catnip Futures stonk.)
-    - *Solar Farm:* Harnesses the power of ultimate sunbeams. (Boosts the Solar Energy Co stonk.)
+  - **Legit Businesses (Market Manipulators):** Active market players that align with the 8 Stonks. Owning them adds a **+X velocity modifier** to the associated Stonk's baseline growth rate over time, or a **-X negative modifier** (depression) to negatively impacted stonks. They also provide "legitimate" cover for your wealth against the Tax Office.
+    - *Storage Company:* A company that stores endless cardboard boxes. (Boosts Cardboard Box LLC; Depresses Laser Dynamics.)
+    - *Pet Store:* Sells active toys to energetic kittens. (Boosts Laser Dynamics, Yarn Corp, and Spring Toy Co; Depresses Solar Energy Co and Cardboard Box LLC.)
+    - *Catnip Dispensary:* Provides high-quality premium nip. (Boosts Catnip Futures and Tuna Inc; Depresses Yarn Corp and Salmon Tech.)
+    - *Solar Farm:* Harnesses the power of ultimate sunbeams. (Boosts Solar Energy Co; Depresses Catnip Futures.)
     - *Volatility & Cost:* Businesses are tiered by cost (e.g., 500k to 50m later in game progression). A cheap business (e.g., Storage Company) adds a velocity modifier but has a specific threshold—it takes many purchases to flood and crash it.
     - *Business Value Fluctuations:* Unlike Tangible Assets, the buy/sell price of a Legit Business is currently set to be static, but could later become tied directly to the current price of its associated Stonk for dynamic value. Note: "Off the books" biscuit income from businesses will be implemented in future phases.
   - **Market Flooding Risk (The Bubble):** If a player buys *too many* of a specific Legit Business they saturate the market based on a 'threshold'.
