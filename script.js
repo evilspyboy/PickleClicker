@@ -1589,11 +1589,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalNetWorth = calculateTotalNetWorth();
         const billionProgressBar = document.getElementById('billion-progress-bar');
         const billionProgressContainer = document.getElementById('billion-progress-container');
+        const billionProgressText = document.getElementById('billion-progress-text');
+
         if (billionProgressBar && billionProgressContainer) {
             let nwPercent = (totalNetWorth / billionGoal) * 100;
             if (nwPercent > 100) nwPercent = 100;
             billionProgressBar.style.width = `${nwPercent}%`;
             billionProgressContainer.title = `Net Worth: ${Math.floor(totalNetWorth).toLocaleString()} / 1,000,000,000`;
+        }
+
+        if (billionProgressText) {
+            billionProgressText.textContent = Math.floor(totalNetWorth).toLocaleString();
         }
 
         if (totalNetWorth >= billionGoal && !game2Ended) {
