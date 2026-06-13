@@ -476,6 +476,22 @@ document.addEventListener('DOMContentLoaded', () => {
         game2Screen.classList.remove('hidden'); // Show Game 2 background
         game2StartScreen.classList.remove('hidden');
         if (globalBgImage) globalBgImage.src = 'assets/bg_game_stonks.png';
+
+        if(game2HeaderEl) game2HeaderEl.classList.add('ui-offscreen-top');
+        if(game2StoreListContEl) {
+            game2StoreListContEl.style.visibility = 'hidden';
+            game2StoreListContEl.style.opacity = '0';
+            game2StoreListContEl.style.pointerEvents = 'none';
+        }
+        if(game2SettingsAreaEl) {
+            game2SettingsAreaEl.style.visibility = 'hidden';
+            game2SettingsAreaEl.style.opacity = '0';
+            game2SettingsAreaEl.style.pointerEvents = 'none';
+        }
+        if(game2BackgroundContEl) {
+            game2BackgroundContEl.classList.remove('game-bg-active');
+            game2BackgroundContEl.classList.add('game-bg-inactive');
+        }
     });
 
     game1SwitchBtn.addEventListener('click', () => {
@@ -485,14 +501,16 @@ document.addEventListener('DOMContentLoaded', () => {
         gameScreen.classList.remove('hidden'); // Show Game 1 background
         // Make sure Game 1 UI is hidden and ready for start screen
         headerEl.classList.add('ui-offscreen-top');
+        catContainerEl.classList.add('ui-offscreen-bottom');
+        stickersContainerEl.classList.add('ui-offscreen-bottom');
         upgradeListContEl.style.visibility = 'hidden';
         upgradeListContEl.style.opacity = '0';
         upgradeListContEl.style.pointerEvents = 'none';
         settingsAreaEl.style.visibility = 'hidden';
         settingsAreaEl.style.opacity = '0';
         settingsAreaEl.style.pointerEvents = 'none';
-        backgroundContEl.classList.remove('game-bg-active');
-        backgroundContEl.classList.add('game-bg-inactive');
+        document.getElementById("background-container").classList.remove('game-bg-active');
+        document.getElementById("background-container").classList.add('game-bg-inactive');
         startScreen.classList.remove('hidden');
         startScreen.classList.remove('slide-up');
 
