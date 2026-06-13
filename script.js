@@ -180,14 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Stonk Market Config and Timer
     let stonkMarketSpeed = 1000;
     setInterval(() => {
-        if (!game2Ended && !game2Screen.classList.contains('hidden')) {
+        if (!game2Ended && !game2Screen.classList.contains('hidden') && game2StartScreen.classList.contains('hidden')) {
             updateStonksMarket();
         }
     }, stonkMarketSpeed);
 
     // Game 2 Passive Income Loop
     setInterval(() => {
-        if (!game2Ended && !game2Screen.classList.contains('hidden')) {
+        if (!game2Ended && !game2Screen.classList.contains('hidden') && game2StartScreen.classList.contains('hidden')) {
             let passiveIncome = 0;
             game2StoreItemsData.forEach(item => {
                 if (item.bps && item.count > 0) {
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tax Audit Loop
     let auditActive = false;
     setInterval(async () => {
-        if (game2Ended || game2Screen.classList.contains('hidden') || auditActive) {
+        if (game2Ended || game2Screen.classList.contains('hidden') || !game2StartScreen.classList.contains('hidden') || auditActive) {
             return;
         }
 
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Auto-save and Update Game 2 UI periodically
     setInterval(() => {
-        if (!game2Screen.classList.contains('hidden')) {
+        if (!game2Screen.classList.contains('hidden') && game2StartScreen.classList.contains('hidden')) {
             saveGame2();
             if (!game2Ended) {
                 updateGame2UI();
@@ -363,11 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedStonkBuyBtn.addEventListener('click', () => {
             if (!selectedStonkLabel) return;
             const currentPrice = getCurrentStonkPrice(selectedStonkLabel);
-            const costFor1k = currentPrice * 1000;
+            const costFor100 = currentPrice * 100;
 
-            if (game2Biscuits >= costFor1k) {
-                game2Biscuits -= costFor1k;
-                game2StonkOwnership[selectedStonkLabel] = (game2StonkOwnership[selectedStonkLabel] || 0) + 1000;
+            if (game2Biscuits >= costFor100) {
+                game2Biscuits -= costFor100;
+                game2StonkOwnership[selectedStonkLabel] = (game2StonkOwnership[selectedStonkLabel] || 0) + 100;
 
                 updateGame2UI();
                 updateSelectedStonkUI();
@@ -381,12 +381,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!selectedStonkLabel) return;
             const currentOwned = game2StonkOwnership[selectedStonkLabel] || 0;
 
-            if (currentOwned >= 1000) {
+            if (currentOwned >= 100) {
                 const currentPrice = getCurrentStonkPrice(selectedStonkLabel);
-                const revenueFor1k = currentPrice * 1000;
+                const revenueFor100 = currentPrice * 100;
 
-                game2StonkOwnership[selectedStonkLabel] -= 1000;
-                game2Biscuits += revenueFor1k;
+                game2StonkOwnership[selectedStonkLabel] -= 100;
+                game2Biscuits += revenueFor100;
 
                 updateGame2UI();
                 updateSelectedStonkUI();
@@ -1249,15 +1249,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (buyBtn && sellBtn) {
                 const currentPrice = getCurrentStonkPrice(config.label);
-                const costFor1k = currentPrice * 1000;
+                const costFor100 = currentPrice * 100;
 
-                if (game2Biscuits >= costFor1k) {
+                if (game2Biscuits >= costFor100) {
                     buyBtn.classList.add('active');
                 } else {
                     buyBtn.classList.remove('active');
                 }
 
-                if (owned >= 1000) {
+                if (owned >= 100) {
                     sellBtn.classList.add('active');
                 } else {
                     sellBtn.classList.remove('active');
