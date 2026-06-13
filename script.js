@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 1. Liquid Penalty
                 if (game2Biscuits > 0) {
-                    const penaltyPercent = (Math.random() * 0.2) + 0.1; // 10% to 30%
+                    const penaltyPercent = (Math.random() * 0.14) + 0.01; // 1% to 15%
                     fine = Math.floor(game2Biscuits * penaltyPercent);
                     game2Biscuits -= fine;
                     modalMessage += `The Tax Office audited you and seized ${formatNumber(fine)} liquid biscuits.\n\n`;
@@ -300,12 +300,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     modalMessage += "Their deep investigation found irregularities!\n";
 
                     let seizedItem = null;
-                    let possibleSeizures = game2StoreItemsData.filter(item => (item.type === 'asset' || item.type === 'shell') && item.count > 0);
+                    let possibleSeizures = game2StoreItemsData.filter(item => item.type === 'shell' && item.count > 1 && item.id !== 'shell-shadowboard');
 
                     if (possibleSeizures.length > 0) {
                         seizedItem = possibleSeizures[Math.floor(Math.random() * possibleSeizures.length)];
                     } else {
-                        let legitSeizures = game2StoreItemsData.filter(item => item.type === 'business' && item.count > 0);
+                        let legitSeizures = game2StoreItemsData.filter(item => item.type === 'business' && item.count > 5);
                         if (legitSeizures.length > 0) {
                             seizedItem = legitSeizures[Math.floor(Math.random() * legitSeizures.length)];
                         }
