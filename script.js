@@ -94,10 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultGame2StoreItemsData = [
         // Tangible Assets
         { id: 'asset-sportscar', name: 'Cardboard Sports Car', type: 'asset', icon: 'assets/cardboard_sportscar.png', baseCost: 1000, count: 0, desc: 'Got some zoomies? You can park this tax free asset.', effect: 'Hides wealth from liquid tax audits.' },
-        { id: 'asset-yacht', name: 'Cardboard Yacht', type: 'asset', icon: 'assets/cardboard_yacht.png', baseCost: 1000, count: 0, desc: 'Look at me, look. I am the CAT-tain now.', effect: 'Offshore assets are always in a tax free harbour.' },
-        { id: 'asset-goldstatue', name: 'Gold Statue', type: 'asset', icon: 'assets/gold_statue.png', baseCost: 1000, count: 0, desc: 'A monument to the most important being in the universe.', effect: 'Solid gold of course, scratch free and tax free.' },
-        { id: 'asset-diamondlitter', name: 'Diamond Litter', type: 'asset', icon: 'assets/diamond_litter.png', baseCost: 1000, count: 0, desc: 'Just the place for my own diamonds in the rough.', effect: 'Turn taxable biscuits into sparkly, unauditable waste.' },
-        { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 1000, count: 0, desc: 'The ultimate in offshore accounts, by having your own shore.', effect: 'Send a friendly hello to the tax office from your haven.' },
+        { id: 'asset-yacht', name: 'Cardboard Yacht', type: 'asset', icon: 'assets/cardboard_yacht.png', baseCost: 10000, count: 0, desc: 'Look at me, look. I am the CAT-tain now.', effect: 'Offshore assets are always in a tax free harbour.' },
+        { id: 'asset-goldstatue', name: 'Gold Statue', type: 'asset', icon: 'assets/gold_statue.png', baseCost: 100000, count: 0, desc: 'A monument to the most important being in the universe.', effect: 'Solid gold of course, scratch free and tax free.' },
+        { id: 'asset-diamondlitter', name: 'Diamond Litter', type: 'asset', icon: 'assets/diamond_litter.png', baseCost: 1000000, count: 0, desc: 'Just the place for my own diamonds in the rough.', effect: 'Turn taxable biscuits into sparkly, unauditable waste.' },
+        { id: 'asset-privateisland', name: 'Private Island Litterbox', type: 'asset', icon: 'assets/private_island_litterbox.png', baseCost: 10000000, count: 0, desc: 'The ultimate in offshore accounts, by having your own shore.', effect: 'Send a friendly hello to the tax office from your haven.' },
 
         // Shell Companies
         { id: 'shell-company', name: 'Shell Company', type: 'shell', icon: 'assets/shell_shellcompany.png', baseCost: 10000, count: 0, bps: 100, desc: 'A literal shell company.', effect: 'Hide your wealth and earn +100 biscuits/sec off the books.' },
@@ -1145,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="store-item-content">
                         <button class="store-btn sell ${sellActive}" data-id="${item.id}" ${disableSell}>-</button>
                         <div class="store-item-middle">
-                            <span class="store-item-count" id="count-${item.id}">x${item.count}</span><span class="store-item-cost" id="store-cost-${item.id}" style="font-size: 10px; color: #666; display: block;"></span>
+                            <span class="store-item-count" id="count-${item.id}">x${item.count}</span>
                         </div>
                         <button class="store-btn buy" data-id="${item.id}">+</button>
                     </div>
@@ -1649,12 +1649,6 @@ document.addEventListener('DOMContentLoaded', () => {
         game2StoreItemsData.forEach(item => {
             const countEl = document.getElementById(`count-${item.id}`);
             if (countEl) countEl.textContent = `x${item.count}`;
-
-            const storeCostEl = document.getElementById(`store-cost-${item.id}`);
-            if (storeCostEl) {
-                let currentCost = getItemBuyCost(item);
-                storeCostEl.textContent = currentCost.toLocaleString() + ' b';
-            }
 
             const sellBtn = document.querySelector(`.store-btn.sell[data-id="${item.id}"]`);
             if (sellBtn) {
