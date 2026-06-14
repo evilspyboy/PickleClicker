@@ -586,6 +586,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if(game2BiscuitCountEl) game2BiscuitCountEl.textContent = Number(game2Biscuits).toLocaleString();
         updateNetWorthProgressBar();
 
+        if (typeof initStonksChart === 'function') initStonksChart();
+
         renderGame2StoreItems();
         updateGame2UI();
         updateStonksMonitorUI();
