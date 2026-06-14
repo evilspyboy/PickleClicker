@@ -792,8 +792,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 listEl.appendChild(li);
             }
 
-            // Show End Game Modal
-            document.getElementById('endgame-modal').classList.remove('hidden');
+            // Show End Game Modal only if actively playing Game 1
+            if (startScreen.classList.contains('hidden') && !gameScreen.classList.contains('hidden')) {
+                document.getElementById('endgame-modal').classList.remove('hidden');
+            }
         }
     }
 
@@ -988,7 +990,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Check end game on load in case they somehow refreshed while exactly at 1m+
                 if (lifetimeBiscuits >= 1000000) {
                     gameEnded = true;
-                    setTimeout(checkEndGame, 1500); // Wait for UI to render then show popup
+                    // We removed setTimeout(checkEndGame, 1500) here to prevent the popup
+                    // from displaying on the start screen repeatedly upon reload.
+                    // checkEndGame will be triggered organically if they continue playing.
                 }
 
                 // Merge loaded upgrades with defaults to prevent issues if game updates
@@ -1710,15 +1714,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Show End Game Modal
-        const endgameBalanceEl = document.getElementById('game2-endgame-balance');
-        if (endgameBalanceEl) {
-            endgameBalanceEl.textContent = `Final Balance: ${Math.floor(game2Biscuits).toLocaleString()} liquid biscuits`;
-        }
+        // Show End Game Modal only if actively playing Game 2
+        if (game2StartScreen.classList.contains('hidden') && !game2Screen.classList.contains('hidden')) {
+            const endgameBalanceEl = document.getElementById('game2-endgame-balance');
+            if (endgameBalanceEl) {
+                endgameBalanceEl.textContent = `Final Balance: ${Math.floor(game2Biscuits).toLocaleString()} liquid biscuits`;
+            }
 
-        const endgameModal = document.getElementById('game2-endgame-modal');
-        if (endgameModal) {
-            endgameModal.classList.remove('hidden');
+            const endgameModal = document.getElementById('game2-endgame-modal');
+            if (endgameModal) {
+                endgameModal.classList.remove('hidden');
+            }
         }
     }
 
