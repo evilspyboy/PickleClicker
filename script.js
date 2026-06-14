@@ -667,7 +667,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof sunbeamInterval !== 'undefined') clearInterval(sunbeamInterval);
         upgradesData = defaultUpgradesData.map(item => ({...item}));
         if (biscuitCountEl) biscuitCountEl.textContent = '0';
-        updateUI();
+        updateBiscuitDisplay();
+        updateUpgradesUI();
 
         // Slide out start screen components
         startScreen.classList.add('slide-up');
