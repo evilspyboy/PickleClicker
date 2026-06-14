@@ -1073,7 +1073,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Catnip Mechanic
     if (catnipBtn) {
         catnipBtn.addEventListener('click', () => {
-            if (devModeActive || gameEnded || isCrashedOut || catnipLevel >= 10) return;
+            if (devModeActive || isCrashedOut || catnipLevel >= 10) return;
 
             if (game2Biscuits < 1000) return;
 
