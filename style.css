@@ -920,7 +920,7 @@ body, html {
 }
 
 #dev-mode-btn, #game2-dev-mode-btn {
-    display: block; /* Hidden for normal gameplay, remove to use dev mode */
+    display: none; /* Hidden for normal gameplay, remove to use dev mode */
 }
 
 /* General Modals */
