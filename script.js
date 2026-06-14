@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     game2StoreItemsData = defaultGame2StoreItemsData.map(defaultItem => {
                         const savedItem = game2State.game2StoreItemsData.find(s => s.id === defaultItem.id);
                         if (savedItem) {
-                            return { ...savedItem, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, stonkDepress: defaultItem.stonkDepress, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier, baseCost: defaultItem.baseCost, bps: defaultItem.bps };
+                            return { ...savedItem, id: defaultItem.id, type: defaultItem.type, desc: defaultItem.desc, effect: defaultItem.effect, name: defaultItem.name, stonkLink: defaultItem.stonkLink, stonkDepress: defaultItem.stonkDepress, threshold: defaultItem.threshold, maxModifier: defaultItem.maxModifier, baseCost: defaultItem.baseCost, bps: defaultItem.bps };
                         }
                         return { ...defaultItem };
                     });
