@@ -475,6 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         game2Screen.classList.remove('hidden'); // Show Game 2 background
         game2StartScreen.classList.remove('hidden');
+        game2StartScreen.classList.remove('slide-up');
         if (globalBgImage) globalBgImage.src = 'assets/bg_game_stonks.png';
 
         if(game2HeaderEl) game2HeaderEl.classList.add('ui-offscreen-top');
@@ -779,6 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             game2Screen.classList.remove('hidden'); // Ensure game2 screen is visible for background
             game2StartScreen.classList.remove('hidden');
+            game2StartScreen.classList.remove('slide-up');
             // Make sure background is ready for game 2
             const bgImageEl = document.getElementById('bg-image');
             if (bgImageEl) {
@@ -1898,6 +1900,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Go back to main title screen cleanly without losing progress
             game2StartScreen.classList.add('hidden');
+            game2StartScreen.classList.remove('slide-up');
             game2Screen.classList.add('hidden'); // Hide Game 2 background
 
             gameScreen.classList.remove('hidden'); // Show Game 1 background
