@@ -542,7 +542,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     game2StartBtn.addEventListener('click', () => {
-        const hasSave = loadGame2();
+        // Since user clicked Start from the title screen, start a completely fresh Game 2 run.
+        localStorage.removeItem('pickleClickerGame2Save');
+
+        // Reset state variables to defaults
+        game2Biscuits = 0;
+        game2TotalClicks = 0;
+        game2Ended = false;
+        investigatedStonks = [];
+        game2StonkOwnership = {};
+        // Deep copy defaults
+        game2StoreItemsData = defaultGame2StoreItemsData.map(item => ({...item}));
+        if(stonksChartInstance) {
+           stonksChartInstance.destroy();
+           stonksChartInstance = null;
+        }
+
+        const hasSave = false;
         if (!hasSave) {
             const savedLeaderboardStr = localStorage.getItem('pickleClickerLeaderboard');
             if (savedLeaderboardStr) {
@@ -569,6 +585,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Init biscuits visual
         if(game2BiscuitCountEl) game2BiscuitCountEl.textContent = Number(game2Biscuits).toLocaleString();
         updateNetWorthProgressBar();
+
+        if (typeof initStonksChart === 'function') initStonksChart();
 
         renderGame2StoreItems();
         updateGame2UI();
@@ -636,6 +654,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startBtn.addEventListener('click', () => {
+        // Since user clicked Start from the title screen, start a completely fresh Game 1 run.
+        localStorage.removeItem('pickleClickerSave');
+        biscuits = 0;
+        lifetimeBiscuits = 0;
+        totalClicks = 0;
+        totalBiscuitsSpent = 0;
+        tapMultiplier = 1;
+        gameEnded = false;
+        sunbeamTimeRemaining = 0;
+        sunbeamActive = false;
+        if (typeof sunbeamInterval !== 'undefined') clearInterval(sunbeamInterval);
+        upgradesData = defaultUpgradesData.map(item => ({...item}));
+        if (biscuitCountEl) biscuitCountEl.textContent = '0';
+        updateUI();
+
         // Slide out start screen components
         startScreen.classList.add('slide-up');
 
