@@ -1,104 +1,129 @@
-# Comprehensive Refactor Plan: Splitting the Monolithic Mr. Pickles Universe
+# Comprehensive Refactor Plan & Architectural Specification: Splitting the Monolithic Mr. Pickles Universe
 
-## Phase 0: Project Context and Guardrails
-**Objective**: Transition the existing "Mr. Pickles Universe" web game from a monolithic file structure (`index.html`, `script.js`, `style.css`) into a highly modular, domain-specific architecture to support long-term maintainability, parallel agent development, and the addition of future games (e.g., Game 3).
+## Phase 0: Project Context, Philosophy, and Guardrails
 
-**Critical Constraint:** The original files (`index.html`, `script.js`, `style.css`) MUST REMAIN UNTOUCHED. All refactored work must be executed in parallel tracks and output to a new set of `_v2` files. These new files serve as a functional, structural demonstration and backup that the development team can swap in when ready.
+**Objective**: Transition the existing "Mr. Pickles Universe" web game from a massive monolithic file structure (`index.html`, `script.js`, `style.css`) into a highly modular, domain-specific architecture. This supports long-term maintainability, allows concurrent agent development without merge conflicts, and prepares the infrastructure for "Game 3".
+
+**Critical Constraint:** The original source files (`index.html`, `script.js`, `style.css`) **MUST REMAIN UNTOUCHED**. All refactored work must be executed in parallel tracks and output to a new set of `_v2` prefixed files. These new files serve as a functional, structural backup that the team can swap in when ready.
+
+**Agent Communication Directive:** This document serves as the absolute source of truth for future AI agents executing this refactor. The monolithic codebase contains highly specific implicit logic and visual layering that must be explicitly understood to prevent regressions. Read this document thoroughly before writing code.
 
 ---
 
 ## Phase 1: Parallel Development Tracks
 
-This phase is designed to be executed concurrently by multiple agents/developers to maximize efficiency and prevent merge conflicts. Each track is strictly isolated to its domain.
+This phase is designed to be executed concurrently. Each track is strictly isolated.
 
 ### Track A: Platform Architecture & Shared Framework
 *   **Role**: Platform Architect
 *   **Target Files**: `index_v2.html`, `shared_v2.js`
 *   **Tasks**:
     1.  **Initialize Root File**: Create `index_v2.html` as a direct replica of `index.html`.
-    2.  **Module Wiring**: Update the bottom of the `<body>` in `index_v2.html` to load the modular JavaScript files in explicit dependency order:
+    2.  **Module Wiring**: Update the bottom of the `<body>` in `index_v2.html` to load the modular scripts in this strict dependency order:
         ```html
         <script src="shared_v2.js"></script>
         <script src="game1_v2.js"></script>
         <script src="game2_v2.js"></script>
         ```
-    3.  **Extract Global Utilities & Scope Exposure**: Create `shared_v2.js` and extract formatting and storage logic. Expose them globally using a strict namespace to prevent collisions:
+    3.  **Global Scope Exposure (`window.PickleShared`)**: Create `shared_v2.js`. You MUST expose shared logic on a global object. Do NOT rely on implicit globals.
         ```javascript
         window.PickleShared = {
-            formatNumber: (num) => { /* logic */ },
-            getLocalStorage: (key, fallback) => { /* logic */ },
-            setLocalStorage: (key, value) => { /* logic */ }
+            formatNumber: (num) => { /* logic */ }, // Handles 'k', 'm', 'b' suffixes
+            getLocalStorage: (key, fallback) => { /* try/catch wrapper */ },
+            setLocalStorage: (key, value) => { /* stringify wrapper */ }
         };
         ```
-    4.  **Promise-based Modals**: Migrate all custom modal logic (`showAlert`, `showConfirm`). Ensure the DOM listeners are properly cleaned up (`removeEventListener`) within the Promise resolution blocks to prevent memory leaks when transitioning between games.
-    5.  **Developer Tools Context**: Isolate the Dev Mode functionality. Implement a context-aware state manager (`currentDevContext = 'game1' | 'game2'`) so that sticker positioning arrays update the correct game's configuration.
+    4.  **Promise-based Modals**: Migrate all custom modal logic.
+        *   **Selectors to migrate**: `#alert-modal`, `#custom-modal`, `#store-item-modal`.
+        *   **Gotcha**: You MUST ensure DOM listeners (`addEventListener`) are cleaned up (`removeEventListener`) within the Promise `.then()` blocks to prevent click-event memory leaks across games.
+    5.  **Developer Tools Context**: Isolate the Dev Mode functionality (`#dev-mode-panel`).
+        *   **Gotcha**: Dev Mode uses a `currentDevContext` variable. Ensure it accurately tracks `'game1'` vs `'game2'` so sticker positioning coordinates write to the correct game's state arrays.
 
 ### Track B: Game 1 Domain Extraction
 *   **Role**: Game 1 Developer
 *   **Target File**: `game1_v2.js`
 *   **Tasks**:
-    1.  **State Isolation**: Create `game1_v2.js`. Migrate all core Game 1 state variables (`score`, `clickPower`, `autoClickPower`, `gameEnded`) into an IIFE (Immediately Invoked Function Expression) or module scope to prevent global namespace pollution.
-    2.  **Interval Management (Crucial)**: Extract the `setInterval` logic. To prevent "ghost" loops from executing when Game 1 is hidden, implement strict bail-out closures:
+    1.  **State Isolation**: Move Game 1 variables (`score`, `clickPower`, `autoClickPower`, `gameEnded`) into a local module scope.
+    2.  **Configuration Data**: Migrate `storeItemsData` and `storeItems`.
+    3.  **Interval Management (Crucial Gotcha)**: The monolith uses `setInterval` for passive income and auto-saving. In a modular world, these loops will fire even when the player is on Game 2. You MUST implement strict bail-out closures:
         ```javascript
         setInterval(() => {
-            if (!document.getElementById('start-screen').classList.contains('slide-up')) return;
-            if (!document.getElementById('game2-screen').classList.contains('hidden')) return;
+            if (!document.getElementById('start-screen').classList.contains('slide-up')) return; // Ensure on active screen
+            if (!document.getElementById('game2-screen').classList.contains('hidden')) return; // Ensure Game 2 is NOT active
             // Execute Game 1 passive income
         }, 1000);
         ```
-    3.  **Interaction Handlers**: Migrate Mr. Pickles clicking logic, store rendering, and the dynamic floating number generation (`+1`).
-    4.  **Endgame Logic & Data Handoff**: When 1,000,000 biscuits are reached, explicitly push the `biscuitsLeft` metric to `window.PickleShared.setLocalStorage('pickleClickerLeaderboard')`. This is the critical handoff point for Track C to pick up the starting balance.
+    4.  **Interaction Handlers**: Migrate Mr. Pickles clicking logic (`#main-image`), scaling transforms, and dynamic floating number logic.
+    5.  **Endgame Logic**: At 1,000,000 biscuits, trigger `#endgame-modal`.
+    6.  **Leaderboard Handoff**: Update `pickleClickerLeaderboard` using `window.PickleShared`. This sets `biscuitsLeft`, which Game 2 relies on to start. Ensure the `#game2-unlock-btn` is revealed.
 
-### Track C: Game 2 Domain Extraction
+### Track C: Game 2 Domain Extraction (Capitalism Simulator)
 *   **Role**: Game 2 Developer
 *   **Target File**: `game2_v2.js`
 *   **Tasks**:
-    1.  **State Isolation**: Migrate Game 2 variables (`game2Biscuits`, `stonkMarketSpeed`, `investigatedStonks`, `catnipLevel`).
-    2.  **Chart.js Transparency**: When re-initializing `window.stonksChartInstance`, ensure the exact transparency configurations (`border: { display: false }`, `drawOnChartArea: false`) are preserved so the graph renders cleanly onto the computer monitor background asset.
-    3.  **Market Mathematics**: Extract the dense `updateStonksMarket` function. Pay special attention to the two-pass modifier calculation, catnip multiplier integration, and the probabilistic rounding function used to prevent low-priced stonks from locking up.
-    4.  **Dynamic Store Data Hydration**: When parsing `localStorage`, strictly merge `defaultGame2StoreItemsData` with the saved data using a spread operator or mapping function. This ensures that properties like `type: 'asset'` or `stonkLink: ['Yarn']` are not lost from older saves, which would break the Audit evasion and Market Flooding mechanics.
+    1.  **State Variables**: Migrate `game2Biscuits`, `stonkMarketSpeed`, `investigatedStonks`, `catnipLevel`, `selectedStonkLabel`, `game2StonkOwnership`.
+    2.  **Configuration Arrays**: Migrate `stonksData` and `defaultGame2StoreItemsData`.
+        *   **Store Scaling Math**: Ensure exponential cost scaling calculation is exact: `baseCost * (1.15 ^ count)`. Note: The 'Shadow Board' (`shell3`) uniquely uses `totalPurchased` instead of `count` for scaling.
+    3.  **Market Mathematics (`updateStonksMarket`)**:
+        *   **Gotcha - 2-Pass System**: Replicate the exact Stonk Web modifier math. First pass calculates primary modifiers. Second pass distributes fractional ripple effects based *only* on strictly positive primary modifiers.
+        *   **Gotcha - Rounding Trap**: Ensure the probabilistic rounding logic is migrated intact, otherwise stonks under 10 biscuits will get mathematically stuck and never fluctuate.
+        *   **Gotcha - Price Floor**: Enforce `Math.max(1, currentPrice + change)`.
+    4.  **Chart.js Transparency**: When moving `window.stonksChartInstance`, preserve exact styling: `border: { display: false }`, `drawOnChartArea: false`. The graph must render transparently over the monitor background asset.
+    5.  **Tax Audits & Interval Loops**:
+        *   Migrate the 5-minute tax audit loop. Ensure it calculates dynamic "Audit Exposure" correctly (ratio of hidden assets vs. businesses).
+        *   Ensure the Catnip meter decay loop (every 3s) and the BPS loop for Legit Businesses are active.
+        *   Apply the same Interval Bail-out logic described in Track B (checking `#game2-start-screen` and `#game2-screen`).
+    6.  **Insider Trading**: Migrate the SEC investigation modal trigger when a stonk hits `1,000,000` biscuits (imposes a strict `-0.05` modifier and flat fine).
 
 ### Track D: CSS Domain Segregation & Container Queries
 *   **Role**: UI/UX Engineer
 *   **Target Files**: `shared_v2.css`, `game1_v2.css`, `game2_v2.css`
 *   **Tasks**:
-    1.  **Global Resets (`shared_v2.css`)**: Extract baseline styles (body flexboxes, hidden scrollbars, `pointer-events: none` overlays, and modal `.slide-up` animations).
-    2.  **Game 1 Specifics (`game1_v2.css`)**: Isolate the Game 1 `#game-area` styles.
-    3.  **Game 2 Specifics (`game2_v2.css`)**: Extract all styles unique to the Capitalism simulator.
-    4.  **Container Query (`cqw`) Management (Crucial)**: Both games rely heavily on `container-type: inline-size` attached to their primary `aspect-ratio: 1/1` containers (`#game-area`, `#game2-area`). Ensure that when splitting the CSS, `cqw` units (e.g., `font-size: 3cqw`) are strictly scoped within their respective DOM IDs to prevent inner text scaling from failing on mobile devices.
+    1.  **Global Resets (`shared_v2.css`)**: Extract baseline styles, `.modal-overlay`, `.hidden` (`display: none !important`), and the `.slide-up` animation.
+        *   **Gotcha - Z-Index Hierarchy**: Modals must be `z-index: 2000`. Dev Mode panel must be `z-index: 3000`. Game UI overlays must be `z-index: 10`.
+    2.  **Start Screen Transparency**: Start screens (`#start-screen`, `#game2-start-screen`) MUST use `background-color: transparent`. They overlay the actual game screens below them. Do not add solid backgrounds to start screens.
+    3.  **Container Query Management (Crucial)**:
+        *   Both `#game-area` and `#game2-area` use `container-type: inline-size` and `aspect-ratio: 1/1`.
+        *   Ensure that all inner font sizes and layout margins use `cqw` units (e.g., `font-size: 3cqw`) scoped strictly within these areas to ensure the games scale proportionally across mobile and desktop.
+    4.  **Game 2 UI Specifics (`game2_v2.css`)**:
+        *   Extract the matrix-style transparent monitor UI (`#stonks-ui`, `.stonk-column`).
+        *   Extract the Catnip Bar absolute positioning and fill transitions.
 
 ---
 
 ## Phase 2: Data Migration & Save State Strategy
 
-Because the application previously relied on a massive monolithic save state or tightly coupled states, the refactor must enforce a strict separation of concerns in `localStorage`:
+The monolith used a single `pickleClickerSave` object. The modular refactor must maintain isolated states while providing seamless backward compatibility:
 
-1.  **Game 1 Save (`pickleClickerSave`)**: Handled entirely by `game1_v2.js`. Stores `score`, `clickPower`, and Game 1 item counts.
-2.  **Leaderboard Handoff (`pickleClickerLeaderboard`)**: The shared bridge. Game 1 writes to this upon reaching the win condition. Game 2 reads from this *only* if `pickleClickerGame2Save` does not exist, using the best `biscuitsLeft` as its starting liquid balance.
-3.  **Game 2 Save (`pickleClickerGame2Save`)**: Handled entirely by `game2_v2.js`. Stores `game2Biscuits`, stonk ownership, and the complex array of investigated stonks.
-
-**Backward Compatibility Rule:** The new modular scripts MUST be able to parse the exact schema of the legacy `localStorage` items generated by the monolithic `script.js` without throwing undefined errors.
+1.  **Game 1 Save (`pickleClickerSave`)**: Managed by `game1_v2.js`.
+2.  **Leaderboard Handoff (`pickleClickerLeaderboard`)**: The crucial bridge. It stores the top 5 scores from Game 1.
+3.  **Game 2 Save (`pickleClickerGame2Save`)**: Managed by `game2_v2.js`.
+4.  **Hydration Gotcha (Type Preservation)**: When loading Game 2 state, you MUST spread the `defaultGame2StoreItemsData` over the saved objects. Older save files might lack properties like `type: 'asset'` or `stonkLink: ['Yarn']`. If these properties are lost during loading, Audit evasion and Market Flooding mechanics will silently fail.
 
 ---
 
-## Phase 3: Testing & QA Strategy (Track F)
+## Phase 3: Quality Assurance & Playwright Testing (Track F)
 
 *   **Role**: QA Automation Engineer
-*   **Prerequisite**: Tracks A, B, C, D must be merged.
+*   **Prerequisite**: Tracks A, B, C, D complete.
 
-**Automated Playwright Scenarios**:
-1.  **Data Injection Bypasses**: Write tests that inject `localStorage.setItem('pickleClickerLeaderboard', JSON.stringify([{ score: 100, biscuitsLeft: 1000 }]))` before page load. Verify that clicking "Game 2" seamlessly skips Game 1 and starts Game 2 with exactly 1000 liquid biscuits.
-2.  **Modal Dismissal Sequence**: Ensure UI tests explicitly locate and click `#game2-instructions-ok` before attempting to interact with the stonk monitor, as the overlay blocks pointer events.
-3.  **Visual Regression**: Take a baseline screenshot of the monolithic `index.html`. Compare it against `index_v2.html` using pixel-match algorithms. Pay special attention to the Developer Mode sticker absolute positioning, ensuring z-indexes were not scrambled during the CSS split.
+**Automated Playwright Scenarios to Implement**:
+1.  **State Injection (Skip to Game 2)**:
+    *   Inject state before page load: `localStorage.setItem('pickleClickerLeaderboard', JSON.stringify([{ score: 100, biscuitsLeft: 1000 }]));`
+    *   Assert `#game2-unlock-btn` is visible on the Game 1 start screen.
+    *   Click `#game2-unlock-btn`. Assert `#game-screen` is `.hidden` and `#game2-screen` is visible.
+    *   Click `#game2-start-btn`. Assert liquid biscuits display reads exactly `1.0k` (verifying `window.PickleShared.formatNumber` integration).
+2.  **Modal Dismissal Sequence**:
+    *   A fresh Game 2 save auto-triggers the `#game2-instructions-modal`.
+    *   Playwright MUST locate and `.click()` the `#game2-instructions-ok` button before interacting with stonk columns, otherwise the overlay blocks pointer events.
+3.  **Visual Regression (Pixel Match)**:
+    *   Take a screenshot of `index.html`. Compare it against `index_v2.html`. Focus specifically on the Chart.js canvas alignment to ensure no 1-2px shifting occurred during the CSS extraction.
 
 ---
 
-## Phase 4: Sequential Integration (Track E)
+## Phase 4: Sequential Integration & Validation (Track E)
 
 *   **Role**: Integration Lead
-*   **Prerequisite**: All code and tests are written.
-
-**Tasks**:
-1.  Verify `shared_v2.js` initializes before the game scripts in `index_v2.html`.
-2.  Test the DOM manipulation sequence: Manually trigger the Game 1 Endgame modal -> Click "Next Stage" -> Verify `#game-screen` hides, `#game2-screen` shows, and `.slide-up` is removed from `#game2-start-screen` without a page reload.
-3.  Confirm zero modifications were made to the original monolith files.
+*   **Tasks**:
+    1.  Ensure `.slide-up` classes are correctly managed. When toggling games, `.slide-up` must be removed from the target game's start screen so it becomes visible again.
+    2.  Verify zero bleed-through. Inner interactive UI elements (like `.game2-dynamic-sticker`) must be explicitly hidden or moved off-screen (`.ui-offscreen-bottom`) when returning to start screens.
