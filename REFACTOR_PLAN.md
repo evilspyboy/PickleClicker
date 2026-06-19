@@ -14,10 +14,10 @@
 
 This phase is designed to be executed concurrently. Each track is strictly isolated.
 
-### Track A: Platform Architecture & Shared Framework
+### Track A: Platform Architecture & Shared Framework (COMPLETED)
 *   **Role**: Platform Architect
 *   **Target Files**: `index_v2.html`, `shared_v2.js`
-*   **Tasks**:
+*   **Tasks**: (COMPLETED)
     1.  **Initialize Root File**: Create `index_v2.html` as a direct replica of `index.html`.
     2.  **Module Wiring**: Update the bottom of the `<body>` in `index_v2.html` to load the modular scripts in this strict dependency order:
         ```html
@@ -39,10 +39,10 @@ This phase is designed to be executed concurrently. Each track is strictly isola
     5.  **Developer Tools Context**: Isolate the Dev Mode functionality (`#dev-mode-panel`).
         *   **Gotcha**: Dev Mode uses a `currentDevContext` variable. Ensure it accurately tracks `'game1'` vs `'game2'` so sticker positioning coordinates write to the correct game's state arrays.
 
-### Track B: Game 1 Domain Extraction
+### Track B: Game 1 Domain Extraction (COMPLETED)
 *   **Role**: Game 1 Developer
 *   **Target File**: `game1_v2.js`
-*   **Tasks**:
+*   **Tasks**: (COMPLETED)
     1.  **State Isolation**: Move Game 1 variables (`score`, `clickPower`, `autoClickPower`, `gameEnded`) into a local module scope.
     2.  **Configuration Data**: Migrate `storeItemsData` and `storeItems`.
     3.  **Interval Management (Crucial Gotcha)**: The monolith uses `setInterval` for passive income and auto-saving. In a modular world, these loops will fire even when the player is on Game 2. You MUST implement strict bail-out closures:
@@ -75,17 +75,17 @@ This phase is designed to be executed concurrently. Each track is strictly isola
         *   Apply the same Interval Bail-out logic described in Track B (checking `#game2-start-screen` and `#game2-screen`).
     6.  **Insider Trading**: Migrate the SEC investigation modal trigger when a stonk hits `1,000,000` biscuits (imposes a strict `-0.05` modifier and flat fine).
 
-### Track D: CSS Domain Segregation & Container Queries
+### Track D: CSS Domain Segregation & Container Queries (PARTIALLY COMPLETED - Game 2 CSS Pending)
 *   **Role**: UI/UX Engineer
-*   **Target Files**: `shared_v2.css`, `game1_v2.css`, `game2_v2.css`
+*   **Target Files**: `shared_v2.css` (COMPLETED), `game1_v2.css` (COMPLETED), `game2_v2.css` (PENDING)
 *   **Tasks**:
-    1.  **Global Resets (`shared_v2.css`)**: Extract baseline styles, `.modal-overlay`, `.hidden` (`display: none !important`), and the `.slide-up` animation.
+    1.  **Global Resets (`shared_v2.css`)**: (COMPLETED) Extract baseline styles, `.modal-overlay`, `.hidden` (`display: none !important`), and the `.slide-up` animation.
         *   **Gotcha - Z-Index Hierarchy**: Modals must be `z-index: 2000`. Dev Mode panel must be `z-index: 3000`. Game UI overlays must be `z-index: 10`.
-    2.  **Start Screen Transparency**: Start screens (`#start-screen`, `#game2-start-screen`) MUST use `background-color: transparent`. They overlay the actual game screens below them. Do not add solid backgrounds to start screens.
-    3.  **Container Query Management (Crucial)**:
+    2.  **Start Screen Transparency**: (COMPLETED) Start screens (`#start-screen`, `#game2-start-screen`) MUST use `background-color: transparent`. They overlay the actual game screens below them. Do not add solid backgrounds to start screens.
+    3.  **Container Query Management (Crucial)**: (COMPLETED for Game 1)
         *   Both `#game-area` and `#game2-area` use `container-type: inline-size` and `aspect-ratio: 1/1`.
         *   Ensure that all inner font sizes and layout margins use `cqw` units (e.g., `font-size: 3cqw`) scoped strictly within these areas to ensure the games scale proportionally across mobile and desktop.
-    4.  **Game 2 UI Specifics (`game2_v2.css`)**:
+    4.  **Game 2 UI Specifics (`game2_v2.css`)**: (PENDING)
         *   Extract the matrix-style transparent monitor UI (`#stonks-ui`, `.stonk-column`).
         *   Extract the Catnip Bar absolute positioning and fill transitions.
 
