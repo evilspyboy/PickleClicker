@@ -1,0 +1,331 @@
+/* Base placements for start screen elements */
+#start-title {
+    position: absolute;
+    left: 49.3333%;
+    top: -12.6753%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+}
+
+#start-cat {
+    position: absolute;
+    left: 49.1667%;
+    top: 24.3281%;
+    width: 45%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+}
+
+#start-btn {
+    position: absolute;
+    left: 49%;
+    top: 58.6615%;
+    width: 43%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 1;
+}
+
+#start-btn:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+/* Game Screen */
+#game-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#game-screen.hidden {
+    display: none;
+}
+
+/* Header */
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #ffb6c1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    z-index: 10;
+    position: relative;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+#header.ui-offscreen-top {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+#reset-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+#reset-icon:active {
+    transform: translateY(-50%) scale(0.9);
+}
+
+.biscuit-icon {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#stickers-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+#sticker-blanket {
+  left: 68.8316%;
+  top: 79.3056%;
+  width: 49%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+#sticker-pillow {
+  left: 68.4931%;
+  top: 77.2292%;
+  width: 47%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+#sticker-spring_toy {
+  left: 33.9983%;
+  top: 84.0087%;
+  width: 15%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+#sticker-carboard_box {
+  left: 56.8316%;
+  top: 43.5938%;
+  width: 34%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+#sticker-mouse_toy {
+  left: 24.8316%;
+  top: 71.5139%;
+  width: 20%;
+  transform: translate(-50%, -50%) scaleX(-1);
+  z-index: 1;
+}
+
+#sticker-cat_tree {
+  left: 24.3299%;
+  top: 46.3628%;
+  width: 51%;
+  transform: translate(-50%, -50%) scaleX(-1);
+  z-index: 1;
+}
+
+#sticker-motivational_poster {
+  left: 76.8333%;
+  top: 24.658%;
+  width: 33%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+#cat-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Let clicks pass through if not on the cat */
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+#cat-image {
+    height: auto;
+    cursor: pointer;
+    pointer-events: auto;
+    position: absolute;
+    left: 66.8316%;
+    top: 67.2448%;
+    width: 47%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    transition: width 0.1s ease-in-out;
+}
+
+#cat-image:active {
+    width: 45%; /* Slightly smaller for the active effect instead of scaling */
+}
+
+/* Upgrade List */
+#upgrade-list {
+    flex: 1 1 40%;
+    overflow-y: auto;
+    background-color: #fff;
+    border-top: 4px solid #ffb6c1;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    gap: 10px;
+    transition: height 1s ease-in-out, opacity 1s ease-in-out, flex-basis 1s ease-in-out;
+}
+
+.upgrade-item {
+    position: relative;
+    padding: 8px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fafafa;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background-color 0.2s;
+}
+
+.upgrade-item.affordable {
+    background-color: #e8f5e9;
+    border-color: #81c784;
+}
+
+.upgrade-item:active {
+    transform: scale(0.98);
+}
+
+.upgrade-info {
+    z-index: 2;
+    flex: 1;
+}
+
+.upgrade-name {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.upgrade-cost {
+    font-size: 11px;
+    color: #666;
+}
+
+.upgrade-desc {
+    font-size: 11px;
+    color: #888;
+    font-style: italic;
+    display: none; /* Hide descriptions to save space */
+}
+
+.upgrade-stats {
+    z-index: 2;
+    font-weight: bold;
+    font-size: 16px;
+    color: #ffb6c1;
+    margin-left: 5px;
+}
+
+.progress-bar-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: transparent;
+    z-index: 1;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #64b5f6;
+    transition: width 0.2s ease-in-out;
+}
+
+.progress-bar.full {
+    background-color: #4caf50;
+}
+
+/* Settings Area */
+#settings-area {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+#settings-area button {
+    padding: 8px 12px;
+    background: #ccc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#dev-mode-btn {
+    display: none; /* Hidden for normal gameplay, remove to use dev mode */
+}
+
+/* Leaderboard */
+#leaderboard-container {
+    width: 100%;
+    background-color: #fafafa;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#leaderboard-container h4 {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#leaderboard-list li {
+    font-size: 14px;
+    padding: 2px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+#leaderboard-list li:last-child {
+    border-bottom: none;
+}
+
+#leaderboard-list li.current-score {
+    font-weight: bold;
+    color: #ffb6c1;
+}
