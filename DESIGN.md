@@ -106,11 +106,52 @@ The application will launch into a **Hub Screen** where the player can choose wh
 
 ---
 
-## 4. Game 3: Mr. Pickles Colonises Mars (Concept)
-**Core Concept:** A space exploration/building game unlocked once the player conquers capitalism on Earth.
+## 4. Game 3: Mr. Pickles Colonises Mars (Concept & Specifications)
+**Core Concept:** A cozy, no-fail spaceship management game where players use their vast wealth to build a rocket and manage a crew of "Castronauts" to ensure a safe journey to Mars.
 - **Unlock Requirement:** Reaching 1 Billion Biscuits in Game 2 ("Mr. Pickles Commits Tax Fraud").
-- **Theme:** "Mr. Pickles Builds a Rocket" or "Mr. Pickles Colonises Mars".
-- **Mechanics:** Players will use their massive wealth to fund a space program, build rocket parts, and fly to Mars. (Further mechanics to be designed in the future).
+- **Theme:** Mr. Pickles uses his laundered money to fund a chaotic feline space program.
+
+### Phase 1: Pre-Launch (The Hangar)
+- **The Setup:** Upon launching Game 3, players enter the "Garage/Hangar" screen.
+- **The Economy:** Players carry over their total `biscuitsLeft` from their winning Game 2 run. They use this massive balance to purchase starting configurations and ship upgrades.
+- **Upgrades:** Players can buy permanent buffs before launch. Examples include:
+  - *Premium Rainbow Fuel:* Increases the ship's base cruising speed.
+  - *Reinforced Cardboard Hull:* Decreases the frequency of hull-breach emergencies.
+  - *Automated Treat Dispensers:* Increases the time it takes for Castronauts to get tired.
+- **Launch:** Once the player finishes spending their biscuits, they click "LAUNCH" to transition to the main spaceflight gameplay.
+
+### Phase 2: The Flight & Visual Layout (Split Screen)
+The game is designed to be mobile-friendly and operates on a "No Fail, Just Delays" philosophy. The player's goal is to fill the "Distance to Mars" progress bar. The ship never goes backward or explodes; if things break, the ship simply slows down or stops until fixed.
+
+#### The Top HUD (The Viewport)
+- A persistent viewport at the top of the screen shows the exterior of the rocket flying horizontally through a side-scrolling starfield.
+- **The Nyan Trail:** The visual indicator of success. If the ship is running smoothly, a massive, animated rainbow trail streams from the engines. If systems fail, the rainbow sputters, fades, and the ship visually slows down.
+- **Progress UI:** A distinct progress bar tracking "Distance to Mars" and a textual readout of current speed (e.g., "Speed: 100 Nyans/sec").
+
+#### The Bottom View (The Ship Interior & Navigation)
+- The lower half of the screen is the interactive area.
+- **Room-to-Room Navigation:** The player navigates the ship by tapping doors. The default view is a "Hallway" or "Hub" showing doors to 3-4 distinct rooms (e.g., Engine Room, Bridge, Break Room, Hydroponics).
+- Tapping a door instantly swaps the background image to display the static interior of that specific room.
+
+### Phase 3: Room Mechanics (The DOM Sticker Architecture)
+Game 3 adheres strictly to the existing technical architecture established in Games 1 and 2: interactive DOM elements (transparent PNGs) absolutely positioned over static backgrounds. There is no physics engine or complex pathfinding.
+
+- **The Environment:** Inside a room, the background is a flat, static image.
+- **The Stickers:** All interactable elements are "Stickers" layered on top via CSS (`position: absolute; left: X%; top: Y%`).
+  1. **Consoles:** Static targets (e.g., the Engine, the Navigation Computer).
+  2. **Emergencies/Alerts:** Dynamic stickers that appear over consoles when something breaks (e.g., a "Sparking Wires" sticker, a "Clogged Filter" sticker). When an emergency sticker is active, ship speed drops.
+  3. **Castronauts:** The crew members.
+- **Interactions (Tap & Slide):**
+  - If a console breaks, the player taps a Castronaut sticker, then taps the "Emergency" sticker.
+  - The Castronaut sticker instantly slides (via CSS transition) to the console's coordinates. The emergency sticker disappears, and ship speed increases.
+- **Crew Management (Stamina):**
+  - Castronauts lose stamina over time while working. A "Zzz" or "Hungry" thought-bubble sticker will appear over them when they are exhausted, and they will stop working (halting the room's function).
+  - The player must tap the exhausted Castronaut, then tap the room's "Exit Door" sticker to send them to the Hallway. From there, they can be assigned to the "Break Room" (e.g., a sunbeam on the floor) to recharge, while the player swaps a fresh Castronaut into the active room.
+
+### Technical Implementation Notes for Future Agents
+- **State Management:** Core logic revolves around tracking `shipSpeed`, `distanceToMars`, and `roomStatus` states in JavaScript.
+- **No Canvas/Physics:** Rely entirely on DOM manipulation. Moving characters simply involves updating CSS classes or inline styles to change `left` and `top` properties to predefined "slots" in front of consoles.
+- **Background Swapping:** Changing rooms does not require a new HTML page; simply change the `.backgroundImage` of the primary container and show/hide the arrays of stickers associated with that specific room's state.
 
 ---
 
