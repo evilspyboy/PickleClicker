@@ -1,0 +1,404 @@
+/* Game 2 Specific Placements */
+#stonk-column-1 {
+    left: 24%;
+    top: 32.9983%;
+    width: 10%;
+    height: 32%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+    container-type: inline-size;
+}
+
+#stonk-column-2 {
+    left: 76.6667%;
+    top: 33.1615%;
+    width: 10%;
+    height: 32%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+    container-type: inline-size;
+}
+
+.stonk-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    container-type: inline-size;
+}
+
+.stonk-monitor-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 20cqw;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 1cqw;
+    box-sizing: border-box;
+    transition: background-color 0.1s, border-color 0.1s;
+}
+
+.stonk-monitor-item.selected {
+    border-color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.stonk-monitor-item img {
+    width: 45cqw;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 1cqw;
+}
+
+#game2-graph-container {
+    left: 49.3247%;
+    top: 33.316%;
+    width: 47%;
+    height: 39%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    border: none;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+#stonks-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#game2-cat-container {
+    left: 22.3333%;
+    top: 72.6632%;
+    width: 23%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    pointer-events: none;
+}
+
+#game2-crashedcat-container {
+    left: 22.5%;
+    top: 79.9965%;
+    width: 23%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    pointer-events: none;
+}
+
+#game2-cat-image, #game2-crashedcat-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transform-origin: bottom center;
+}
+
+#catnip-meter-container {
+    left: 13.3281%;
+    top: 33.4983%;
+    width: 8%;
+    height: 37%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 60;
+    container-type: inline-size;
+}
+
+#game2-selected-stonk * {
+    max-width: 100%;
+}
+
+#catnip-btn {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#catnip-btn:active {
+    transform: scale(0.9);
+}
+
+@keyframes catnipShake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-30deg); }
+    50% { transform: rotate(30deg); }
+    75% { transform: rotate(-30deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.shake-anim {
+    animation: catnipShake 0.3s ease-in-out;
+}
+
+.catnip-bar-bg {
+    width: 45cqw;
+    flex: 1;
+    background-color: #ddd;
+    border: 2px solid #888;
+    border-radius: 10px;
+    margin-top: 20cqw;
+    position: relative;
+    overflow: hidden;
+}
+
+#catnip-bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background-color: #81c784; /* Green */
+    transition: height 0.2s, background-color 0.2s;
+}
+
+/* Stonks Grid */
+#game2-selected-stonk {
+    left: 77%;
+    top: 72.1667%;
+    width: 22%;
+    height: 15%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    z-index: 60;
+    container-type: inline-size;
+}
+
+.selected-stonk-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    margin-bottom: 5%;
+}
+
+#selected-stonk-icon {
+    width: 40%;
+    height: 100%;
+    object-fit: contain;
+    margin-right: 5%;
+}
+
+.selected-stonk-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 55%;
+    height: 100%;
+}
+
+#selected-stonk-name {
+    font-weight: bold;
+    font-size: 10cqw;
+}
+
+#selected-stonk-amount {
+    font-size: 8cqw;
+    opacity: 0.9;
+}
+
+.selected-stonk-controls {
+    display: flex;
+    gap: 5%;
+    width: 100%;
+    height: 45%;
+    justify-content: center;
+}
+
+.selected-stonk-btn {
+    flex: 1;
+    height: 100%;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10cqw;
+    background-color: #ddd;
+    color: #fff;
+}
+.selected-stonk-btn.buy.active { background-color: #4CAF50; }
+.selected-stonk-btn.sell.active { background-color: #f44336; }
+.selected-stonk-btn:active { transform: scale(0.9); }
+
+/* Store List */
+#game2-store-list {
+    flex: 1 1 40%;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 columns for Game 2 store items */
+    grid-auto-rows: min-content;
+    gap: 15px;
+    transition: height 1s ease-in-out, opacity 1s ease-in-out, flex-basis 1s ease-in-out;
+}
+
+.store-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.store-col-title {
+    text-align: center;
+    font-size: 1.1em;
+    color: #333;
+    margin: 0;
+    padding: 5px 0;
+    border-bottom: 2px solid #eee;
+}
+
+.store-col-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.store-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.store-item-icon-large {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.store-item {
+    position: relative;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    display: flex;
+    background-color: #fafafa;
+    overflow: hidden;
+    height: 50px;
+    user-select: none;
+    flex: 1; /* take up remaining space */
+}
+
+.store-item-progress {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px; /* Assuming 40px is width of the plus button */
+    height: 0%; /* Default height is 0 */
+    background-color: rgba(144, 238, 144, 0.4);
+    transition: height 0.3s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.store-item-content {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+
+.store-btn {
+    width: 40px;
+    height: 100%;
+    border: none;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
+    z-index: 3;
+}
+
+.store-btn.sell {
+    background-color: #ddd;
+    color: #fff;
+}
+
+.store-btn.sell.active {
+    background-color: #ff6b6b; /* Red when owned */
+}
+
+.store-btn.buy {
+    background-color: transparent;
+    color: #333;
+    border-left: 2px solid #eee;
+}
+
+.store-btn.buy.active {
+    background-color: #90ee90; /* Green when affordable */
+}
+
+.store-btn.buy:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.store-btn.buy.active:hover {
+    background-color: #7ccd7c;
+}
+
+.store-item-middle {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 5px;
+}
+
+.store-item-count {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+}
+
+@media (max-width: 600px) {
+    #game2-store-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        padding: 5px;
+    }
+
+    .store-column-title {
+        font-size: 0.8em;
+    }
+
+    .store-item-icon-large {
+        width: 30px;
+        height: 30px;
+        left: -15px;
+    }
+
+    .store-item {
+        margin-left: 15px;
+    }
+
+    .store-btn {
+        width: 25px;
+    }
+
+    .store-item-progress {
+        width: 25px;
+    }
+}

@@ -57,7 +57,7 @@ This phase is designed to be executed concurrently. Each track is strictly isola
     5.  **Endgame Logic**: At 1,000,000 biscuits, trigger `#endgame-modal`.
     6.  **Leaderboard Handoff**: Update `pickleClickerLeaderboard` using `window.PickleShared`. This sets `biscuitsLeft`, which Game 2 relies on to start. Ensure the `#game2-unlock-btn` is revealed.
 
-### Track C: Game 2 Domain Extraction (Capitalism Simulator)
+### Track C: Game 2 Domain Extraction (COMPLETED)
 *   **Role**: Game 2 Developer
 *   **Target File**: `game2_v2.js`
 *   **Tasks**:
@@ -75,9 +75,9 @@ This phase is designed to be executed concurrently. Each track is strictly isola
         *   Apply the same Interval Bail-out logic described in Track B (checking `#game2-start-screen` and `#game2-screen`).
     6.  **Insider Trading**: Migrate the SEC investigation modal trigger when a stonk hits `1,000,000` biscuits (imposes a strict `-0.05` modifier and flat fine).
 
-### Track D: CSS Domain Segregation & Container Queries (PARTIALLY COMPLETED - Game 2 CSS Pending)
+### Track D: CSS Domain Segregation & Container Queries (COMPLETED)
 *   **Role**: UI/UX Engineer
-*   **Target Files**: `shared_v2.css` (COMPLETED), `game1_v2.css` (COMPLETED), `game2_v2.css` (PENDING)
+*   **Target Files**: `shared_v2.css` (COMPLETED), `game1_v2.css` (COMPLETED), `game2_v2.css` (COMPLETED)
 *   **Tasks**:
     1.  **Global Resets (`shared_v2.css`)**: (COMPLETED) Extract baseline styles, `.modal-overlay`, `.hidden` (`display: none !important`), and the `.slide-up` animation.
         *   **Gotcha - Z-Index Hierarchy**: Modals must be `z-index: 2000`. Dev Mode panel must be `z-index: 3000`. Game UI overlays must be `z-index: 10`.
@@ -85,7 +85,7 @@ This phase is designed to be executed concurrently. Each track is strictly isola
     3.  **Container Query Management (Crucial)**: (COMPLETED for Game 1)
         *   Both `#game-area` and `#game2-area` use `container-type: inline-size` and `aspect-ratio: 1/1`.
         *   Ensure that all inner font sizes and layout margins use `cqw` units (e.g., `font-size: 3cqw`) scoped strictly within these areas to ensure the games scale proportionally across mobile and desktop.
-    4.  **Game 2 UI Specifics (`game2_v2.css`)**: (PENDING)
+    4.  **Game 2 UI Specifics (`game2_v2.css`)**: (COMPLETED)
         *   Extract the matrix-style transparent monitor UI (`#stonks-ui`, `.stonk-column`).
         *   Extract the Catnip Bar absolute positioning and fill transitions.
 
